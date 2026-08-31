@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ominus Tech — Caixa & Finanças</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+        --tinta: #18171b;
+        --tinta-suave: #2a2831;
+        --pedra: #efeee7;
+        --pedra-card: #ffffff;
+        --latao: #b9902f;
+        --latao-escuro: #8f6f21;
+        --bordo: #7a2331;
+        --bordo-escuro: #591a24;
+        --navalha: #2f5d50;
+        --texto: #201e1b;
+        --texto-suave: #6b6459;
+        --linha: #ddd8cc;
+        --perigo: #a8332a;
+        --whatsapp: #25D366;
+
+        --fonte-cartaz: 'Oswald', sans-serif;
+        --fonte-corpo: 'Inter', sans-serif;
+        --fonte-dados: 'IBM Plex Mono', monospace;
+
+        --radius: 10px;
+        --radius-peq: 6px;
+        --sombra: 0 8px 24px -12px rgba(24,23,27,0.25);
+        --sombra-forte: 0 20px 48px -18px rgba(24,23,27,0.35);
+
+        --faixa: repeating-linear-gradient(
+            45deg,
+            var(--bordo) 0px, var(--bordo) 14px,
+            var(--pedra-card) 14px, var(--pedra-card) 28px,
+            var(--latao) 28px, var(--latao) 42px,
+            var(--pedra-card) 42px, var(--pedra-card) 56px
+        );
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        background: var(--pedra);
+        color: var(--texto);
+        font-family: var(--fonte-corpo);
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: inherit; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--pedra); }
+    ::-webkit-scrollbar-thumb { background: var(--latao); border-radius: 3px; }
+
+    .faixa-topo { height: 5px; width: 100%; background: var(--faixa); background-size: 70px 70px; animation: girarFaixa 3.2s linear infinite; }
+    @keyframes girarFaixa { from { background-position: 0 0; } to { background-position: 70px 0; } }
+
+    input, select {
+        font-family: var(--fonte-corpo);
+        background: var(--pedra);
+        border: 2px solid var(--linha);
+        border-radius: var(--radius-peq);
+        color: var(--texto);
+        padding: 11px 14px;
+        width: 100%;
+        font-size: 0.9rem;
+        transition: border-color .15s;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--latao); }
+    label {
+        display: block; font-family: var(--fonte-cartaz); font-size: 0.72rem; font-weight: 600;
+        letter-spacing: 0.06em; text-transform: uppercase; color: var(--bordo); margin-bottom: 7px;
+    }
+    .form-group { margin-bottom: 16px; }
+
+    /* ================= SIDEBAR ================= */
+    #sidebar {
+        position: fixed; left: 0; top: 5px; bottom: 0;
+        width: 72px; background: var(--tinta); border-right: 1px solid rgba(185,144,47,0.25);
+        display: flex; flex-direction: column; align-items: center; padding: 22px 0;
+        z-index: 100; transition: width .3s ease; overflow: hidden;
+    }
+    #sidebar:hover { width: 220px; }
+    .sidebar-logo {
+        font-family: var(--fonte-cartaz); font-size: 1.05rem; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--pedra); white-space: nowrap; overflow: hidden;
+        width: 100%; text-align: center; padding: 0 16px; margin-bottom: 18px;
+    }
+    .sidebar-logo span:last-child { color: var(--latao); opacity: 0; transition: opacity .2s; }
+    #sidebar:hover .sidebar-logo span:last-child { opacity: 1; }
+    .sidebar-logo-icon { min-width: 40px; display: inline-block; }
+
+    .nav-item {
+        width: 100%; display: flex; align-items: center; gap: 14px; padding: 13px 16px;
+        transition: background .15s, border-color .15s; border-left: 3px solid transparent; white-space: nowrap;
+    }
+    .nav-item:hover { background: rgba(185,144,47,0.1); border-left-color: var(--latao-escuro); }
+    .nav-item.active { background: rgba(185,144,47,0.16); border-left-color: var(--latao); }
+    .nav-item.active .nav-icon, .nav-item.active .nav-label { color: var(--latao); }
+    .nav-icon { min-width: 40px; text-align: center; color: #a39d8f; font-size: 1.05rem; }
+    .nav-label { font-size: 0.82rem; font-weight: 500; color: #a39d8f; opacity: 0; transition: opacity .2s; }
+    #sidebar:hover .nav-label { opacity: 1; }
+
+    /* ================= APP ================= */
+    #app { margin-left: 72px; min-height: 100vh; padding: 36px 40px 60px; max-width: 1180px; }
+
+    .page-header { padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px; }
+    .page-title { font-family: var(--fonte-cartaz); font-size: 1.9rem; text-transform: uppercase; letter-spacing: 0.02em; color: var(--tinta); margin-bottom: 4px; }
+    .page-subtitle { color: var(--texto-suave); font-size: 0.88rem; }
+
+    /* KPIS */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 30px; }
+    .kpi-card { background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); padding: 20px; box-shadow: var(--sombra); }
+    .kpi-title { font-family: var(--fonte-cartaz); font-size: 0.7rem; text-transform: uppercase; color: var(--texto-suave); letter-spacing: 0.06em; }
+    .kpi-value { font-family: var(--fonte-dados); font-size: 1.5rem; font-weight: 600; margin-top: 8px; color: var(--texto); }
+    .kpi-value.green { color: var(--navalha); }
+    .kpi-value.red { color: var(--bordo); }
+    .kpi-value.gold { color: var(--latao-escuro); }
+
+    /* GRIDS E CARDS */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 30px; }
+    @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+    @media (max-width: 880px) { #app { margin-left: 0; padding-top: 90px; } #sidebar { width: 100%; height: auto; bottom: auto; flex-direction: row; padding: 10px; } }
+
+    .card { background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); padding: 24px; box-shadow: var(--sombra); position: relative; overflow: hidden; }
+    .card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--faixa); background-size: 48px 48px; }
+    .card-title {
+        font-family: var(--fonte-cartaz); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
+        color: var(--bordo); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+    }
+    .card-title::after { content: ""; flex: 1; height: 1px; background: var(--linha); }
+
+    /* BOTÕES */
+    .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 24px;
+        border-radius: var(--radius-peq); font-family: var(--fonte-cartaz); font-size: 0.82rem; font-weight: 600;
+        text-transform: uppercase; letter-spacing: 0.03em; transition: background .15s, transform .12s; border: none;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-success { background: var(--navalha); color: #fff; }
+    .btn-success:hover { background: #24473d; }
+    .btn-danger { background: var(--bordo); color: #fff; }
+    .btn-danger:hover { background: var(--bordo-escuro); }
+    .btn-full { width: 100%; }
+
+    /* TABELA */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th { text-align: left; padding: 11px 12px; font-family: var(--fonte-cartaz); font-size: 0.68rem; color: var(--bordo); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 2px solid var(--linha); }
+    td { padding: 11px 12px; border-bottom: 1px solid var(--linha); color: var(--texto); }
+
+    .badge {
+        display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.66rem; font-weight: 700; text-transform: uppercase;
+    }
+    .badge-entrada { background: #eaf2ee; color: var(--navalha); border: 1px solid var(--navalha); }
+    .badge-saida { background: #f8ecec; color: var(--bordo); border: 1px solid var(--bordo); }
+
+    /* LOADER & TOAST */
+    .loader-overlay {
+        position: fixed; inset: 0; background: rgba(239,238,231,0.92); backdrop-filter: blur(6px);
+        display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 9000;
+    }
+    .loader-overlay.visible { display: flex; }
+    .loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--linha); border-top-color: var(--bordo); animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader-text { margin-top: 18px; font-family: var(--fonte-cartaz); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bordo); }
+
+    #toast-container { position: fixed; bottom: 28px; right: 28px; z-index: 9998; display: flex; flex-direction: column; gap: 10px; }
+    .toast { padding: 14px 18px; background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); font-size: 0.85rem; color: var(--texto); min-width: 280px; box-shadow: var(--sombra-forte); }
+    .toast.success { border-color: var(--navalha); }
+    .toast.error { border-color: var(--perigo); }
+    .toast.info { border-color: var(--latao); }
+  </style>
+</head>
+<body>
+
+<div class="faixa-topo" aria-hidden="true"></div>
+
+  <div class="loader-overlay" id="loader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">PROCESSANDO...</div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <nav id="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">Om</span><span>inus</span></div>
+    <a href="index.html" class="nav-item"><span class="nav-icon">◈</span><span class="nav-label">Dashboard</span></a>
+    <a href="financeiro.html" class="nav-item active"><span class="nav-icon">◎</span><span class="nav-label">Caixa & Finanças</span></a>
+    <a href="barbeiros.html" class="nav-item"><span class="nav-icon">◉</span><span class="nav-label">Barbeiros</span></a>
+    <a href="agenda.html" class="nav-item"><span class="nav-icon">▦</span><span class="nav-label">Agenda</span></a>
+  </nav>7
+
+  <main id="app">
+    <div class="page-header">
+      <div class="page-title">Caixa & Frente de Loja</div>
+      <p class="page-subtitle">Registro de vendas de produtos, cortes e sangrias de caixa</p>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Saldo Total no Caixa</div>
+        <div class="kpi-value gold" id="kpi-saldo">R$ 0,00</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Entradas (Vendas)</div>
+        <div class="kpi-value green" id="kpi-entradas">R$ 0,00</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Saídas (Sangrias)</div>
+        <div class="kpi-value red" id="kpi-saidas">R$ 0,00</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Recebido em Pix/Dinheiro</div>
+        <div class="kpi-value" id="kpi-pix-dinheiro">R$ 0,00</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Registrar Venda / Entrada</div>
+        <form onsubmit="registrarMovimentacao(event, 'entrada')">
+          <div class="form-group">
+            <label>Tipo de Entrada</label>
+            <select id="ent-categoria" required>
+              <option value="Serviço">Corte / Barba / Serviço</option>
+              <option value="Produto">Venda de Produto (Shampoo, Pomada, etc.)</option>
+              <option value="Outros">Outras Receitas</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Descrição do Item / Cliente</label>
+            <input type="text" id="ent-descricao" placeholder="Ex: Pomada Matte / Cliente João" required />
+          </div>
+          <div class="grid-2" style="margin-bottom:0;">
+            <div class="form-group">
+              <label>Valor (R$)</label>
+              <input type="number" id="ent-valor" step="0.01" placeholder="0,00" required />
+            </div>
+            <div class="form-group">
+              <label>Forma de Pagamento</label>
+              <select id="ent-forma" required>
+                <option value="PIX">Pix</option>
+                <option value="Dinheiro">Dinheiro (Espécie)</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Cartão de Débito">Cartão de Débito</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success btn-full">Confirmar Entrada / Recebimento</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Registrar Saída / Despesa / Sangria</div>
+        <form onsubmit="registrarMovimentacao(event, 'saida')">
+          <div class="form-group">
+            <label>Descrição da Saída</label>
+            <input type="text" id="sai-descricao" placeholder="Ex: Sangria para banco, Compra de café, Aluguel" required />
+          </div>
+          <div class="grid-2" style="margin-bottom:0;">
+            <div class="form-group">
+              <label>Valor (R$)</label>
+              <input type="number" id="sai-valor" step="0.01" placeholder="0,00" required />
+            </div>
+            <div class="form-group">
+              <label>Origem / Forma</label>
+              <select id="sai-forma" required>
+                <option value="Dinheiro">Caixa Físico (Dinheiro)</option>
+                <option value="PIX">Conta/Pix</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-danger btn-full" style="margin-top: 18px;">Confirmar Saída / Sangria</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Extrato / Lançamentos do Dia</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Descrição</th>
+              <th>Forma Pgto</th>
+              <th>Valor</th>
+              <th>Horário</th>
+            </tr>
+          </thead>
+          <tbody id="caixa-table">
+            <tr>
+              <td colspan="5" style="text-align:center; color:var(--texto-suave); padding:24px;">Nenhuma movimentação hoje.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    /* =============================================
+       WEBHOOK N8N CONFIG
+    ============================================= */
+    const API_CONFIG = {
+      REGISTRAR_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-registrar', // POST
+      OBTER_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter' // GET
+    };
+
+    let movimentacoes = [];
+
+    function showLoader(msg = 'PROCESSANDO...') {
+      document.getElementById('loader').classList.add('visible');
+      document.querySelector('.loader-text').textContent = msg;
+    }
+    function hideLoader() { document.getElementById('loader').classList.remove('visible'); }
+
+    function toast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.innerHTML = msg;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }
+
+    function formatMoeda(val) {
+      return 'R$ ' + parseFloat(val || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    }
+
+    // Registrar Entrada ou Saída
+    async function registrarMovimentacao(event, tipo) {
+      event.preventDefault();
+
+      let descricao, valor, forma, categoria;
+
+      if (tipo === 'entrada') {
+        categoria = document.getElementById('ent-categoria').value;
+        descricao = document.getElementById('ent-descricao').value.trim();
+        valor = parseFloat(document.getElementById('ent-valor').value);
+        forma = document.getElementById('ent-forma').value;
+      } else {
+        categoria = 'Sangria / Despesa';
+        descricao = document.getElementById('sai-descricao').value.trim();
+        valor = parseFloat(document.getElementById('sai-valor').value);
+        forma = document.getElementById('sai-forma').value;
+      }
+
+      if (!descricao || isNaN(valor) || valor <= 0) {
+        toast('Preencha os campos com valores válidos.', 'error');
+        return;
+      }
+
+      const payload = {
+        tipo, // 'entrada' ou 'saida'
+        categoria,
+        descricao,
+        valor,
+        forma_pagamento: forma,
+        data_hora: new Date().toISOString()
+      };
+
+      showLoader('REGISTRANDO CAIXA...');
+
+      try {
+        // Tenta enviar para o n8n
+        await fetch(API_CONFIG.REGISTRAR_CAIXA, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        movimentacoes.unshift(payload);
+        atualizarTela();
+        toast(`${tipo === 'entrada' ? 'Recebimento' : 'Saída'} registrado com sucesso!`, 'success');
+        event.target.reset();
+      } catch (err) {
+        console.warn('Servidor offline. Registrando localmente.', err);
+        movimentacoes.unshift(payload);
+        atualizarTela();
+        toast('Registrado localmente!', 'info');
+        event.target.reset();
+      } finally {
+        hideLoader();
+      }
+    }
+
+    // Recalcular totais e atualizar tabela
+    function atualizarTela() {
+      let totalEntradas = 0;
+      let totalSaidas = 0;
+      let pixDinheiro = 0;
+
+      const tbody = document.getElementById('caixa-table');
+
+      if (!movimentacoes.length) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--texto-suave); padding:24px;">Nenhuma movimentação hoje.</td></tr>`;
+      } else {
+        tbody.innerHTML = movimentacoes.map(m => {
+          if (m.tipo === 'entrada') {
+            totalEntradas += m.valor;
+            if (m.forma_pagamento === 'PIX' || m.forma_pagamento === 'Dinheiro') pixDinheiro += m.valor;
+          } else {
+            totalSaidas += m.valor;
+          }
+
+          const hora = new Date(m.data_hora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+          return `
+            <tr>
+              <td><span class="badge ${m.tipo === 'entrada' ? 'badge-entrada' : 'badge-saida'}">${m.tipo}</span></td>
+              <td><strong>[${m.categoria}]</strong> ${m.descricao}</td>
+              <td>${m.forma_pagamento}</td>
+              <td style="color: ${m.tipo === 'entrada' ? 'var(--navalha)' : 'var(--bordo)'}; font-weight: 600;">
+                ${m.tipo === 'entrada' ? '+' : '-'} ${formatMoeda(m.valor)}
+              </td>
+              <td>${hora}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      const saldoTotal = totalEntradas - totalSaidas;
+
+      document.getElementById('kpi-saldo').textContent = formatMoeda(saldoTotal);
+      document.getElementById('kpi-entradas').textContent = formatMoeda(totalEntradas);
+      document.getElementById('kpi-saidas').textContent = formatMoeda(totalSaidas);
+      document.getElementById('kpi-pix-dinheiro').textContent = formatMoeda(pixDinheiro);
+    }
+  </script>
+</body>
+</html>

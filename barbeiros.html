@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ominus Tech — Painel do Barbeiro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+        --tinta: #18171b;
+        --tinta-suave: #2a2831;
+        --pedra: #efeee7;
+        --pedra-card: #ffffff;
+        --latao: #b9902f;
+        --latao-escuro: #8f6f21;
+        --bordo: #7a2331;
+        --bordo-escuro: #591a24;
+        --navalha: #2f5d50;
+        --texto: #201e1b;
+        --texto-suave: #6b6459;
+        --linha: #ddd8cc;
+        --perigo: #a8332a;
+        --info: #3f6a8f;
+        --whatsapp: #25D366;
+
+        --fonte-cartaz: 'Oswald', sans-serif;
+        --fonte-corpo: 'Inter', sans-serif;
+        --fonte-dados: 'IBM Plex Mono', monospace;
+
+        --radius: 10px;
+        --radius-peq: 6px;
+        --sombra: 0 8px 24px -12px rgba(24,23,27,0.25);
+        --sombra-forte: 0 20px 48px -18px rgba(24,23,27,0.35);
+
+        --faixa: repeating-linear-gradient(
+            45deg,
+            var(--bordo) 0px, var(--bordo) 14px,
+            var(--pedra-card) 14px, var(--pedra-card) 28px,
+            var(--latao) 28px, var(--latao) 42px,
+            var(--pedra-card) 42px, var(--pedra-card) 56px
+        );
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        background: var(--pedra);
+        color: var(--texto);
+        font-family: var(--fonte-corpo);
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: inherit; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--pedra); }
+    ::-webkit-scrollbar-thumb { background: var(--latao); border-radius: 3px; }
+
+    .faixa-topo { height: 5px; width: 100%; background: var(--faixa); background-size: 70px 70px; animation: girarFaixa 3.2s linear infinite; }
+    @keyframes girarFaixa { from { background-position: 0 0; } to { background-position: 70px 0; } }
+
+    /* ================= SIDEBAR ================= */
+    #sidebar {
+        position: fixed; left: 0; top: 5px; bottom: 0;
+        width: 72px; background: var(--tinta); border-right: 1px solid rgba(185,144,47,0.25);
+        display: flex; flex-direction: column; align-items: center; padding: 22px 0;
+        z-index: 100; transition: width .3s ease; overflow: hidden;
+    }
+    #sidebar:hover { width: 220px; }
+    .sidebar-logo {
+        font-family: var(--fonte-cartaz); font-size: 1.05rem; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--pedra); white-space: nowrap; overflow: hidden;
+        width: 100%; text-align: center; padding: 0 16px; margin-bottom: 18px;
+    }
+    .sidebar-logo span:last-child { color: var(--latao); opacity: 0; transition: opacity .2s; }
+    #sidebar:hover .sidebar-logo span:last-child { opacity: 1; }
+    .sidebar-logo-icon { min-width: 40px; display: inline-block; }
+
+    .nav-item {
+        width: 100%; display: flex; align-items: center; gap: 14px; padding: 13px 16px;
+        transition: background .15s, border-color .15s; border-left: 3px solid transparent; white-space: nowrap;
+    }
+    .nav-item:hover { background: rgba(185,144,47,0.1); border-left-color: var(--latao-escuro); }
+    .nav-item.active { background: rgba(185,144,47,0.16); border-left-color: var(--latao); }
+    .nav-item.active .nav-icon, .nav-item.active .nav-label { color: var(--latao); }
+    .nav-icon { min-width: 40px; text-align: center; color: #a39d8f; font-size: 1.05rem; }
+    .nav-label { font-size: 0.82rem; font-weight: 500; color: #a39d8f; opacity: 0; transition: opacity .2s; }
+    #sidebar:hover .nav-label { opacity: 1; }
+
+    /* ================= APP ================= */
+    #app { margin-left: 72px; min-height: 100vh; padding: 36px 40px 60px; max-width: 1180px; }
+
+    .page-header {
+        padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px; position: relative; overflow: hidden;
+    }
+    .page-header::after {
+        content: '◈'; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+        font-size: 64px; color: rgba(185,144,47,0.1); pointer-events: none;
+    }
+    .page-title { font-family: var(--fonte-cartaz); font-size: 1.9rem; text-transform: uppercase; letter-spacing: 0.02em; color: var(--tinta); margin-bottom: 4px; }
+    .page-subtitle { color: var(--texto-suave); font-size: 0.88rem; }
+
+    .controls-bar {
+        display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 24px;
+        background: var(--pedra-card); padding: 18px 24px; border-radius: var(--radius); border: 1px solid var(--linha);
+        box-shadow: var(--sombra);
+    }
+    .control-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 200px; }
+    .control-group label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; color: var(--bordo); text-transform: uppercase; }
+    select, input[type="date"] {
+      background: var(--pedra-card); border: 1px solid var(--linha); color: var(--texto);
+      padding: 10px 14px; border-radius: var(--radius-peq); font-family: inherit; font-size: 14px; outline: none;
+    }
+    select:focus, input[type="date"]:focus { border-color: var(--latao); }
+
+    /* STAT CARDS */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 32px; }
+    .stat-card {
+        background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); padding: 22px;
+        position: relative; overflow: hidden; box-shadow: var(--sombra); transition: transform .15s, border-color .15s;
+    }
+    .stat-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--latao), transparent); }
+    .stat-card:hover { transform: translateY(-2px); border-color: var(--latao); }
+    .stat-label { font-family: var(--fonte-cartaz); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--texto-suave); margin-bottom: 10px; }
+    .stat-value { font-family: var(--fonte-dados); font-size: 1.55rem; font-weight: 600; color: var(--bordo); line-height: 1; margin-bottom: 6px; }
+
+    .card {
+        background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius);
+        padding: 24px; box-shadow: var(--sombra); position: relative; overflow: hidden; transition: border-color .15s, box-shadow .15s;
+    }
+    .card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--faixa); background-size: 48px 48px; }
+    .card:hover { border-color: var(--latao); }
+    .card-title {
+        font-family: var(--fonte-cartaz); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
+        color: var(--bordo); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+    }
+    .card-title::after { content: ""; flex: 1; height: 1px; background: var(--linha); }
+
+    .atendimento-card {
+        background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius);
+        padding: 18px 22px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;
+        transition: transform .15s, border-color .15s, background .15s;
+    }
+    .atendimento-card:hover { border-color: var(--latao); transform: translateY(-2px); background: #faf8f3; }
+    .cliente-nome { font-size: 16px; font-weight: 600; color: var(--texto); margin-bottom: 4px; }
+    .servico-desc { font-size: 13px; color: var(--texto-suave); }
+    .hora-tag { font-family: var(--fonte-dados); font-size: 1.25rem; font-weight: 600; color: var(--bordo); text-align: right; }
+    
+    .btn-whatsapp {
+        display: inline-flex; align-items: center; gap: 6px; background: var(--whatsapp);
+        color: #000; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: var(--radius-peq);
+        margin-top: 8px; text-decoration: none; transition: transform 0.2s;
+    }
+    .btn-whatsapp:hover { transform: scale(1.04); }
+
+    /* LOADER / TOAST */
+    .loader-overlay {
+        position: fixed; inset: 0; background: rgba(239,238,231,0.92); backdrop-filter: blur(6px);
+        display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 9000;
+    }
+    .loader-overlay.visible { display: flex; }
+    .loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--linha); border-top-color: var(--bordo); animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader-text { margin-top: 18px; font-family: var(--fonte-cartaz); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bordo); }
+
+    #toast-container { position: fixed; bottom: 28px; right: 28px; z-index: 9998; display: flex; flex-direction: column; gap: 10px; }
+    .toast {
+        display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--pedra-card); border: 1px solid var(--linha);
+        border-radius: var(--radius); min-width: 300px; box-shadow: var(--sombra-forte); animation: slideIn .35s ease; font-size: 0.85rem; color: var(--texto);
+    }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .toast.success { border-color: var(--navalha); }
+    .toast.error { border-color: var(--perigo); }
+    .toast.info { border-color: var(--latao); }
+    .toast-icon { font-size: 1.1rem; color: var(--bordo); }
+    .toast-msg { flex: 1; font-size: 0.85rem; line-height: 1.5; }
+
+    @media (max-width: 880px) { #app { margin-left: 0; padding-top: 90px; } #sidebar { width: 100%; height: auto; bottom: auto; flex-direction: row; padding: 10px; } .stat-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 520px) { .stat-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="faixa-topo" aria-hidden="true"></div>
+
+  <!-- LOADER -->
+  <div class="loader-overlay" id="loader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">CARREGANDO ATENDIMENTOS...</div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container"></div>
+
+  <!-- SIDEBAR -->
+  <nav id="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">Om</span><span>inus</span></div>
+    <a href="index.html" class="nav-item"><span class="nav-icon">◈</span><span class="nav-label">Dashboard</span></a>
+    <a href="financeiro.html" class="nav-item"><span class="nav-icon">◎</span><span class="nav-label">Financeiro</span></a>
+    <a href="barbeiros.html" class="nav-item"><span class="nav-icon">◉</span><span class="nav-label">Barbeiros</span></a>
+    <a href="agenda.html" class="nav-item"><span class="nav-icon">▦</span><span class="nav-label">Agenda</span></a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main id="app">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Painel do Barbeiro</h1>
+        <p class="page-subtitle">Acompanhamento individual de horários e cortes do dia</p>
+      </div>
+    </div>
+
+    <div class="controls-bar">
+      <div class="control-group">
+        <label>Selecione o Barbeiro:</label>
+        <select id="select-barbeiro" onchange="acessarBarbeiro()">
+          <option value="">-- Escolha um barbeiro --</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label>Data dos Atendimentos:</label>
+        <input type="date" id="select-data" onchange="carregarAtendimentos()" />
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Cortes Agendados Hoje</span>
+        <span class="stat-value" id="stat-total-cortes">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Próximo Horário</span>
+        <span class="stat-value" id="stat-proximo-horario">--:--</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✂ Acessar Painel</div>
+      <div id="lista-atendimentos">
+        <div style="text-align:center; color: var(--texto-suave); padding: 40px; border: 1px solid var(--linha); border-radius: var(--radius); background: #f7f3e9;">
+          Selecione um barbeiro no campo acima para acessar seu painel de agendamentos.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Barbeiros disponíveis com links para suas páginas
+    const BARBEIROS = [
+      { nome: 'Igor Muniz', pagina: 'igor.html' },
+      { nome: 'Anderson', pagina: 'anderson.html' }
+    ];
+
+    function showLoader(msg = 'CARREGANDO...') {
+      document.getElementById('loader').classList.add('visible');
+      document.querySelector('.loader-text').textContent = msg;
+    }
+    function hideLoader() { document.getElementById('loader').classList.remove('visible'); }
+
+    function toast(msg, type = 'info', duration = 4000) {
+      const icons = { success: '✓', error: '✕', info: '✦', warning: '⚠' };
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.innerHTML = `
+        <span class="toast-icon">${icons[type] || '✦'}</span>
+        <span class="toast-msg">${msg}</span>
+      `;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), duration);
+    }
+
+    // Carrega a lista de barbeiros no Select
+    function carregarListaBarbeiros() {
+      const select = document.getElementById('select-barbeiro');
+      select.innerHTML = '<option value="">-- Escolha um barbeiro --</option>';
+
+      BARBEIROS.forEach(b => {
+        const opt = document.createElement('option');
+        opt.value = b.pagina;
+        opt.textContent = b.nome;
+        select.appendChild(opt);
+      });
+    }
+
+    // Redireciona para a página do barbeiro selecionado
+    function acessarBarbeiro() {
+      const select = document.getElementById('select-barbeiro');
+      const pagina = select.value;
+
+      if (!pagina) {
+        toast('Selecione um barbeiro para continuar', 'info');
+        return;
+      }
+
+      showLoader(`Acessando painel de ${select.options[select.selectedIndex].text}...`);
+      setTimeout(() => {
+        window.location.href = pagina;
+      }, 500);
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', () => {
+      carregarListaBarbeiros();
+      
+      // Remove a data e seu label se não forem mais necessários
+      const dataGroup = document.querySelector('.control-group:nth-child(2)');
+      if (dataGroup) {
+        dataGroup.style.display = 'none';
+      }
+      
+      // Remove as stats pois não são mais usadas
+      const statsGrid = document.querySelector('.stats-grid');
+      if (statsGrid) {
+        statsGrid.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

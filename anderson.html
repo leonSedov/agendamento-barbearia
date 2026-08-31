@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ominus Tech — Painel Anderson</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --tinta: #18171b;
+        --tinta-suave: #2a2831;
+        --pedra: #efeee7;
+        --pedra-card: #ffffff;
+        --latao: #b9902f;
+        --latao-escuro: #8f6f21;
+        --bordo: #7a2331;
+        --bordo-escuro: #591a24;
+        --navalha: #2f5d50;
+        --texto: #201e1b;
+        --texto-suave: #6b6459;
+        --linha: #ddd8cc;
+        --perigo: #a8332a;
+        --whatsapp: #25D366;
+
+        --fonte-cartaz: 'Oswald', sans-serif;
+        --fonte-corpo: 'Inter', sans-serif;
+        --fonte-dados: 'IBM Plex Mono', monospace;
+
+        --radius: 10px;
+        --radius-peq: 6px;
+        --sombra: 0 8px 24px -12px rgba(24,23,27,0.25);
+        --sombra-forte: 0 20px 48px -18px rgba(24,23,27,0.35);
+
+        --faixa: repeating-linear-gradient(
+            45deg,
+            var(--bordo) 0px, var(--bordo) 14px,
+            var(--pedra-card) 14px, var(--pedra-card) 28px,
+            var(--latao) 28px, var(--latao) 42px,
+            var(--pedra-card) 42px, var(--pedra-card) 56px
+        );
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        background: var(--pedra);
+        color: var(--texto);
+        font-family: var(--fonte-corpo);
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: inherit; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--pedra); }
+    ::-webkit-scrollbar-thumb { background: var(--latao); border-radius: 3px; }
+
+    .faixa-topo { height: 5px; width: 100%; background: var(--faixa); background-size: 70px 70px; animation: girarFaixa 3.2s linear infinite; }
+    @keyframes girarFaixa { from { background-position: 0 0; } to { background-position: 70px 0; } }
+
+    /* ================= SIDEBAR ================= */
+    #sidebar {
+        position: fixed; left: 0; top: 5px; bottom: 0;
+        width: 72px; background: var(--tinta); border-right: 1px solid rgba(185,144,47,0.25);
+        display: flex; flex-direction: column; align-items: center; padding: 22px 0;
+        z-index: 100; transition: width .3s ease; overflow: hidden;
+    }
+    #sidebar:hover { width: 220px; }
+    .sidebar-logo {
+        font-family: var(--fonte-cartaz); font-size: 1.05rem; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--pedra); white-space: nowrap; overflow: hidden;
+        width: 100%; text-align: center; padding: 0 16px; margin-bottom: 18px;
+    }
+    .sidebar-logo span:last-child { color: var(--latao); opacity: 0; transition: opacity .2s; }
+    #sidebar:hover .sidebar-logo span:last-child { opacity: 1; }
+    .sidebar-logo-icon { min-width: 40px; display: inline-block; }
+
+    .sidebar-perfil {
+        display: flex; align-items: center; gap: 12px; width: 100%; padding: 0 16px 18px;
+        margin-bottom: 8px; border-bottom: 1px solid rgba(185,144,47,0.2); white-space: nowrap; overflow: hidden;
+    }
+    .sidebar-perfil__foto {
+        width: 40px; height: 40px; min-width: 40px; border-radius: 50%; object-fit: cover;
+        border: 2px solid var(--latao); background: var(--tinta-suave);
+    }
+    .sidebar-perfil__nome { font-family: var(--fonte-cartaz); font-size: 0.85rem; color: var(--pedra); opacity: 0; transition: opacity .2s; }
+    #sidebar:hover .sidebar-perfil__nome { opacity: 1; }
+
+    .nav-item {
+        width: 100%; display: flex; align-items: center; gap: 14px; padding: 13px 16px;
+        transition: background .15s, border-color .15s; border-left: 3px solid transparent; white-space: nowrap;
+    }
+    .nav-item:hover { background: rgba(185,144,47,0.1); border-left-color: var(--latao-escuro); }
+    .nav-item.active { background: rgba(185,144,47,0.16); border-left-color: var(--latao); }
+    .nav-item.active .nav-icon, .nav-item.active .nav-label { color: var(--latao); }
+    .nav-icon { min-width: 40px; text-align: center; color: #a39d8f; font-size: 1.05rem; }
+    .nav-label { font-size: 0.82rem; font-weight: 500; color: #a39d8f; opacity: 0; transition: opacity .2s; }
+    #sidebar:hover .nav-label { opacity: 1; }
+
+    /* ================= APP ================= */
+    #app { margin-left: 72px; min-height: 100vh; padding: 36px 40px 60px; max-width: 1100px; }
+
+    .page-header {
+        padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px;
+        position: relative;
+    }
+    .page-title { font-family: var(--fonte-cartaz); font-size: 1.9rem; text-transform: uppercase; letter-spacing: 0.02em; color: var(--tinta); margin-bottom: 4px; }
+    .page-subtitle { color: var(--texto-suave); font-size: 0.88rem; }
+
+    .card {
+        background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius);
+        padding: 24px; box-shadow: var(--sombra); position: relative; overflow: hidden;
+    }
+    .card--faixa::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--faixa); background-size: 48px 48px; }
+    .card-title {
+        font-family: var(--fonte-cartaz); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
+        color: var(--bordo); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+    }
+    .card-title::after { content: ""; flex: 1; height: 1px; background: var(--linha); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    @media (max-width: 880px) { .grid-2 { grid-template-columns: 1fr; } #app { margin-left: 0; padding-top: 90px; } #sidebar { width: 100%; height: auto; bottom: auto; flex-direction: row; padding: 10px; } }
+
+    /* MÉTRICAS */
+    .metric-card { text-align: center; }
+    .metric-value { font-family: var(--fonte-dados); font-size: 2.2rem; font-weight: 600; color: var(--bordo); line-height: 1; }
+    .metric-label { font-family: var(--fonte-cartaz); font-size: 0.7rem; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 8px; }
+
+    /* CALENDÁRIO */
+    .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; background: var(--tinta); padding: 10px 14px; border-radius: var(--radius-peq); }
+    .cal-title { font-family: var(--fonte-dados); font-size: 0.92rem; color: var(--pedra); text-transform: capitalize; }
+    .cal-btn { background: none; border: none; color: var(--latao); font-size: 1rem; padding: 4px 8px; transition: color .15s; }
+    .cal-btn:hover { color: var(--pedra); }
+
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
+    .cal-header { font-size: 0.66rem; font-weight: 700; color: var(--bordo); text-transform: uppercase; letter-spacing: 0.03em; padding: 6px 0; }
+    .cal-day {
+        aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+        border-radius: var(--radius-peq); font-size: 0.88rem; font-family: var(--fonte-dados);
+        cursor: pointer; transition: all .15s; background: var(--pedra); border: 2px solid transparent; color: var(--texto);
+        min-height: 44px;
+    }
+    .cal-day:hover:not(.empty) { border-color: var(--latao); }
+    .cal-day.today { border-color: var(--latao); color: var(--latao-escuro); font-weight: 600; }
+    .cal-day.empty { background: transparent; cursor: default; }
+    .cal-day.selected { background: var(--bordo); color: #fff; font-weight: 600; border-color: var(--bordo); }
+
+    .divider { height: 1px; background: var(--linha); margin: 20px 0; }
+
+    /* HORÁRIOS */
+    .section-label { font-family: var(--fonte-cartaz); font-size: 0.75rem; font-weight: 600; color: var(--bordo); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; display: block; }
+    .time-status-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+    .time-badge { padding: 8px 4px; border-radius: var(--radius-peq); text-align: center; font-size: 0.72rem; font-family: var(--fonte-dados); font-weight: 600; background: var(--pedra); border: 1px solid var(--linha); color: var(--texto); }
+    .time-badge.busy { border-color: var(--bordo); color: var(--bordo); background: #f8ecec; }
+    .time-badge.free { border-color: var(--navalha); color: var(--navalha); background: #eaf2ee; }
+
+    /* AGENDAMENTOS */
+    .agendamento-item {
+        border: 1px solid var(--linha); border-radius: var(--radius); padding: 15px 16px; margin-bottom: 12px;
+        background: var(--pedra-card); display: flex; justify-content: space-between; align-items: center; gap: 12px;
+        transition: border-color .15s, box-shadow .15s;
+    }
+    .agendamento-item:hover { border-color: var(--latao); box-shadow: var(--sombra); }
+    .agendamento-item .hora { font-family: var(--fonte-dados); font-weight: 600; color: var(--bordo); font-size: 1rem; white-space: nowrap; }
+    .agendamento-item .cliente { font-family: var(--fonte-cartaz); font-size: 0.98rem; color: var(--tinta); }
+    .agendamento-item .servico { color: var(--texto-suave); font-size: 0.82rem; margin-top: 3px; }
+    .agendamento-item .preco { color: var(--latao-escuro); font-family: var(--fonte-dados); font-size: 0.78rem; margin-top: 3px; font-weight: 600; }
+
+    .whatsapp-btn {
+        display: inline-flex; align-items: center; gap: 6px; background: var(--whatsapp);
+        color: #fff; padding: 6px 12px; border-radius: var(--radius-peq); font-size: 0.75rem;
+        font-weight: 700; margin-top: 8px; transition: transform .15s;
+    }
+    .whatsapp-btn:hover { transform: scale(1.03); }
+
+    .btn-deletar {
+        display: inline-flex; align-items: center; gap: 6px; background: #fbeceb; border: 1px solid var(--perigo);
+        color: var(--perigo); padding: 6px 12px; border-radius: var(--radius-peq); font-size: 0.72rem;
+        font-weight: 700; margin-top: 8px; transition: background .15s;
+    }
+    .btn-deletar:hover { background: #f5d9d7; }
+
+    .status-badge {
+        display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.68rem; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.05em; background: #f5efe0; color: var(--latao-escuro); border: 1px solid var(--latao);
+    }
+
+    /* LOADER E TOAST */
+    .loader-overlay {
+        position: fixed; inset: 0; background: rgba(239,238,231,0.92); backdrop-filter: blur(6px);
+        display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 9000;
+    }
+    .loader-overlay.visible { display: flex; }
+    .loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--linha); border-top-color: var(--bordo); animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader-text { margin-top: 18px; font-family: var(--fonte-cartaz); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bordo); }
+
+    #toast-container { position: fixed; bottom: 28px; right: 28px; z-index: 9998; display: flex; flex-direction: column; gap: 10px; }
+    .toast { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); min-width: 300px; box-shadow: var(--sombra-forte); font-size: 0.88rem; color: var(--texto); }
+    .toast.success { border-color: var(--navalha); }
+    .toast.error { border-color: var(--perigo); }
+</style>
+</head>
+<body>
+
+<div class="faixa-topo" aria-hidden="true"></div>
+
+<div class="loader-overlay" id="loader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">CONSULTANDO AGENDA...</div>
+</div>
+
+<div id="toast-container"></div>
+
+<nav id="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">Om</span><span>inus</span></div>
+    <div class="sidebar-perfil">
+        <img src="anderson.png" alt="Anderson" class="sidebar-perfil__foto" onerror="this.style.display='none'">
+        <span class="sidebar-perfil__nome">Anderson</span>
+    </div>
+    <a href="index.html" class="nav-item"><span class="nav-icon">◈</span><span class="nav-label">Dashboard</span></a>
+    <a href="financeiro.html" class="nav-item"><span class="nav-icon">◎</span><span class="nav-label">Financeiro</span></a>
+    <a href="barbeiros.html" class="nav-item"><span class="nav-icon">◉</span><span class="nav-label">Barbeiros</span></a>
+    <a href="agenda.html" class="nav-item"><span class="nav-icon">▦</span><span class="nav-label">Agenda</span></a>
+</nav>
+
+<main id="app">
+    <div class="page-header">
+        <div class="page-title">Painel do Barbeiro — Anderson</div>
+        <div class="page-subtitle">Seus atendimentos, horários e faturamento do dia</div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 22px;">
+        <div class="card metric-card">
+            <div class="metric-value" id="metric-atendimentos">0</div>
+            <div class="metric-label">Atendimentos no dia</div>
+        </div>
+        <div class="card metric-card">
+            <div class="metric-value" id="metric-faturamento">R$ 0</div>
+            <div class="metric-label">Faturamento estimado do dia</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card card--faixa">
+            <div class="card-title">Calendário de Atendimentos</div>
+            <div class="cal-nav">
+                <button class="cal-btn" onclick="mudarMes(-1)">◀</button>
+                <span class="cal-title" id="cal-month-label">—</span>
+                <button class="cal-btn" onclick="mudarMes(1)">▶</button>
+            </div>
+            <div class="calendar-grid" id="calendar-grid"></div>
+        </div>
+
+        <div class="card card--faixa">
+            <div class="card-title">Compromissos — <span id="selected-date-label" style="color:var(--tinta)">Selecione uma data</span></div>
+
+            <span class="section-label">Status dos horários</span>
+            <div class="time-status-grid" id="timeStatusGrid"></div>
+
+            <div class="divider"></div>
+
+            <span class="section-label">Cortes e serviços marcados</span>
+            <div id="dia-agendamentos">
+                <div style="text-align:center; color: var(--texto-suave); padding: 26px; border: 1px dashed var(--linha); border-radius: var(--radius); background: var(--pedra);">
+                    Selecione um dia no calendário para visualizar os agendamentos.
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Identidade deste painel — cada barbeiro tem sua própria página com este id fixo
+    const BARBEIRO_ID = 'anderson';
+    const BARBEIRO_NOME = 'Anderson';
+
+    // Endpoint único de consulta utilizado pelo sistema de agendamento
+    const CONSULTA_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/consultar-disponibilidade';
+
+    // Webhook para exclusão de agendamento (COLE O SEU LINK AQUI)
+    const DELETAR_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/deletar-agendamento';
+
+    // Lista oficial de horários da barbearia
+    const HORARIOS_PADRAO = [
+      '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
+      '11:00', '11:30', '13:00', '13:30', '14:00', '14:30',
+      '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
+      '18:00', '18:30', '19:00'
+    ];
+
+    // Preços dos serviços (mesmos da página pública de agendamento) — usados apenas para estimar o faturamento do dia
+    const PRECOS_SERVICOS = {
+      'Alinhamento de Fios': 140,
+      'Cabelo e Barba': 120,
+      'Cabelo e Hidratação Capilar': 105,
+      'Cabelo e Sobrancelhas': 85,
+      'Corte de Cabelo': 65,
+      'Hidratação Capilar': 40,
+      'Sobrancelhas': 20,
+      'Barboterapia': 60,
+      'Limpeza de Pele': 50,
+      'Acabamento de Cabelo': 25
+    };
+
+    let STATE = {
+      calMes: new Date().getMonth(),
+      calAno: new Date().getFullYear(),
+      diaSelecionado: null,
+      agendamentosAtuais: []
+    };
+
+    function showLoader(msg = 'CONSULTANDO AGENDA...') {
+      document.getElementById('loader').classList.add('visible');
+      document.querySelector('.loader-text').textContent = msg;
+    }
+
+    function hideLoader() {
+      document.getElementById('loader').classList.remove('visible');
+    }
+
+    function toast(msg, type = 'info', duration = 3000) {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.innerHTML = `<span class="toast-msg">${msg}</span>`;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), duration);
+    }
+
+    function formatDataFormatada(dataISO) {
+      if (!dataISO) return '—';
+      const parts = dataISO.split('-');
+      if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      return dataISO;
+    }
+
+    function renderCalendario() {
+      const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+      const dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+      document.getElementById('cal-month-label').textContent = `${meses[STATE.calMes]} ${STATE.calAno}`;
+
+      const grid = document.getElementById('calendar-grid');
+      grid.innerHTML = '';
+
+      dias.forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'cal-header';
+        el.textContent = d;
+        grid.appendChild(el);
+      });
+
+      const primeiroDia = new Date(STATE.calAno, STATE.calMes, 1).getDay();
+      const totalDias = new Date(STATE.calAno, STATE.calMes + 1, 0).getDate();
+      const hoje = new Date();
+
+      for (let i = 0; i < primeiroDia; i++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day empty';
+        grid.appendChild(el);
+      }
+
+      for (let dia = 1; dia <= totalDias; dia++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day';
+        el.textContent = dia;
+
+        const diaStr = String(dia).padStart(2, '0');
+        const mesStr = String(STATE.calMes + 1).padStart(2, '0');
+        const dataStr = `${STATE.calAno}-${mesStr}-${diaStr}`;
+        el.dataset.date = dataStr;
+
+        if (dia === hoje.getDate() && STATE.calMes === hoje.getMonth() && STATE.calAno === hoje.getFullYear()) {
+          el.classList.add('today');
+        }
+
+        if (STATE.diaSelecionado === dataStr) {
+          el.classList.add('selected');
+        }
+
+        el.onclick = () => selecionarDia(dataStr);
+        grid.appendChild(el);
+      }
+    }
+
+    function mudarMes(delta) {
+      STATE.calMes += delta;
+      if (STATE.calMes > 11) { STATE.calMes = 0; STATE.calAno++; }
+      if (STATE.calMes < 0) { STATE.calMes = 11; STATE.calAno--; }
+      renderCalendario();
+    }
+
+    // Consulta os cortes marcados e horários para o dia selecionado, filtrando por este barbeiro
+    async function selecionarDia(dataStr) {
+      STATE.diaSelecionado = dataStr;
+
+      document.querySelectorAll('.cal-day').forEach(el => {
+        el.classList.toggle('selected', el.dataset.date === dataStr);
+      });
+
+      document.getElementById('selected-date-label').textContent = formatDataFormatada(dataStr);
+
+      showLoader('BUSCANDO SEUS CORTES...');
+
+      try {
+        // Envia o mesmo JSON usado no fluxo de agendamento, incluindo o barbeiro deste painel
+        const response = await fetch(CONSULTA_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ "ag-data": dataStr, "ag-barbeiro": BARBEIRO_ID })
+        });
+
+        if (!response.ok) throw new Error(`Status ${response.status}`);
+
+        const dados = await response.json();
+        const ocupados = dados.ocupados || [];
+        const agendamentos = dados.agendamentos || [];
+
+        STATE.agendamentosAtuais = agendamentos;
+
+        renderDetalhesDia(ocupados, agendamentos);
+        toast('Agenda do dia atualizada!', 'success');
+      } catch (err) {
+        console.error('Erro ao consultar agenda:', err);
+        STATE.agendamentosAtuais = [];
+        renderDetalhesDia([], []);
+        toast('Erro ao buscar dados do dia.', 'error');
+      } finally {
+        hideLoader();
+      }
+    }
+
+    // Renderiza a lista de cortes marcados, o indicador de cada horário e as métricas do dia
+    function renderDetalhesDia(ocupados = [], agendamentos = []) {
+      const statusGrid = document.getElementById('timeStatusGrid');
+      const containerList = document.getElementById('dia-agendamentos');
+
+      statusGrid.innerHTML = '';
+      containerList.innerHTML = '';
+
+      // 1. Preenche os Badges com os horários e seus status
+      HORARIOS_PADRAO.forEach(hora => {
+        const estaOcupado = ocupados.includes(hora) || agendamentos.some(a => (a['ag-hora'] || a.hora) === hora);
+        const badge = document.createElement('div');
+        badge.className = `time-badge ${estaOcupado ? 'busy' : 'free'}`;
+        badge.innerText = `${hora} • ${estaOcupado ? 'Ocupado' : 'Livre'}`;
+        statusGrid.appendChild(badge);
+      });
+
+      // 2. Métricas do dia (quantidade de atendimentos e faturamento estimado)
+      let faturamentoDia = 0;
+      agendamentos.forEach(ag => {
+        const servico = ag['ag-servico'] || ag.servico || '';
+        faturamentoDia += PRECOS_SERVICOS[servico] || 0;
+      });
+      document.getElementById('metric-atendimentos').textContent = agendamentos.length || ocupados.length || 0;
+      document.getElementById('metric-faturamento').textContent =
+        'R$ ' + faturamentoDia.toLocaleString('pt-BR', { minimumFractionDigits: 0 });
+
+      // 3. Exibe os cartões com os detalhes dos atendimentos
+      if (agendamentos.length > 0) {
+        agendamentos.forEach((ag, index) => {
+          const nome = ag['ag-nome'] || ag.nome || ag.nome_cliente || 'Cliente Agendado';
+          const hora = ag['ag-hora'] || ag.hora || '--:--';
+          const servico = ag['ag-servico'] || ag.servico || 'Corte Tradicional';
+          const whatsapp = ag['ag-whatsapp'] || ag.whatsapp || '';
+          const cleanZap = whatsapp.replace(/\D/g, '');
+          const preco = PRECOS_SERVICOS[servico];
+
+          const el = document.createElement('div');
+          el.className = 'agendamento-item';
+          el.innerHTML = `
+            <div>
+              <div class="cliente">${nome}</div>
+              <div class="servico"><strong>Serviço:</strong> ${servico}</div>
+              ${preco ? `<div class="preco">R$ ${preco.toLocaleString('pt-BR')}</div>` : ''}
+              <div style="display:flex; gap:8px; align-items:center;">
+                ${whatsapp ? `<a href="https://wa.me/${cleanZap}" target="_blank" class="whatsapp-link whatsapp-btn">💬 ${whatsapp}</a>` : ''}
+                <button class="btn-deletar" onclick="deletarAgendamento(${index})">🗑️ Excluir</button>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div class="hora">${hora} hs</div>
+              <span class="status-badge">Confirmado</span>
+            </div>
+          `;
+          containerList.appendChild(el);
+        });
+      } else if (ocupados.length > 0) {
+        // Se a API retornar apenas o vetor de horários 'ocupados'
+        ocupados.forEach(hora => {
+          const el = document.createElement('div');
+          el.className = 'agendamento-item';
+          el.innerHTML = `
+            <div>
+              <div class="cliente">Horário Reservado</div>
+              <div class="servico">Agendamento registrado no sistema.</div>
+              <button class="btn-deletar" onclick="deletarAgendamentoPorHora('${hora}')">🗑️ Excluir</button>
+            </div>
+            <div style="text-align: right;">
+              <div class="hora">${hora} hs</div>
+              <span class="status-badge">Reservado</span>
+            </div>
+          `;
+          containerList.appendChild(el);
+        });
+      } else {
+        containerList.innerHTML = `
+          <div style="text-align:center; color: var(--texto-suave); padding: 26px; border: 1px dashed var(--linha); border-radius: var(--radius); background: var(--pedra);">
+            <p>Nenhum corte ou horário reservado para você neste dia.</p>
+          </div>`;
+      }
+    }
+
+    // Função para deletar um agendamento completo
+    async function deletarAgendamento(index) {
+      const ag = STATE.agendamentosAtuais[index];
+      if (!ag) return;
+
+      const nome = ag['ag-nome'] || ag.nome || ag.nome_cliente || 'Cliente';
+      if (!confirm(`Tem certeza de que deseja excluir o agendamento de "${nome}"?`)) return;
+
+      showLoader('DELETANDO AGENDAMENTO...');
+
+      try {
+        const payload = {
+          "ag-id": ag.id || ag['ag-id'] || '',
+          "ag-data": STATE.diaSelecionado,
+          "ag-hora": ag['ag-hora'] || ag.hora || '',
+          "ag-nome": nome,
+          "ag-servico": ag['ag-servico'] || ag.servico || '',
+          "ag-barbeiro": BARBEIRO_ID
+        };
+
+        const response = await fetch(DELETAR_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          toast('Agendamento excluído com sucesso!', 'success');
+          selecionarDia(STATE.diaSelecionado);
+        } else {
+          toast('Erro ao excluir agendamento.', 'error');
+        }
+      } catch (err) {
+        console.error('Erro ao deletar:', err);
+        toast('Erro de conexão ao tentar excluir.', 'error');
+      } finally {
+        hideLoader();
+      }
+    }
+
+    // Função auxiliar caso venha apenas o vetor de horários ocupados
+    async function deletarAgendamentoPorHora(hora) {
+      if (!confirm(`Tem certeza de que deseja excluir o agendamento das ${hora}?`)) return;
+
+      showLoader('DELETANDO AGENDAMENTO...');
+
+      try {
+        const payload = {
+          "ag-data": STATE.diaSelecionado,
+          "ag-hora": hora,
+          "ag-barbeiro": BARBEIRO_ID
+        };
+
+        const response = await fetch(DELETAR_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          toast('Agendamento excluído com sucesso!', 'success');
+          selecionarDia(STATE.diaSelecionado);
+        } else {
+          toast('Erro ao excluir agendamento.', 'error');
+        }
+      } catch (err) {
+        console.error('Erro ao deletar:', err);
+        toast('Erro de conexão ao tentar excluir.', 'error');
+      } finally {
+        hideLoader();
+      }
+    }
+
+    // Inicializa o calendário e carrega os agendamentos da data atual
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCalendario();
+
+      const hoje = new Date();
+      const diaStr = String(hoje.getDate()).padStart(2, '0');
+      const mesStr = String(hoje.getMonth() + 1).padStart(2, '0');
+      const anoStr = hoje.getFullYear();
+
+      selecionarDia(`${anoStr}-${mesStr}-${diaStr}`);
+    });
+</script>
+</body>
+</html>
