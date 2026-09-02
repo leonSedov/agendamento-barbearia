@@ -749,6 +749,57 @@
       }
     }
 
+    // Função auxiliar para extrair o valor/preço de um agendamento
+    // CORRIGIDO: o webhook (Google Calendar) não retorna um campo de preço isolado —
+    // ele vem embutido dentro de um texto corrido, algo como:
+    // "Cliente: leon sedov Serviço: Alinhamento de Fios WhatsApp: 84 9457-1402 Barbeiro: igor Valor: 140"
+    // Por isso, além de tentar campos diretos, agora extraímos "Valor: <número>" de dentro
+    // de qualquer texto disponível no agendamento (nome, serviço, descrição, título, etc).
+    function obterValorAgendamento(ag) {
+      // 1. Tenta encontrar o valor em campos diretos possíveis (caso o webhook mude no futuro)
+      const valorDireto = ag['ag-preco'] || ag['ag-valor'] || ag.valor || ag.preco ||
+                           ag.price || ag.total || ag['ag-total'] || ag['valor_total'] ||
+                           ag['ag-valor-servico'];
+
+      if (valorDireto && !isNaN(parseFloat(String(valorDireto).replace(',', '.')))) {
+        const num = parseFloat(String(valorDireto).replace(',', '.'));
+        if (num > 0) return num;
+      }
+
+      // 2. Procura o padrão "Valor: 140" (ou "Valor R$ 140,00" etc.) dentro de qualquer
+      // texto do agendamento — é aqui que o preço realmente está, vindo da descrição
+      // do evento no Google Calendar.
+      const camposTexto = [
+        ag['ag-servico'], ag.servico, ag['ag-nome'], ag.nome,
+        ag.descricao, ag.description, ag.title, ag.summary, ag['ag-descricao']
+      ].filter(Boolean);
+
+      for (const texto of camposTexto) {
+        const match = String(texto).match(/valor\s*:?\s*R?\$?\s*([\d.,]+)/i);
+        if (match) {
+          const num = parseFloat(match[1].replace(/\./g, '').replace(',', '.')) ||
+                      parseFloat(match[1].replace(',', '.'));
+          if (!isNaN(num) && num > 0) return num;
+        }
+      }
+
+      // 3. Se não achou o padrão "Valor:", tenta casar pelo nome do serviço em PRECOS_SERVICOS
+      // (útil se algum dia o webhook passar a mandar o nome do serviço "limpo")
+      const servicoBruto = ag['ag-servico'] || ag.servico || '';
+      const servicoNormalizado = servicoBruto.trim();
+
+      if (PRECOS_SERVICOS[servicoNormalizado]) return PRECOS_SERVICOS[servicoNormalizado];
+
+      const chaveEncontrada = Object.keys(PRECOS_SERVICOS).find(
+        chave => servicoNormalizado.toLowerCase().includes(chave.trim().toLowerCase())
+      );
+      if (chaveEncontrada) return PRECOS_SERVICOS[chaveEncontrada];
+
+      // 4. Se mesmo assim não achou nada, avisa no console para facilitar o diagnóstico
+      console.warn('[Faturamento] Não foi possível determinar o valor deste agendamento. Campos recebidos:', ag);
+      return 0;
+    }
+
     // Renderiza a lista de cortes marcados, o indicador de cada horário e as métricas do dia
     function renderDetalhesDia(ocupados = [], agendamentos = []) {
       const statusGrid = document.getElementById('timeStatusGrid');
@@ -767,11 +818,12 @@
       });
 
       // 2. Métricas do dia (quantidade de atendimentos e faturamento estimado)
+      // Soma todos os valores dos agendamentos que vêm do webhook consultar-disponibilidade
       let faturamentoDia = 0;
       agendamentos.forEach(ag => {
-        const servico = ag['ag-servico'] || ag.servico || '';
-        faturamentoDia += PRECOS_SERVICOS[servico] || 0;
+        faturamentoDia += obterValorAgendamento(ag);
       });
+      
       document.getElementById('metric-atendimentos').textContent = agendamentos.length || ocupados.length || 0;
       document.getElementById('metric-faturamento').textContent =
         'R$ ' + faturamentoDia.toLocaleString('pt-BR', { minimumFractionDigits: 0 });
@@ -784,7 +836,7 @@
           const servico = ag['ag-servico'] || ag.servico || 'Corte Tradicional';
           const whatsapp = ag['ag-whatsapp'] || ag.whatsapp || '';
           const cleanZap = whatsapp.replace(/\D/g, '');
-          const preco = PRECOS_SERVICOS[servico];
+          const preco = obterValorAgendamento(ag);
 
           const el = document.createElement('div');
           el.className = 'agendamento-item';

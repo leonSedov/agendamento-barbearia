@@ -608,6 +608,20 @@
 const WEBHOOK_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/agendamento';
 const CONSULTA_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/consultar-disponibilidade';
 
+// Preços dos serviços
+const PRECOS_SERVICOS = {
+  'Alinhamento de Fios': 140,
+  'Cabelo e Barba': 120,
+  'Cabelo e Hidratação Capilar': 105,
+  'Cabelo e Sobrancelhas': 85,
+  'Corte de Cabelo': 65,
+  'Hidratação Capilar': 40,
+  'Sobrancelhas': 20,
+  'Barboterapia': 60,
+  'Limpeza de Pele': 50,
+  'Acabamento de Cabelo': 25
+};
+
 let selectedDate = null;
 let selectedTime = null;
 let viewDate = new Date();
@@ -748,6 +762,8 @@ function irParaResumo() {
     }
     const servicoSelect = document.getElementById('servico');
     const servicoTexto = servicoSelect.options[servicoSelect.selectedIndex].text;
+    const servicoValue = servicoSelect.value;
+    const preco = PRECOS_SERVICOS[servicoValue] || 0;
     const barbeiroSelect = document.getElementById('barbeiro');
     const barbeiroTexto = barbeiroSelect.options[barbeiroSelect.selectedIndex].text;
     const [ano, mes, dia] = selectedDate.split('-');
@@ -756,6 +772,7 @@ function irParaResumo() {
         <div class="resumo-caixa__linha"><span>Profissional</span><span>${barbeiroTexto}</span></div>
         <div class="resumo-caixa__linha"><span>Data</span><span>${dia}/${mes}/${ano}</span></div>
         <div class="resumo-caixa__linha"><span>Horário</span><span>${selectedTime}</span></div>
+        <div class="resumo-caixa__linha"><span>Preço</span><span>R$ ${preco.toLocaleString('pt-BR')}</span></div>
         <div class="resumo-caixa__linha"><span>Nome</span><span>${nome}</span></div>
         <div class="resumo-caixa__linha"><span>WhatsApp</span><span>${zap}</span></div>
     `;
@@ -894,16 +911,20 @@ async function enviarAgendamento() {
 
         btn.innerText = "RESERVANDO...";
 
+        const servicoSelecionado = document.getElementById('servico').value;
+        const preco = PRECOS_SERVICOS[servicoSelecionado] || 0;
+
         const response = await fetch(WEBHOOK_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "ag-nome": nome,
                 "ag-whatsapp": zap,
-                "ag-servico": document.getElementById('servico').value,
+                "ag-servico": servicoSelecionado,
                 "ag-barbeiro": document.getElementById('barbeiro').value,
                 "ag-data": selectedDate,
-                "ag-hora": selectedTime
+                "ag-hora": selectedTime,
+                "ag-preco": preco
             })
         });
 
