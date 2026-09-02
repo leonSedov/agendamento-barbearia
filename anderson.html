@@ -847,6 +847,40 @@
       return 0;
     }
 
+    // ================= FILTRO DE AGENDAMENTOS DO ANDERSON =================
+    function agendamentoPertenceAoAnderson(ag) {
+      // Lista de campos que podem conter o nome do barbeiro
+      const camposBarbeiro = [
+        ag['ag-barbeiro'], ag.barbeiro, ag.barber, ag['barber-id'],
+        ag['ag-barbeiro-nome'], ag.barbeiroNome, ag.barberName,
+        ag['ag-barbeiro-id'], ag['barbeiro_id'], ag['barber_id']
+      ].filter(Boolean).map(v => String(v).trim().toLowerCase());
+
+      // Verifica se algum campo corresponde a "anderson"
+      if (camposBarbeiro.some(v => v === 'anderson' || v === 'anderson' || v.includes('anderson'))) {
+        return true;
+      }
+
+      // Se não achou, procura no texto combinado de título, descrição, resumo
+      const textoCombinado = [
+        ag.summary, ag.title, ag.description, ag.descricao,
+        ag['ag-descricao'], ag['ag-servico'], ag.servico
+      ].filter(Boolean).join(' ').toLowerCase();
+
+      // Expressão regular para "barbeiro: anderson" (com ou sem acento)
+      if (/barbeiro\s*:\s*(anderson)/i.test(textoCombinado)) {
+        return true;
+      }
+
+      // Fallback: verifica se em qualquer campo aparece "anderson" como palavra isolada
+      const todosTextos = Object.values(ag).filter(Boolean).join(' ').toLowerCase();
+      if (/\b(anderson)\b/.test(todosTextos)) {
+        return true;
+      }
+
+      return false;
+    }
+
     // ================= CALENDÁRIO =================
     function renderCalendario() {
       const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
@@ -917,6 +951,7 @@
       showLoader('BUSCANDO SEUS CORTES...');
 
       try {
+        // Envia requisição para o webhook com o barbeiro específico
         const response = await fetch(CONSULTA_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -926,12 +961,19 @@
         if (!response.ok) throw new Error(`Status ${response.status}`);
 
         const dados = await response.json();
-        const ocupados = dados.ocupados || [];
-        const agendamentos = dados.agendamentos || [];
+        // Pega todos os agendamentos e filtra apenas os do Anderson
+        const todosAgendamentos = Array.isArray(dados.agendamentos) ? dados.agendamentos : [];
+        const agendamentosFiltrados = todosAgendamentos.filter(agendamentoPertenceAoAnderson);
 
-        STATE.agendamentosAtuais = agendamentos;
+        // Extrai os horários ocupados a partir dos agendamentos filtrados
+        const horariosOcupados = agendamentosFiltrados
+          .map(ag => ag['ag-hora'] || ag.hora)
+          .filter(Boolean);
 
-        renderDetalhesDia(ocupados, agendamentos);
+        STATE.agendamentosAtuais = agendamentosFiltrados;
+
+        // Renderiza usando os ocupados (que são os horários dos agendamentos do Anderson)
+        renderDetalhesDia(horariosOcupados, agendamentosFiltrados);
         toast('Agenda do dia atualizada!', 'success');
       } catch (err) {
         console.error('Erro ao consultar agenda:', err);
@@ -951,12 +993,7 @@
       statusGrid.innerHTML = '';
       containerList.innerHTML = '';
 
-      const horariosOcupados = new Set();
-      ocupados.forEach(h => horariosOcupados.add(h));
-      agendamentos.forEach(a => {
-        const hora = a['ag-hora'] || a.hora;
-        if (hora) horariosOcupados.add(hora);
-      });
+      const horariosOcupados = new Set(ocupados);
 
       HORARIOS_PADRAO.forEach(hora => {
         const ocupado = horariosOcupados.has(hora);
