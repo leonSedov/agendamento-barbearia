@@ -226,7 +226,7 @@
     .modal {
         background: var(--pedra-card);
         border-radius: var(--radius);
-        max-width: 480px;
+        max-width: 520px;
         width: 100%;
         padding: 28px 32px;
         box-shadow: var(--sombra-forte);
@@ -281,6 +281,8 @@
     .modal .opcoes button.primario:hover { background: #f0dddc; border-color: var(--bordo-escuro); }
     .modal .opcoes button.perigo { border-color: var(--perigo); color: var(--perigo); background: #fde8e6; }
     .modal .opcoes button.perigo:hover { background: #fad5d2; }
+    .modal .opcoes button.secundario { border-color: var(--navalha); color: var(--navalha); background: #eaf2ee; }
+    .modal .opcoes button.secundario:hover { background: #d4e3dd; }
 
     .modal .form-group {
         margin-bottom: 14px;
@@ -347,7 +349,104 @@
     }
     .modal .confirm-text strong { color: var(--tinta); }
 
-    /* ================= RESPONSIVO ================= */
+    /* ================= CLIENTES REGULARES (apenas modal) ================= */
+    .cliente-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 14px;
+        border: 1px solid var(--linha);
+        border-radius: var(--radius-peq);
+        margin-bottom: 8px;
+        background: var(--pedra-card);
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+    .cliente-item:hover {
+        border-color: var(--latao);
+        background: var(--pedra);
+        transform: translateX(4px);
+    }
+    .cliente-item .cliente-nome {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--tinta);
+    }
+    .cliente-item .cliente-info {
+        font-size: 0.8rem;
+        color: var(--texto-suave);
+        margin-top: 2px;
+    }
+    .cliente-item .cliente-badge {
+        background: var(--latao);
+        color: #fff;
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+    }
+    .cliente-item .cliente-badge.whatsapp {
+        background: var(--whatsapp);
+        margin-left: 8px;
+    }
+    .cliente-item .cliente-actions {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+
+    .busca-cliente {
+        margin-bottom: 12px;
+    }
+    .busca-cliente input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--linha);
+        border-radius: var(--radius-peq);
+        font-family: var(--fonte-corpo);
+        font-size: 0.9rem;
+        background: var(--pedra);
+    }
+    .busca-cliente input:focus {
+        outline: none;
+        border-color: var(--latao);
+    }
+
+    .btn-voltar {
+        background: none;
+        border: none;
+        color: var(--texto-suave);
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 0;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: color .15s;
+    }
+    .btn-voltar:hover { color: var(--tinta); }
+
+    .btn-recargar {
+        display: inline-block;
+        background: var(--latao);
+        color: #fff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: var(--radius-peq);
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background .15s;
+        margin-bottom: 12px;
+    }
+    .btn-recargar:hover { background: var(--latao-escuro); }
+
+    /* ================= HEADER MOBILE ================= */
     .mobile-header {
         display: none;
         position: fixed;
@@ -480,6 +579,7 @@
         .divider { margin: 16px 0; }
         .section-label { font-size: 0.65rem; margin-bottom: 8px; }
         .modal .opcoes { flex-direction: column; }
+        .modal { padding: 16px; }
     }
 
     @media (max-width: 380px) {
@@ -574,17 +674,39 @@
 <div class="modal-overlay" id="modalGerenciar">
     <div class="modal">
         <button class="btn-fechar" id="modalFechar">&times;</button>
-        <h2>Gerenciar Horário</h2>
+        <h2 id="modalTitulo">Gerenciar Horário</h2>
         <div class="modal-sub">
             <strong id="modalDataHora">—</strong>
         </div>
 
-        <div id="modalOpcoes" class="opcoes">
-            <button class="primario" id="btnAgendarCliente">📋 Agendar Cliente</button>
-            <button class="perigo" id="btnIndisponivel">🚫 Indisponível</button>
+        <div id="modalOpcoes">
+            <div class="opcoes">
+                <button class="primario" id="btnAgendarCliente">📋 Agendar Cliente</button>
+                <button class="perigo" id="btnIndisponivel">🚫 Indisponível</button>
+            </div>
+        </div>
+
+        <div id="modalEscolhaCliente" style="display:none;">
+            <button class="btn-voltar" id="btnVoltarEscolha">← Voltar</button>
+            <div class="opcoes">
+                <button class="primario" id="btnNovoCliente">🆕 Novo Cliente</button>
+                <button class="secundario" id="btnClienteRegular">🔄 Cliente Regular</button>
+            </div>
+        </div>
+
+        <div id="modalListaClientes" style="display:none;">
+            <button class="btn-voltar" id="btnVoltarLista">← Voltar</button>
+            <div class="busca-cliente">
+                <input type="text" id="buscaCliente" placeholder="Buscar cliente...">
+            </div>
+            <button class="btn-recargar" id="btnRecarregarClientes">🔄 Recarregar</button>
+            <div id="listaClientesContainer">
+                <!-- Clientes renderizados como botões -->
+            </div>
         </div>
 
         <div id="modalFormAgendamento" style="display:none;">
+            <button class="btn-voltar" id="btnVoltarForm">← Voltar</button>
             <div class="form-group">
                 <label>Nome do cliente</label>
                 <input type="text" id="modalNome" placeholder="Ex: João Silva">
@@ -617,6 +739,7 @@
         </div>
 
         <div id="modalConfirmIndisponivel" style="display:none;">
+            <button class="btn-voltar" id="btnVoltarIndisponivel">← Voltar</button>
             <div class="confirm-text">
                 Tem certeza que deseja marcar este horário como <strong>INDISPONÍVEL</strong>?<br>
                 <span style="font-size:0.85rem; color:var(--texto-suave);">Nenhum cliente poderá agendar neste horário.</span>
@@ -634,6 +757,7 @@
     const CONSULTA_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/consultar-disponibilidade';
     const DELETAR_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/deletar-agendamento';
     const WEBHOOK_BARBEIRO = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/agendamento-do-barbeiro';
+    const CLIENTES_REGULARES_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/clientes-regulares';
 
     const HORARIOS_PADRAO = [
       '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
@@ -663,7 +787,8 @@
       agendamentosAtuais: [],
       modalHora: null,
       modalData: null,
-      modalOcupado: false
+      modalOcupado: false,
+      clientesRegulares: [],
     };
 
     // ================= UTILITÁRIOS =================
@@ -923,9 +1048,12 @@
       document.getElementById('modalDataHora').textContent =
         `${formatDataFormatada(STATE.diaSelecionado)} — ${hora}`;
 
-      document.getElementById('modalOpcoes').style.display = 'flex';
+      document.getElementById('modalOpcoes').style.display = 'block';
+      document.getElementById('modalEscolhaCliente').style.display = 'none';
+      document.getElementById('modalListaClientes').style.display = 'none';
       document.getElementById('modalFormAgendamento').style.display = 'none';
       document.getElementById('modalConfirmIndisponivel').style.display = 'none';
+      document.getElementById('modalTitulo').textContent = 'Gerenciar Horário';
 
       modal.classList.add('active');
     }
@@ -936,6 +1064,8 @@
       document.getElementById('modalWhatsapp').value = '';
       document.getElementById('modalServico').value = '';
       document.getElementById('modalObs').value = '';
+      document.getElementById('buscaCliente').value = '';
+      document.getElementById('listaClientesContainer').innerHTML = '<div style="text-align:center; color: var(--texto-suave); padding: 20px;">Carregando clientes...</div>';
     }
 
     document.getElementById('modalFechar').addEventListener('click', fecharModal);
@@ -945,24 +1075,167 @@
 
     document.getElementById('btnAgendarCliente').addEventListener('click', () => {
       document.getElementById('modalOpcoes').style.display = 'none';
-      document.getElementById('modalFormAgendamento').style.display = 'block';
-      document.getElementById('modalConfirmIndisponivel').style.display = 'none';
+      document.getElementById('modalEscolhaCliente').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Tipo de Cliente';
     });
 
     document.getElementById('btnIndisponivel').addEventListener('click', () => {
       document.getElementById('modalOpcoes').style.display = 'none';
-      document.getElementById('modalFormAgendamento').style.display = 'none';
       document.getElementById('modalConfirmIndisponivel').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Marcar Indisponível';
     });
 
-    // Enviar agendamento (formulário)
+    document.getElementById('btnVoltarEscolha').addEventListener('click', () => {
+      document.getElementById('modalEscolhaCliente').style.display = 'none';
+      document.getElementById('modalOpcoes').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Gerenciar Horário';
+    });
+
+    document.getElementById('btnVoltarLista').addEventListener('click', () => {
+      document.getElementById('modalListaClientes').style.display = 'none';
+      document.getElementById('modalEscolhaCliente').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Tipo de Cliente';
+    });
+
+    document.getElementById('btnVoltarForm').addEventListener('click', () => {
+      document.getElementById('modalFormAgendamento').style.display = 'none';
+      document.getElementById('modalEscolhaCliente').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Tipo de Cliente';
+    });
+
+    document.getElementById('btnVoltarIndisponivel').addEventListener('click', () => {
+      document.getElementById('modalConfirmIndisponivel').style.display = 'none';
+      document.getElementById('modalOpcoes').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Gerenciar Horário';
+    });
+
+    // ================= CLIENTE REGULAR (apenas modal) =================
+    async function carregarClientesRegulares() {
+      try {
+        const response = await fetch(CLIENTES_REGULARES_URL, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        let data = await response.json();
+        let lista = [];
+        if (Array.isArray(data)) {
+          lista = data;
+        } else if (data && typeof data === 'object') {
+          const keys = Object.keys(data);
+          for (const key of keys) {
+            if (Array.isArray(data[key])) {
+              lista = data[key];
+              break;
+            }
+          }
+          if (lista.length === 0 && data.items && Array.isArray(data.items)) {
+            lista = data.items;
+          }
+          if (lista.length === 0 && data.data && Array.isArray(data.data)) {
+            lista = data.data;
+          }
+        }
+        STATE.clientesRegulares = lista
+          .filter(item => item && (item.nome || item.name))
+          .map(item => ({
+            nome: item.nome || item.name || '',
+            whatsapp: item.whatsapp || item.numero || '',
+            visitas: parseInt(item.visitas || 0, 10)
+          }));
+        console.log('Clientes regulares carregados:', STATE.clientesRegulares);
+      } catch (err) {
+        console.error('Erro ao buscar clientes regulares:', err);
+        STATE.clientesRegulares = [];
+      }
+    }
+
+    function renderizarListaClientes(filtro = '') {
+      const container = document.getElementById('listaClientesContainer');
+      let lista = STATE.clientesRegulares.filter(c =>
+        (c.nome && c.nome.toLowerCase().includes(filtro.toLowerCase())) ||
+        (c.whatsapp && c.whatsapp.includes(filtro))
+      );
+      // Ordena por visitas (do maior para o menor)
+      lista.sort((a, b) => (b.visitas || 0) - (a.visitas || 0));
+
+      if (lista.length === 0) {
+        container.innerHTML = `<div style="text-align:center; color: var(--texto-suave); padding: 20px;">Nenhum cliente regular encontrado.</div>`;
+        return;
+      }
+
+      container.innerHTML = '';
+      lista.forEach(cliente => {
+        const div = document.createElement('div');
+        div.className = 'cliente-item';
+        const whatsExibido = cliente.whatsapp ? cliente.whatsapp : 'Sem WhatsApp';
+        div.innerHTML = `
+          <div>
+            <div class="cliente-nome">${cliente.nome || 'Sem nome'}</div>
+            <div class="cliente-info">${whatsExibido} • ${cliente.visitas || 0} visita(s)</div>
+          </div>
+          <div class="cliente-actions">
+            <span class="cliente-badge">Selecionar</span>
+          </div>
+        `;
+        div.addEventListener('click', () => selecionarClienteRegular(cliente));
+        container.appendChild(div);
+      });
+    }
+
+    function selecionarClienteRegular(cliente) {
+      // Preenche automaticamente os campos
+      document.getElementById('modalNome').value = cliente.nome || '';
+      document.getElementById('modalWhatsapp').value = cliente.whatsapp || '';
+      document.getElementById('modalServico').value = ''; // mantém vazio
+
+      // Mostra o formulário
+      document.getElementById('modalListaClientes').style.display = 'none';
+      document.getElementById('modalFormAgendamento').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Novo Atendimento';
+    }
+
+    document.getElementById('btnNovoCliente').addEventListener('click', () => {
+      document.getElementById('modalNome').value = '';
+      document.getElementById('modalWhatsapp').value = '';
+      document.getElementById('modalServico').value = '';
+      document.getElementById('modalObs').value = '';
+      document.getElementById('modalEscolhaCliente').style.display = 'none';
+      document.getElementById('modalFormAgendamento').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Novo Atendimento';
+    });
+
+    document.getElementById('btnClienteRegular').addEventListener('click', async () => {
+      if (STATE.clientesRegulares.length === 0) {
+        showLoader('CARREGANDO CLIENTES...');
+        await carregarClientesRegulares();
+        hideLoader();
+      }
+      document.getElementById('modalEscolhaCliente').style.display = 'none';
+      document.getElementById('modalListaClientes').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Selecione um Cliente';
+      renderizarListaClientes('');
+    });
+
+    document.getElementById('btnRecarregarClientes').addEventListener('click', async () => {
+      showLoader('RECARREGANDO...');
+      await carregarClientesRegulares();
+      hideLoader();
+      renderizarListaClientes(document.getElementById('buscaCliente').value);
+      toast('Lista recarregada!', 'success');
+    });
+
+    document.getElementById('buscaCliente').addEventListener('input', function() {
+      renderizarListaClientes(this.value);
+    });
+
+    // ================= ENVIAR AGENDAMENTO =================
     document.getElementById('btnEnviarAgendamento').addEventListener('click', async () => {
       const nome = document.getElementById('modalNome').value.trim();
       const whatsapp = document.getElementById('modalWhatsapp').value.trim();
       const servico = document.getElementById('modalServico').value;
       const obs = document.getElementById('modalObs').value.trim();
 
-      // Calcula preço baseado no serviço selecionado
       const preco = PRECOS_SERVICOS[servico] || 0;
 
       const payload = {
@@ -978,7 +1251,7 @@
       await enviarParaWebhook(payload);
     });
 
-    // Confirmar indisponibilidade
+    // ================= CONFIRMAR INDISPONIBILIDADE =================
     document.getElementById('btnConfirmarIndisponivel').addEventListener('click', async () => {
       const payload = {
         "ag-data": STATE.modalData,
@@ -993,7 +1266,7 @@
       await enviarParaWebhook(payload);
     });
 
-    // ================= ENVIO PARA WEBHOOK (agora no formato compatível) =================
+    // ================= ENVIO PARA WEBHOOK =================
     async function enviarParaWebhook(payload) {
       showLoader('ENVIANDO...');
       try {
@@ -1116,6 +1389,9 @@
       const anoStr = hoje.getFullYear();
 
       selecionarDia(`${anoStr}-${mesStr}-${diaStr}`);
+
+      // Carrega clientes regulares para o modal (não exibe na página inicial)
+      carregarClientesRegulares();
 
       const hamburger = document.getElementById('hamburger-btn');
       const overlay = document.getElementById('sidebar-overlay');
