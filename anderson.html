@@ -203,6 +203,184 @@
     .toast.success { border-color: var(--navalha); }
     .toast.error { border-color: var(--perigo); }
 
+  /* ================= MODAL AGENDAMENTO ================= */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(24, 23, 27, 0.7);
+    z-index: 9999;
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.active {
+    display: flex;
+  }
+
+  .modal-box {
+    background: var(--pedra-card);
+    border-radius: var(--radius);
+    box-shadow: var(--sombra-forte);
+    max-width: 500px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    border: 1px solid var(--linha);
+  }
+
+  .modal-header {
+    position: sticky;
+    top: 0;
+    background: var(--tinta);
+    color: var(--pedra);
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(185,144,47,0.25);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+  }
+
+  .modal-title {
+    font-family: var(--fonte-cartaz);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .modal-close-btn {
+    background: none;
+    border: none;
+    color: var(--latao);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+  }
+
+  .modal-close-btn:hover {
+    color: var(--pedra);
+  }
+
+  .modal-content {
+    padding: 24px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-label {
+    display: block;
+    font-family: var(--fonte-cartaz);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--bordo);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--linha);
+    border-radius: var(--radius-peq);
+    font-family: var(--fonte-corpo);
+    font-size: 0.9rem;
+    color: var(--texto);
+    background: var(--pedra);
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    outline: none;
+    border-color: var(--latao);
+    background: var(--pedra-card);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: var(--fonte-corpo);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 520px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .modal-box {
+      width: 95%;
+      max-height: 90vh;
+    }
+
+    .modal-content {
+      padding: 16px;
+    }
+  }
+
+  .modal-footer {
+    padding: 16px 24px;
+    background: var(--tinta-suave);
+    border-top: 1px solid var(--linha);
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 10px 20px;
+    border-radius: var(--radius-peq);
+    font-family: var(--fonte-corpo);
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-primary {
+    background: var(--bordo);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: var(--bordo-escuro);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--texto-suave);
+    border: 1px solid var(--linha);
+  }
+
+  .btn-secondary:hover {
+    background: var(--pedra);
+    border-color: var(--texto-suave);
+  }
     /* ================= HEADER MOBILE ================= */
     .mobile-header {
         display: none;
@@ -588,6 +766,25 @@
     </div>
 </main>
 
+<div class="modal-overlay" id="modal-agendamento">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Novo Atendimento — <span id="modal-hora-selecionada">--:--</span></div>
+      <button type="button" class="modal-close-btn" onclick="fecharModal()">&#10005;</button>
+    </div>
+    <form id="form-agendamento" onsubmit="enviarAgendamento(event)">
+      <div class="modal-content">
+        <div class="form-group"><label class="form-label" for="ag-nome">Nome do Cliente</label><input class="form-input" id="ag-nome" type="text"></div>
+        <div class="form-group"><label class="form-label" for="ag-whatsapp">WhatsApp</label><input class="form-input" id="ag-whatsapp" type="tel"></div>
+        <div class="form-group"><label class="form-label" for="ag-servico">Serviço</label><select class="form-select" id="ag-servico"><option value="">Selecione um serviço</option><option value="Alinhamento de Fios">Alinhamento de Fios</option><option value="Cabelo e Barba">Cabelo e Barba</option><option value="Cabelo e Hidratação Capilar">Cabelo e Hidratação Capilar</option><option value="Cabelo e Sobrancelhas">Cabelo e Sobrancelhas</option><option value="Corte de Cabelo">Corte de Cabelo</option><option value="Hidratação Capilar">Hidratação Capilar</option><option value="Sobrancelhas">Sobrancelhas</option><option value="Barboterapia">Barboterapia</option><option value="Limpeza de Pele">Limpeza de Pele</option><option value="Acabamento de Cabelo">Acabamento de Cabelo</option></select></div>
+        <div class="form-row"><div class="form-group"><label class="form-label" for="ag-preco">Preço (R$)</label><input class="form-input" id="ag-preco" type="number" step="0.01"></div><div class="form-group"><label class="form-label" for="ag-data">Data</label><input class="form-input" id="ag-data" type="date"></div></div>
+        <div class="form-group"><label class="form-label" for="ag-observacoes">Observações</label><textarea class="form-textarea" id="ag-observacoes"></textarea></div>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn-secondary" onclick="fecharModal()">Cancelar</button><button type="submit" class="btn-primary">Confirmar Agendamento</button></div>
+    </form>
+  </div>
+</div>
+
 <script>
     // Identidade deste painel — cada barbeiro tem sua própria página com este id fixo
     const BARBEIRO_ID = 'anderson';
@@ -814,17 +1011,14 @@
         const badge = document.createElement('div');
         badge.className = `time-badge ${estaOcupado ? 'busy' : 'free'}`;
         badge.innerText = `${hora} • ${estaOcupado ? 'Ocupado' : 'Livre'}`;
+        badge.style.cursor = 'pointer';
+        badge.onclick = () => abrirModalAgendamento(hora);
         statusGrid.appendChild(badge);
       });
-
-      // 2. Métricas do dia (quantidade de atendimentos e faturamento estimado)
-      // Soma todos os valores dos agendamentos que vêm do webhook consultar-disponibilidade
-      let faturamentoDia = 0;
-      agendamentos.forEach(ag => {
-        faturamentoDia += obterValorAgendamento(ag);
-      });
-      
-      document.getElementById('metric-atendimentos').textContent = agendamentos.length || ocupados.length || 0;
+            // 2. Métricas do dia (quantidade de atendimentos e faturamento estimado)
+              badge.onclick = () => abrirModalAgendamento(hora);
+              statusGrid.appendChild(badge);
+            });
       document.getElementById('metric-faturamento').textContent =
         'R$ ' + faturamentoDia.toLocaleString('pt-BR', { minimumFractionDigits: 0 });
 
@@ -979,6 +1173,101 @@
       document.body.style.overflow = '';
     }
 
+    // ================= FUNÇÕES DO MODAL =================
+    let HORA_SELECIONADA = null;
+    const WEBHOOK_AGENDAMENTO_BARBEIRO = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/agendamento-do-barbeiro';
+
+    function abrirModalAgendamento(hora) {
+      HORA_SELECIONADA = hora;
+      const modal = document.getElementById('modal-agendamento');
+      const today = new Date();
+      const ano = today.getFullYear();
+      const mes = String(today.getMonth() + 1).padStart(2, '0');
+      const dia = String(today.getDate()).padStart(2, '0');
+
+      // Configura a data no input para hoje por padrão
+      document.getElementById('ag-data').value = `${ano}-${mes}-${dia}`;
+      document.getElementById('modal-hora-selecionada').textContent = hora;
+
+      // Limpa o formulário
+      document.getElementById('form-agendamento').reset();
+      document.getElementById('ag-data').value = `${ano}-${mes}-${dia}`;
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModal() {
+      const modal = document.getElementById('modal-agendamento');
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+      HORA_SELECIONADA = null;
+    }
+
+    // Fecha o modal ao clicar no overlay (fundo escuro)
+    document.addEventListener('DOMContentLoaded', () => {
+      const modalOverlay = document.getElementById('modal-agendamento');
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+          fecharModal();
+        }
+      });
+    });
+
+    async function enviarAgendamento(event) {
+      event.preventDefault();
+
+      if (!STATE.diaSelecionado || !HORA_SELECIONADA) {
+        toast('Erro: data ou hora não selecionada.', 'error');
+        return;
+      }
+
+      // Coleta os dados do formulário (nenhum é obrigatório)
+      const nome = document.getElementById('ag-nome').value.trim();
+      const whatsapp = document.getElementById('ag-whatsapp').value.trim();
+      const servico = document.getElementById('ag-servico').value.trim();
+      const preco = document.getElementById('ag-preco').value.trim();
+      const data = document.getElementById('ag-data').value.trim();
+      const observacoes = document.getElementById('ag-observacoes').value.trim();
+
+      // Monta o payload para enviar ao webhook
+      const payload = {
+        'ag-barbeiro': BARBEIRO_ID,
+        'ag-barbeiro-nome': BARBEIRO_NOME,
+        'ag-data': data || STATE.diaSelecionado,
+        'ag-hora': HORA_SELECIONADA,
+        'ag-nome': nome || '',
+        'ag-whatsapp': whatsapp || '',
+        'ag-servico': servico || '',
+        'ag-preco': preco ? parseFloat(preco) : 0,
+        'ag-observacoes': observacoes || '',
+        'timestamp': new Date().toISOString()
+      };
+
+      showLoader('ENVIANDO AGENDAMENTO...');
+
+      try {
+        const response = await fetch(WEBHOOK_AGENDAMENTO_BARBEIRO, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          toast('✓ Agendamento criado com sucesso!', 'success');
+          fecharModal();
+          // Recarrega os agendamentos do dia
+          selecionarDia(STATE.diaSelecionado);
+        } else {
+          toast('Erro ao enviar agendamento. Tente novamente.', 'error');
+        }
+      } catch (err) {
+        console.error('Erro ao enviar agendamento:', err);
+        toast('Erro de conexão ao enviar agendamento.', 'error');
+      } finally {
+        hideLoader();
+      }
+    }
     document.addEventListener('DOMContentLoaded', () => {
       renderCalendario();
 
