@@ -63,6 +63,98 @@
     .faixa-topo { height: 5px; width: 100%; background: var(--faixa); background-size: 70px 70px; animation: girarFaixa 3.2s linear infinite; }
     @keyframes girarFaixa { from { background-position: 0 0; } to { background-position: 70px 0; } }
 
+    /* ================= LOGIN OVERLAY ================= */
+    #login-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(24, 23, 27, 0.92);
+        backdrop-filter: blur(8px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999;
+        padding: 20px;
+    }
+    #login-overlay.active { display: flex; }
+    .login-box {
+        background: var(--pedra-card);
+        border-radius: var(--radius);
+        padding: 40px 36px;
+        max-width: 420px;
+        width: 100%;
+        box-shadow: var(--sombra-forte);
+        text-align: center;
+        animation: modalEntrar 0.4s ease;
+    }
+    @keyframes modalEntrar {
+        from { opacity: 0; transform: translateY(-20px) scale(0.96); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .login-box h1 {
+        font-family: var(--fonte-cartaz);
+        font-size: 1.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--tinta);
+        margin-bottom: 6px;
+    }
+    .login-box .sub {
+        color: var(--texto-suave);
+        font-size: 0.9rem;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--linha);
+        padding-bottom: 16px;
+    }
+    .login-box .login-icon {
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+        color: var(--latao);
+    }
+    .login-box input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid var(--linha);
+        border-radius: var(--radius-peq);
+        font-size: 1rem;
+        font-family: var(--fonte-corpo);
+        background: var(--pedra);
+        color: var(--texto);
+        transition: border-color 0.2s;
+        margin-bottom: 16px;
+        text-align: center;
+        letter-spacing: 2px;
+    }
+    .login-box input:focus {
+        outline: none;
+        border-color: var(--latao);
+    }
+    .login-box .btn-entrar {
+        width: 100%;
+        padding: 14px;
+        background: var(--bordo);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-peq);
+        font-family: var(--fonte-cartaz);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 600;
+        transition: background 0.15s;
+    }
+    .login-box .btn-entrar:hover {
+        background: var(--bordo-escuro);
+    }
+    .login-box .erro {
+        color: var(--perigo);
+        font-size: 0.85rem;
+        margin-top: 12px;
+        display: none;
+    }
+    .login-box .erro.visible {
+        display: block;
+    }
+
     /* ================= SIDEBAR ================= */
     #sidebar {
         position: fixed; left: 0; top: 5px; bottom: 0;
@@ -435,6 +527,18 @@
 
 <div class="faixa-topo" aria-hidden="true"></div>
 
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay" class="active">
+    <div class="login-box">
+        <div class="login-icon">🔐</div>
+        <h1>Ominus Tech</h1>
+        <div class="sub">Painel Administrativo</div>
+        <input type="password" id="senha-input" placeholder="Digite a senha" autocomplete="off">
+        <button class="btn-entrar" id="btn-login">Entrar</button>
+        <div class="erro" id="login-erro">Senha incorreta. Tente novamente.</div>
+    </div>
+</div>
+
   <!-- MOBILE HEADER -->
   <div class="mobile-header">
     <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">
@@ -485,7 +589,7 @@
   </nav>
 
   <!-- MAIN CONTENT (DASHBOARD) -->
-  <main id="app">
+  <main id="app" style="display:none;">
     <div class="page-header">
       <div class="page-title">Dashboard</div>
       <p class="page-subtitle">Visão geral · Hoje, <span id="today-date"></span></p>
@@ -571,14 +675,77 @@
   </main>
 
   <script>
+    // ================= SISTEMA DE SENHA =================
+    const SENHA_CORRETA = 'km12873';
+    const STORAGE_KEY = 'auth_data_dashboard';
+
+    function getAuthData() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return null;
+            return JSON.parse(raw);
+        } catch { return null; }
+    }
+
+    function setAuthData() {
+        const hoje = new Date();
+        const dataStr = hoje.getFullYear() + '-' +
+                       String(hoje.getMonth()+1).padStart(2,'0') + '-' +
+                       String(hoje.getDate()).padStart(2,'0');
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: dataStr }));
+    }
+
+    function precisaAutenticar() {
+        const auth = getAuthData();
+        if (!auth) return true;
+
+        const hoje = new Date();
+        const diaAtual = hoje.getDate();
+        const mesAtual = hoje.getMonth() + 1;
+        const anoAtual = hoje.getFullYear();
+
+        // Se hoje é dia 8, sempre pede senha
+        if (diaAtual === 8) {
+            if (!auth.data) return true;
+            const partes = auth.data.split('-');
+            if (partes.length !== 3) return true;
+            const anoSalvo = parseInt(partes[0], 10);
+            const mesSalvo = parseInt(partes[1], 10);
+            const diaSalvo = parseInt(partes[2], 10);
+            if (anoSalvo !== anoAtual || mesSalvo !== mesAtual || diaSalvo !== 8) {
+                return true;
+            }
+            return false;
+        } else {
+            if (!auth.data) return true;
+            return false;
+        }
+    }
+
+    function autenticar(senha) {
+        if (senha === SENHA_CORRETA) {
+            setAuthData();
+            document.getElementById('login-overlay').classList.remove('active');
+            document.getElementById('app').style.display = 'block';
+            // Inicializa a aplicação
+            iniciarDashboard();
+            return true;
+        } else {
+            const erro = document.getElementById('login-erro');
+            erro.classList.add('visible');
+            setTimeout(() => erro.classList.remove('visible'), 3000);
+            return false;
+        }
+    }
+
     /* =============================================
        WEBHOOK CONFIG
        → Substitua as URLs pelas do seu n8n
     ============================================= */
     const API_CONFIG = {
-      BUSCAR_DADOS: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/dados', // POST/GET – retorna stats
-      LISTAR_BARBEIROS: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/barbeiros', // GET – lista barbeiros
-      CLIENTES_FREQUENCIA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/clientes-frequencia' // GET – clientes e frequência
+      BUSCAR_DADOS: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/dados',
+      LISTAR_BARBEIROS: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/barbeiros',
+      CLIENTES_FREQUENCIA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/clientes-frequencia'
     };
 
     /* =============================================
@@ -781,9 +948,9 @@
     }
 
     /* =============================================
-       INICIALIZAÇÃO
+       INICIALIZAÇÃO DO DASHBOARD
     ============================================= */
-    document.addEventListener('DOMContentLoaded', () => {
+    function iniciarDashboard() {
       // Data atual
       const hoje = new Date();
       document.getElementById('today-date').textContent = hoje.toLocaleDateString('pt-BR', {
@@ -818,6 +985,35 @@
           closeMenu();
         }
       });
+    }
+
+    /* =============================================
+       INICIALIZAÇÃO (com verificação de senha)
+    ============================================= */
+    document.addEventListener('DOMContentLoaded', () => {
+      // Eventos do login
+      document.getElementById('btn-login').addEventListener('click', function() {
+        const input = document.getElementById('senha-input');
+        autenticar(input.value);
+        input.value = '';
+      });
+
+      document.getElementById('senha-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          document.getElementById('btn-login').click();
+        }
+      });
+
+      // Verifica se precisa autenticar
+      if (precisaAutenticar()) {
+        document.getElementById('login-overlay').classList.add('active');
+        document.getElementById('app').style.display = 'none';
+        document.getElementById('senha-input').focus();
+      } else {
+        document.getElementById('login-overlay').classList.remove('active');
+        document.getElementById('app').style.display = 'block';
+        iniciarDashboard();
+      }
     });
   </script>
 
