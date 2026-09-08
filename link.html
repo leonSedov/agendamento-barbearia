@@ -674,7 +674,6 @@ inicializarCarrossel();
 /* ---------------------------------------------------------------
  * Abaixo: SOMENTE navegação/visual (abas do perfil, entrada e saída
  * do painel de agendamento, barra de progresso do wizard).
- * Nenhuma linha de fetch/webhook foi criada ou alterada aqui.
  * ------------------------------------------------------------- */
 function mostrarAba(nome) {
     document.querySelectorAll('.aba').forEach((el) => el.classList.toggle('ativa', el.dataset.aba === nome));
@@ -746,7 +745,7 @@ function nextStep(step) {
     }
     if(step === 1) renderCalendar();
     atualizarProgresso(step);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Removido scrollTo para evitar salto ao topo
 }
 
 /* ---------------------------------------------------------------

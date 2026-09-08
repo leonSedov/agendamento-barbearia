@@ -62,6 +62,96 @@
     .faixa-topo { height: 5px; width: 100%; background: var(--faixa); background-size: 70px 70px; animation: girarFaixa 3.2s linear infinite; }
     @keyframes girarFaixa { from { background-position: 0 0; } to { background-position: 70px 0; } }
 
+    /* ================= LOGIN OVERLAY ================= */
+    #login-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(24, 23, 27, 0.92);
+        backdrop-filter: blur(8px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999;
+        padding: 20px;
+    }
+    #login-overlay.active {
+        display: flex;
+    }
+    .login-box {
+        background: var(--pedra-card);
+        border-radius: var(--radius);
+        padding: 40px 36px;
+        max-width: 420px;
+        width: 100%;
+        box-shadow: var(--sombra-forte);
+        text-align: center;
+        animation: modalEntrar 0.4s ease;
+    }
+    .login-box h1 {
+        font-family: var(--fonte-cartaz);
+        font-size: 1.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--tinta);
+        margin-bottom: 6px;
+    }
+    .login-box .sub {
+        color: var(--texto-suave);
+        font-size: 0.9rem;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--linha);
+        padding-bottom: 16px;
+    }
+    .login-box .login-icon {
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+        color: var(--latao);
+    }
+    .login-box input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid var(--linha);
+        border-radius: var(--radius-peq);
+        font-size: 1rem;
+        font-family: var(--fonte-corpo);
+        background: var(--pedra);
+        color: var(--texto);
+        transition: border-color 0.2s;
+        margin-bottom: 16px;
+        text-align: center;
+        letter-spacing: 2px;
+    }
+    .login-box input:focus {
+        outline: none;
+        border-color: var(--latao);
+    }
+    .login-box .btn-entrar {
+        width: 100%;
+        padding: 14px;
+        background: var(--bordo);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-peq);
+        font-family: var(--fonte-cartaz);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 600;
+        transition: background 0.15s;
+    }
+    .login-box .btn-entrar:hover {
+        background: var(--bordo-escuro);
+    }
+    .login-box .erro {
+        color: var(--perigo);
+        font-size: 0.85rem;
+        margin-top: 12px;
+        display: none;
+    }
+    .login-box .erro.visible {
+        display: block;
+    }
+
     /* ================= SIDEBAR ================= */
     #sidebar {
         position: fixed; left: 0; top: 5px; bottom: 0;
@@ -590,6 +680,18 @@
 </head>
 <body>
 
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay" class="active">
+    <div class="login-box">
+        <div class="login-icon">🔐</div>
+        <h1>Ominus Tech</h1>
+        <div class="sub">Painel do Barbeiro — Igor Muniz</div>
+        <input type="password" id="senha-input" placeholder="Digite a senha" autocomplete="off">
+        <button class="btn-entrar" id="btn-login">Entrar</button>
+        <div class="erro" id="login-erro">Senha incorreta. Tente novamente.</div>
+    </div>
+</div>
+
 <div class="faixa-topo" aria-hidden="true"></div>
 
 <!-- MOBILE HEADER -->
@@ -624,7 +726,7 @@
     </a>
 </nav>
 
-<main id="app">
+<main id="app" style="display:none;">
     <div class="page-header">
         <div class="page-title">Painel do Barbeiro — Igor Muniz</div>
         <div class="page-subtitle">Seus atendimentos, horários e faturamento do dia</div>
@@ -750,6 +852,101 @@
 </div>
 
 <script>
+    // ================= SISTEMA DE SENHA =================
+    const SENHA_CORRETA = '2027igor';
+    const STORAGE_KEY = 'auth_data_igor';
+
+    function getAuthData() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return null;
+            return JSON.parse(raw);
+        } catch { return null; }
+    }
+
+    function setAuthData() {
+        const hoje = new Date();
+        const dataStr = hoje.getFullYear() + '-' +
+                       String(hoje.getMonth()+1).padStart(2,'0') + '-' +
+                       String(hoje.getDate()).padStart(2,'0');
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: dataStr }));
+    }
+
+    function precisaAutenticar() {
+        const auth = getAuthData();
+        if (!auth) return true;
+
+        const hoje = new Date();
+        const diaAtual = hoje.getDate();
+        const mesAtual = hoje.getMonth() + 1;
+        const anoAtual = hoje.getFullYear();
+
+        // Se hoje é dia 8, sempre pede senha (independente do armazenado)
+        if (diaAtual === 8) {
+            // Se não tiver dado salvo ou se o dado salvo for de um dia diferente (ou de outro mês/ano), pede
+            if (!auth.data) return true;
+            const partes = auth.data.split('-');
+            if (partes.length !== 3) return true;
+            const anoSalvo = parseInt(partes[0], 10);
+            const mesSalvo = parseInt(partes[1], 10);
+            const diaSalvo = parseInt(partes[2], 10);
+            // Se o dado salvo não é o dia 8 do mês atual, pede senha
+            if (anoSalvo !== anoAtual || mesSalvo !== mesAtual || diaSalvo !== 8) {
+                return true;
+            }
+            // Se já autenticou no dia 8 de hoje, permite
+            return false;
+        } else {
+            // Se não for dia 8, verifica se a última autenticação foi em algum dia
+            // Se não houver dado, pede
+            if (!auth.data) return true;
+            // Se houver dado, não pede (a menos que seja dia 8, que já tratamos)
+            return false;
+        }
+    }
+
+    function autenticar(senha) {
+        if (senha === SENHA_CORRETA) {
+            setAuthData();
+            document.getElementById('login-overlay').classList.remove('active');
+            document.getElementById('app').style.display = 'block';
+            // Inicializa a aplicação após login
+            iniciarAplicacao();
+            return true;
+        } else {
+            const erro = document.getElementById('login-erro');
+            erro.classList.add('visible');
+            setTimeout(() => erro.classList.remove('visible'), 3000);
+            return false;
+        }
+    }
+
+    // Evento de login
+    document.getElementById('btn-login').addEventListener('click', function() {
+        const input = document.getElementById('senha-input');
+        autenticar(input.value);
+        input.value = '';
+    });
+
+    document.getElementById('senha-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            document.getElementById('btn-login').click();
+        }
+    });
+
+    // Verifica se precisa autenticar ao carregar a página
+    document.addEventListener('DOMContentLoaded', function() {
+        if (precisaAutenticar()) {
+            document.getElementById('login-overlay').classList.add('active');
+            document.getElementById('app').style.display = 'none';
+            document.getElementById('senha-input').focus();
+        } else {
+            document.getElementById('login-overlay').classList.remove('active');
+            document.getElementById('app').style.display = 'block';
+            iniciarAplicacao();
+        }
+    });
+
     // ================= CONFIGURAÇÕES =================
     const BARBEIRO_ID = 'igor';
     const BARBEIRO_NOME = 'Igor Muniz';
@@ -817,7 +1014,6 @@
     }
 
     function obterValorAgendamento(ag) {
-      // Tenta campos diretos
       const valorDireto = ag['ag-preco'] || ag['ag-valor'] || ag.valor || ag.preco ||
                            ag.price || ag.total || ag['ag-total'] || ag['valor_total'] ||
                            ag['ag-valor-servico'];
@@ -825,7 +1021,6 @@
         const num = parseFloat(String(valorDireto).replace(',', '.'));
         if (num > 0) return num;
       }
-      // Busca na descrição ou outros textos
       const camposTexto = [
         ag['ag-servico'], ag.servico, ag['ag-nome'], ag.nome,
         ag.descricao, ag.description, ag.title, ag.summary, ag['ag-descricao']
@@ -838,7 +1033,6 @@
           if (!isNaN(num) && num > 0) return num;
         }
       }
-      // Tenta pelo nome do serviço
       const servicoBruto = ag['ag-servico'] || ag.servico || '';
       const servicoNormalizado = servicoBruto.trim();
       if (PRECOS_SERVICOS[servicoNormalizado]) return PRECOS_SERVICOS[servicoNormalizado];
@@ -851,30 +1045,25 @@
 
     // ================= FILTRO DE AGENDAMENTOS DO IGOR =================
     function agendamentoPertenceAoIgor(ag) {
-      // Lista de campos que podem conter o nome do barbeiro
       const camposBarbeiro = [
         ag['ag-barbeiro'], ag.barbeiro, ag.barber, ag['barber-id'],
         ag['ag-barbeiro-nome'], ag.barbeiroNome, ag.barberName,
         ag['ag-barbeiro-id'], ag['barbeiro_id'], ag['barber_id']
       ].filter(Boolean).map(v => String(v).trim().toLowerCase());
 
-      // Verifica se algum campo corresponde a "igor" ou "igor muniz"
       if (camposBarbeiro.some(v => v === 'igor' || v === 'igor muniz' || v.includes('igor'))) {
         return true;
       }
 
-      // Se não achou, procura no texto combinado de título, descrição, resumo
       const textoCombinado = [
         ag.summary, ag.title, ag.description, ag.descricao,
         ag['ag-descricao'], ag['ag-servico'], ag.servico
       ].filter(Boolean).join(' ').toLowerCase();
 
-      // Expressão regular para "barbeiro: igor" ou "barbeiro: igor muniz"
       if (/barbeiro\s*:\s*(igor(?:\s+muniz)?)/i.test(textoCombinado)) {
         return true;
       }
 
-      // Fallback: verifica se em qualquer campo aparece "igor" como palavra isolada
       const todosTextos = Object.values(ag).filter(Boolean).join(' ').toLowerCase();
       if (/\b(igor muniz|igor)\b/.test(todosTextos)) {
         return true;
@@ -953,7 +1142,6 @@
       showLoader('BUSCANDO SEUS CORTES...');
 
       try {
-        // Envia requisição para o webhook com o barbeiro específico
         const response = await fetch(CONSULTA_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -963,18 +1151,15 @@
         if (!response.ok) throw new Error(`Status ${response.status}`);
 
         const dados = await response.json();
-        // Pega todos os agendamentos e filtra apenas os do Igor
         const todosAgendamentos = Array.isArray(dados.agendamentos) ? dados.agendamentos : [];
         const agendamentosFiltrados = todosAgendamentos.filter(agendamentoPertenceAoIgor);
 
-        // Extrai os horários ocupados a partir dos agendamentos filtrados
         const horariosOcupados = agendamentosFiltrados
           .map(ag => ag['ag-hora'] || ag.hora)
           .filter(Boolean);
 
         STATE.agendamentosAtuais = agendamentosFiltrados;
 
-        // Renderiza usando os ocupados (que são os horários dos agendamentos do Igor)
         renderDetalhesDia(horariosOcupados, agendamentosFiltrados);
         toast('Agenda do dia atualizada!', 'success');
       } catch (err) {
@@ -1417,7 +1602,7 @@
     }
 
     // ================= INICIALIZAÇÃO =================
-    document.addEventListener('DOMContentLoaded', () => {
+    function iniciarAplicacao() {
       renderCalendario();
 
       const hoje = new Date();
@@ -1444,7 +1629,9 @@
           closeMenu();
         }
       });
-    });
+    }
+
+    // A aplicação será iniciada após autenticação (ou se já estiver autenticado)
 </script>
 </body>
 </html>

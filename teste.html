@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ominus Tech — Clientes Regulares</title>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ominus Tech — Painel Anderson</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
     :root {
         --tinta: #18171b;
         --tinta-suave: #2a2831;
@@ -20,7 +20,6 @@
         --texto-suave: #6b6459;
         --linha: #ddd8cc;
         --perigo: #a8332a;
-        --info: #3f6a8f;
         --whatsapp: #25D366;
 
         --fonte-cartaz: 'Oswald', sans-serif;
@@ -63,6 +62,96 @@
     .faixa-topo { height: 5px; width: 100%; background: var(--faixa); background-size: 70px 70px; animation: girarFaixa 3.2s linear infinite; }
     @keyframes girarFaixa { from { background-position: 0 0; } to { background-position: 70px 0; } }
 
+    /* ================= LOGIN OVERLAY ================= */
+    #login-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(24, 23, 27, 0.92);
+        backdrop-filter: blur(8px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999;
+        padding: 20px;
+    }
+    #login-overlay.active {
+        display: flex;
+    }
+    .login-box {
+        background: var(--pedra-card);
+        border-radius: var(--radius);
+        padding: 40px 36px;
+        max-width: 420px;
+        width: 100%;
+        box-shadow: var(--sombra-forte);
+        text-align: center;
+        animation: modalEntrar 0.4s ease;
+    }
+    .login-box h1 {
+        font-family: var(--fonte-cartaz);
+        font-size: 1.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--tinta);
+        margin-bottom: 6px;
+    }
+    .login-box .sub {
+        color: var(--texto-suave);
+        font-size: 0.9rem;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--linha);
+        padding-bottom: 16px;
+    }
+    .login-box .login-icon {
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+        color: var(--latao);
+    }
+    .login-box input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid var(--linha);
+        border-radius: var(--radius-peq);
+        font-size: 1rem;
+        font-family: var(--fonte-corpo);
+        background: var(--pedra);
+        color: var(--texto);
+        transition: border-color 0.2s;
+        margin-bottom: 16px;
+        text-align: center;
+        letter-spacing: 2px;
+    }
+    .login-box input:focus {
+        outline: none;
+        border-color: var(--latao);
+    }
+    .login-box .btn-entrar {
+        width: 100%;
+        padding: 14px;
+        background: var(--bordo);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-peq);
+        font-family: var(--fonte-cartaz);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 600;
+        transition: background 0.15s;
+    }
+    .login-box .btn-entrar:hover {
+        background: var(--bordo-escuro);
+    }
+    .login-box .erro {
+        color: var(--perigo);
+        font-size: 0.85rem;
+        margin-top: 12px;
+        display: none;
+    }
+    .login-box .erro.visible {
+        display: block;
+    }
+
     /* ================= SIDEBAR ================= */
     #sidebar {
         position: fixed; left: 0; top: 5px; bottom: 0;
@@ -80,6 +169,17 @@
     #sidebar:hover .sidebar-logo span:last-child { opacity: 1; }
     .sidebar-logo-icon { min-width: 40px; display: inline-block; }
 
+    .sidebar-perfil {
+        display: flex; align-items: center; gap: 12px; width: 100%; padding: 0 16px 18px;
+        margin-bottom: 8px; border-bottom: 1px solid rgba(185,144,47,0.2); white-space: nowrap; overflow: hidden;
+    }
+    .sidebar-perfil__foto {
+        width: 40px; height: 40px; min-width: 40px; border-radius: 50%; object-fit: cover;
+        border: 2px solid var(--latao); background: var(--tinta-suave);
+    }
+    .sidebar-perfil__nome { font-family: var(--fonte-cartaz); font-size: 0.85rem; color: var(--pedra); opacity: 0; transition: opacity .2s; }
+    #sidebar:hover .sidebar-perfil__nome { opacity: 1; }
+
     .nav-item {
         width: 100%; display: flex; align-items: center; gap: 14px; padding: 13px 16px;
         transition: background .15s, border-color .15s; border-left: 3px solid transparent; white-space: nowrap;
@@ -92,74 +192,100 @@
     #sidebar:hover .nav-label { opacity: 1; }
 
     /* ================= APP ================= */
-    #app { margin-left: 72px; min-height: 100vh; padding: 36px 40px 60px; max-width: 1180px; }
+    #app { margin-left: 72px; min-height: 100vh; padding: 36px 40px 60px; max-width: 1100px; }
 
     .page-header {
-        padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px; position: relative; overflow: hidden;
-    }
-    .page-header::after {
-        content: '◈'; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
-        font-size: 64px; color: rgba(185,144,47,0.1); pointer-events: none;
+        padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px;
+        position: relative;
     }
     .page-title { font-family: var(--fonte-cartaz); font-size: 1.9rem; text-transform: uppercase; letter-spacing: 0.02em; color: var(--tinta); margin-bottom: 4px; }
     .page-subtitle { color: var(--texto-suave); font-size: 0.88rem; }
 
     .card {
         background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius);
-        padding: 24px; box-shadow: var(--sombra); position: relative; overflow: hidden; transition: border-color .15s, box-shadow .15s;
+        padding: 24px; box-shadow: var(--sombra); position: relative; overflow: hidden;
     }
-    .card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--faixa); background-size: 48px 48px; }
-    .card:hover { border-color: var(--latao); }
+    .card--faixa::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--faixa); background-size: 48px 48px; }
     .card-title {
         font-family: var(--fonte-cartaz); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
         color: var(--bordo); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
     }
     .card-title::after { content: ""; flex: 1; height: 1px; background: var(--linha); }
 
-    /* STAT CARDS */
-    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 32px; }
-    .stat-card {
-        background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); padding: 22px;
-        position: relative; overflow: hidden; box-shadow: var(--sombra); transition: transform .15s, border-color .15s;
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+
+    /* MÉTRICAS */
+    .metric-card { text-align: center; }
+    .metric-value { font-family: var(--fonte-dados); font-size: 2.2rem; font-weight: 600; color: var(--bordo); line-height: 1; }
+    .metric-label { font-family: var(--fonte-cartaz); font-size: 0.7rem; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 8px; }
+
+    /* CALENDÁRIO */
+    .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; background: var(--tinta); padding: 10px 14px; border-radius: var(--radius-peq); }
+    .cal-title { font-family: var(--fonte-dados); font-size: 0.92rem; color: var(--pedra); text-transform: capitalize; }
+    .cal-btn { background: none; border: none; color: var(--latao); font-size: 1rem; padding: 4px 8px; transition: color .15s; }
+    .cal-btn:hover { color: var(--pedra); }
+
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
+    .cal-header { font-size: 0.66rem; font-weight: 700; color: var(--bordo); text-transform: uppercase; letter-spacing: 0.03em; padding: 6px 0; }
+    .cal-day {
+        aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+        border-radius: var(--radius-peq); font-size: 0.88rem; font-family: var(--fonte-dados);
+        cursor: pointer; transition: all .15s; background: var(--pedra); border: 2px solid transparent; color: var(--texto);
+        min-height: 44px;
     }
-    .stat-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--latao), transparent); }
-    .stat-card:hover { transform: translateY(-2px); border-color: var(--latao); }
-    .stat-label { font-family: var(--fonte-cartaz); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--texto-suave); margin-bottom: 10px; }
-    .stat-value { font-family: var(--fonte-dados); font-size: 1.55rem; font-weight: 600; color: var(--bordo); line-height: 1; margin-bottom: 6px; }
-    .stat-change { font-size: 0.76rem; color: var(--texto-suave); }
-    .stat-change.up { color: var(--navalha); }
-    .stat-change.down { color: var(--bordo); }
+    .cal-day:hover:not(.empty) { border-color: var(--latao); }
+    .cal-day.today { border-color: var(--latao); color: var(--latao-escuro); font-weight: 600; }
+    .cal-day.empty { background: transparent; cursor: default; }
+    .cal-day.selected { background: var(--bordo); color: #fff; font-weight: 600; border-color: var(--bordo); }
 
-    /* TABELA */
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    thead tr { border-bottom: 2px solid var(--linha); }
-    th { text-align: left; padding: 11px 14px; font-family: var(--fonte-cartaz); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--bordo); }
-    td { padding: 13px 14px; border-bottom: 1px solid var(--linha); color: var(--texto); }
-    tbody tr { transition: background .15s; }
-    tbody tr:hover { background: #f7f3e9; }
+    .divider { height: 1px; background: var(--linha); margin: 20px 0; }
 
-    .badge {
-        display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    /* HORÁRIOS */
+    .section-label { font-family: var(--fonte-cartaz); font-size: 0.75rem; font-weight: 600; color: var(--bordo); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; display: block; }
+    .time-status-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+    .time-badge {
+        padding: 8px 4px; border-radius: var(--radius-peq); text-align: center; font-size: 0.72rem; font-family: var(--fonte-dados); font-weight: 600;
+        background: var(--pedra); border: 1px solid var(--linha); color: var(--texto);
+        cursor: pointer;
+        transition: background .15s, border-color .15s, transform .1s;
     }
-    .badge-success { background: #eaf2ee; color: var(--navalha); border: 1px solid var(--navalha); }
-    .badge-warning { background: #f5efe0; color: var(--latao-escuro); border: 1px solid var(--latao); }
-    .badge-danger { background: #f8ecec; color: var(--bordo); border: 1px solid var(--bordo); }
-    .badge-info { background: #eaf1f6; color: var(--info); border: 1px solid var(--info); }
+    .time-badge:hover { transform: scale(1.02); border-color: var(--latao); }
+    .time-badge.busy { border-color: var(--bordo); color: var(--bordo); background: #f8ecec; }
+    .time-badge.free { border-color: var(--navalha); color: var(--navalha); background: #eaf2ee; }
+    .time-badge.indisponivel { border-color: var(--perigo); color: var(--perigo); background: #fde8e6; }
 
-    /* BOTÕES */
-    .btn {
-        display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 26px;
-        border-radius: var(--radius-peq); font-family: var(--fonte-cartaz); font-size: 0.8rem; font-weight: 600;
-        letter-spacing: 0.04em; text-transform: uppercase; transition: background .15s, transform .12s, box-shadow .15s; border: none;
+    /* AGENDAMENTOS */
+    .agendamento-item {
+        border: 1px solid var(--linha); border-radius: var(--radius); padding: 15px 16px; margin-bottom: 12px;
+        background: var(--pedra-card); display: flex; justify-content: space-between; align-items: center; gap: 12px;
+        transition: border-color .15s, box-shadow .15s;
     }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--bordo); color: #fff; box-shadow: var(--sombra); }
-    .btn-primary:hover { background: var(--bordo-escuro); }
-    .btn-outline { background: transparent; color: var(--bordo); border: 2px solid var(--linha); }
-    .btn-outline:hover { border-color: var(--bordo); background: #fbf3ee; }
+    .agendamento-item:hover { border-color: var(--latao); box-shadow: var(--sombra); }
+    .agendamento-item .hora { font-family: var(--fonte-dados); font-weight: 600; color: var(--bordo); font-size: 1rem; white-space: nowrap; }
+    .agendamento-item .cliente { font-family: var(--fonte-cartaz); font-size: 0.98rem; color: var(--tinta); }
+    .agendamento-item .servico { color: var(--texto-suave); font-size: 0.82rem; margin-top: 3px; }
+    .agendamento-item .preco { color: var(--latao-escuro); font-family: var(--fonte-dados); font-size: 0.78rem; margin-top: 3px; font-weight: 600; }
 
-    /* LOADER / TOAST */
+    .whatsapp-btn {
+        display: inline-flex; align-items: center; gap: 6px; background: var(--whatsapp);
+        color: #fff; padding: 6px 12px; border-radius: var(--radius-peq); font-size: 0.75rem;
+        font-weight: 700; margin-top: 8px; transition: transform .15s;
+    }
+    .whatsapp-btn:hover { transform: scale(1.03); }
+
+    .btn-deletar {
+        display: inline-flex; align-items: center; gap: 6px; background: #fbeceb; border: 1px solid var(--perigo);
+        color: var(--perigo); padding: 6px 12px; border-radius: var(--radius-peq); font-size: 0.72rem;
+        font-weight: 700; margin-top: 8px; transition: background .15s;
+    }
+    .btn-deletar:hover { background: #f5d9d7; }
+
+    .status-badge {
+        display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.68rem; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.05em; background: #f5efe0; color: var(--latao-escuro); border: 1px solid var(--latao);
+    }
+
+    /* LOADER E TOAST */
     .loader-overlay {
         position: fixed; inset: 0; background: rgba(239,238,231,0.92); backdrop-filter: blur(6px);
         display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 9000;
@@ -170,18 +296,243 @@
     .loader-text { margin-top: 18px; font-family: var(--fonte-cartaz); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bordo); }
 
     #toast-container { position: fixed; bottom: 28px; right: 28px; z-index: 9998; display: flex; flex-direction: column; gap: 10px; }
-    .toast {
-        display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--pedra-card); border: 1px solid var(--linha);
-        border-radius: var(--radius); min-width: 300px; box-shadow: var(--sombra-forte); animation: slideIn .35s ease; font-size: 0.85rem; color: var(--texto);
-    }
-    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .toast { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); min-width: 300px; box-shadow: var(--sombra-forte); font-size: 0.88rem; color: var(--texto); }
     .toast.success { border-color: var(--navalha); }
     .toast.error { border-color: var(--perigo); }
-    .toast.info { border-color: var(--latao); }
-    .toast-icon { font-size: 1.1rem; color: var(--bordo); }
-    .toast-msg { flex: 1; font-size: 0.85rem; line-height: 1.5; }
 
-    /* ================= HEADER MOBILE ================= */
+    /* ================= MODAL ================= */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+        background: var(--pedra-card);
+        border-radius: var(--radius);
+        max-width: 520px;
+        width: 100%;
+        padding: 28px 32px;
+        box-shadow: var(--sombra-forte);
+        position: relative;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: modalEntrar .25s ease;
+    }
+    @keyframes modalEntrar {
+        from { opacity: 0; transform: translateY(-20px) scale(0.96); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal h2 {
+        font-family: var(--fonte-cartaz);
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--tinta);
+        margin-bottom: 6px;
+    }
+    .modal .modal-sub {
+        color: var(--texto-suave);
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--linha);
+        padding-bottom: 14px;
+    }
+    .modal .modal-sub strong {
+        color: var(--tinta);
+    }
+    .modal .opcoes {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    .modal .opcoes button {
+        flex: 1;
+        padding: 14px 8px;
+        border: 2px solid var(--linha);
+        border-radius: var(--radius-peq);
+        background: var(--pedra);
+        font-family: var(--fonte-cartaz);
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        transition: all .15s;
+        color: var(--texto);
+    }
+    .modal .opcoes button:hover { border-color: var(--latao); background: #f5f0e4; }
+    .modal .opcoes button.primario { border-color: var(--bordo); color: var(--bordo); background: #f8ecec; }
+    .modal .opcoes button.primario:hover { background: #f0dddc; border-color: var(--bordo-escuro); }
+    .modal .opcoes button.perigo { border-color: var(--perigo); color: var(--perigo); background: #fde8e6; }
+    .modal .opcoes button.perigo:hover { background: #fad5d2; }
+    .modal .opcoes button.secundario { border-color: var(--navalha); color: var(--navalha); background: #eaf2ee; }
+    .modal .opcoes button.secundario:hover { background: #d4e3dd; }
+
+    .modal .form-group {
+        margin-bottom: 14px;
+    }
+    .modal .form-group label {
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--texto-suave);
+        margin-bottom: 4px;
+    }
+    .modal input, .modal select, .modal textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--linha);
+        border-radius: var(--radius-peq);
+        font-family: var(--fonte-corpo);
+        font-size: 0.9rem;
+        background: var(--pedra);
+        transition: border-color .15s;
+        color: var(--texto);
+    }
+    .modal input:focus, .modal select:focus, .modal textarea:focus {
+        outline: none;
+        border-color: var(--latao);
+    }
+    .modal textarea { resize: vertical; min-height: 60px; }
+    .modal .btn-enviar {
+        width: 100%;
+        padding: 14px;
+        background: var(--bordo);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-peq);
+        font-family: var(--fonte-cartaz);
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        transition: background .15s;
+        margin-top: 6px;
+    }
+    .modal .btn-enviar:hover { background: var(--bordo-escuro); }
+    .modal .btn-fechar {
+        position: absolute;
+        top: 16px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 1.6rem;
+        line-height: 1;
+        color: var(--texto-suave);
+        transition: color .15s;
+        padding: 0 6px;
+    }
+    .modal .btn-fechar:hover { color: var(--tinta); }
+    .modal .confirm-text {
+        text-align: center;
+        padding: 12px 0 16px;
+        font-size: 0.95rem;
+        color: var(--texto-suave);
+    }
+    .modal .confirm-text strong { color: var(--tinta); }
+
+    /* ================= CLIENTES REGULARES (apenas modal) ================= */
+    .cliente-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 14px;
+        border: 1px solid var(--linha);
+        border-radius: var(--radius-peq);
+        margin-bottom: 8px;
+        background: var(--pedra-card);
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+    .cliente-item:hover {
+        border-color: var(--latao);
+        background: var(--pedra);
+        transform: translateX(4px);
+    }
+    .cliente-item .cliente-nome {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--tinta);
+    }
+    .cliente-item .cliente-info {
+        font-size: 0.8rem;
+        color: var(--texto-suave);
+        margin-top: 2px;
+    }
+    .cliente-item .cliente-badge {
+        background: var(--latao);
+        color: #fff;
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+    }
+    .cliente-item .cliente-actions {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+
+    .busca-cliente {
+        margin-bottom: 12px;
+    }
+    .busca-cliente input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--linha);
+        border-radius: var(--radius-peq);
+        font-family: var(--fonte-corpo);
+        font-size: 0.9rem;
+        background: var(--pedra);
+    }
+    .busca-cliente input:focus {
+        outline: none;
+        border-color: var(--latao);
+    }
+
+    .btn-voltar {
+        background: none;
+        border: none;
+        color: var(--texto-suave);
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 0;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: color .15s;
+    }
+    .btn-voltar:hover { color: var(--tinta); }
+
+    .btn-recargar {
+        display: inline-block;
+        background: var(--latao);
+        color: #fff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: var(--radius-peq);
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background .15s;
+        margin-bottom: 12px;
+    }
+    .btn-recargar:hover { background: var(--latao-escuro); }
+
+    /* ================= RESPONSIVO ================= */
     .mobile-header {
         display: none;
         position: fixed;
@@ -196,7 +547,6 @@
         padding: 0 16px;
         gap: 16px;
     }
-
     .hamburger-btn {
         display: none;
         width: 40px;
@@ -210,26 +560,21 @@
         gap: 5px;
         padding: 0;
     }
-
     .hamburger-line {
         width: 24px;
         height: 2px;
         background: var(--latao);
         transition: all 0.3s ease;
     }
-
     .hamburger-btn.active .hamburger-line:nth-child(1) {
         transform: rotate(45deg) translate(8px, 8px);
     }
-
     .hamburger-btn.active .hamburger-line:nth-child(2) {
         opacity: 0;
     }
-
     .hamburger-btn.active .hamburger-line:nth-child(3) {
         transform: rotate(-45deg) translate(7px, -7px);
     }
-
     .mobile-logo {
         flex: 1;
         font-family: var(--fonte-cartaz);
@@ -240,11 +585,9 @@
         color: var(--pedra);
         white-space: nowrap;
     }
-
     .mobile-logo-text {
         color: var(--latao);
     }
-
     .sidebar-overlay {
         display: none;
         position: fixed;
@@ -253,43 +596,13 @@
         z-index: 99;
         backdrop-filter: blur(4px);
     }
-
     .sidebar-overlay.active {
         display: block;
     }
 
-    /* ================= SIDEBAR RESPONSIVE ================= */
-    #sidebar {
-        position: fixed;
-        left: 0;
-        top: 5px;
-        bottom: 0;
-        width: 72px;
-        background: var(--tinta);
-        border-right: 1px solid rgba(185,144,47,0.25);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 22px 0;
-        z-index: 100;
-        transition: width .3s ease;
-        overflow: hidden;
-    }
-
-    #sidebar:hover {
-        width: 220px;
-    }
-
-    /* ================= MOBILE RESPONSIVE ================= */
     @media (max-width: 880px) {
-        .mobile-header {
-            display: flex;
-        }
-
-        .hamburger-btn {
-            display: flex;
-        }
-
+        .mobile-header { display: flex; }
+        .hamburger-btn { display: flex; }
         #sidebar {
             position: fixed;
             left: 0;
@@ -304,297 +617,754 @@
             transition: transform 0.3s ease;
             z-index: 102;
         }
-
-        #sidebar.active {
-            transform: translateX(0);
-        }
-
-        #sidebar:hover {
-            width: 280px;
-        }
-
-        .sidebar-logo span:last-child {
-            opacity: 1;
-        }
-
-        .nav-label {
-            opacity: 1;
-        }
-
+        #sidebar.active { transform: translateX(0); }
+        #sidebar:hover { width: 280px; }
+        .sidebar-logo span:last-child { opacity: 1; }
+        .sidebar-perfil__nome { opacity: 1; }
+        .nav-label { opacity: 1; }
         #app {
             margin-left: 0;
             padding-top: 80px;
         }
-
-        .stat-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            font-size: 0.75rem;
-        }
-
-        .page-title {
-            font-size: 1.5rem;
-        }
-
-        .card {
-            padding: 16px;
-        }
-
-        table {
-            font-size: 0.75rem;
-        }
-
-        th, td {
-            padding: 8px 10px;
-        }
-
-        #toast-container {
-            bottom: 16px;
-            right: 16px;
-        }
-
-        .toast {
-            min-width: 250px;
-            font-size: 0.75rem;
-        }
+        .grid-2 { grid-template-columns: 1fr; }
+        .metric-card { padding: 16px; }
+        #toast-container { bottom: 16px; right: 16px; }
+        .toast { min-width: 250px; font-size: 0.75rem; }
+        .card { padding: 16px; }
+        .page-title { font-size: 1.5rem; }
+        .page-subtitle { font-size: 0.8rem; }
+        .cal-day { min-height: 40px; font-size: 0.75rem; }
+        .agendamento-item { padding: 12px; flex-direction: column; text-align: left; }
+        .agendamento-item .hora { font-size: 0.9rem; }
+        .agendamento-item .cliente { font-size: 0.9rem; }
+        .section-label { font-size: 0.7rem; }
+        .time-badge { font-size: 0.65rem; padding: 6px 2px; }
+        .time-status-grid { grid-template-columns: repeat(2, 1fr); }
+        .modal { padding: 20px; max-width: 100%; }
     }
 
     @media (max-width: 520px) {
-        .stat-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .page-title {
-            font-size: 1.2rem;
-        }
-
-        #app {
-            padding: 80px 16px 40px;
-        }
-
-        .card {
-            padding: 12px;
-        }
-
-        table {
-            font-size: 0.7rem;
-        }
-
-        th, td {
-            padding: 6px 8px;
-        }
-
-        .btn {
-            padding: 8px 16px;
-            font-size: 0.7rem;
-        }
-
-        .toast {
-            min-width: 200px;
-            font-size: 0.7rem;
-            padding: 10px 12px;
-        }
-
-        .page-header {
-            padding: 0 0 16px;
-            margin-bottom: 20px;
-        }
-
-        .stat-label {
-            font-size: 0.6rem;
-        }
-
-        .stat-value {
-            font-size: 1.2rem;
-        }
+        #app { padding: 80px 16px 40px; }
+        .page-title { font-size: 1.2rem; }
+        .page-subtitle { font-size: 0.75rem; }
+        .grid-2 { grid-template-columns: 1fr; }
+        .metric-value { font-size: 1.8rem; }
+        .metric-label { font-size: 0.6rem; }
+        .card { padding: 12px; border-radius: 6px; }
+        .card-title { font-size: 0.75rem; margin-bottom: 12px; }
+        .cal-title { font-size: 0.8rem; }
+        .cal-day { min-height: 36px; font-size: 0.7rem; }
+        .agendamento-item { margin-bottom: 10px; padding: 10px; }
+        .agendamento-item .hora { font-size: 0.8rem; }
+        .agendamento-item .cliente { font-size: 0.85rem; }
+        .agendamento-item .servico { font-size: 0.75rem; }
+        .whatsapp-btn, .btn-deletar { font-size: 0.65rem; padding: 5px 10px; }
+        .time-status-grid { grid-template-columns: 1fr 1fr; }
+        .status-badge { font-size: 0.6rem; padding: 4px 10px; }
+        .toast { min-width: 200px; font-size: 0.7rem; padding: 10px 12px; }
+        .divider { margin: 16px 0; }
+        .section-label { font-size: 0.65rem; margin-bottom: 8px; }
+        .modal .opcoes { flex-direction: column; }
+        .modal { padding: 16px; }
     }
 
     @media (max-width: 380px) {
-        .mobile-logo {
-            font-size: 0.8rem;
-        }
-
-        #app {
-            padding: 80px 12px 40px;
-        }
-
-        .page-title {
-            font-size: 1rem;
-        }
-
-        table {
-            font-size: 0.65rem;
-        }
+        .mobile-logo { font-size: 0.8rem; }
+        #app { padding: 80px 12px 40px; }
+        .page-title { font-size: 1rem; }
+        .metric-value { font-size: 1.5rem; }
+        .time-status-grid { grid-template-columns: 1fr; }
+        .cal-day { min-height: 32px; font-size: 0.65rem; }
     }
-  </style>
+</style>
 </head>
 <body>
 
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay" class="active">
+    <div class="login-box">
+        <div class="login-icon">🔐</div>
+        <h1>Ominus Tech</h1>
+        <div class="sub">Painel do Barbeiro — Anderson</div>
+        <input type="password" id="senha-input" placeholder="Digite a senha" autocomplete="off">
+        <button class="btn-entrar" id="btn-login">Entrar</button>
+        <div class="erro" id="login-erro">Senha incorreta. Tente novamente.</div>
+    </div>
+</div>
+
 <div class="faixa-topo" aria-hidden="true"></div>
 
-  <!-- MOBILE HEADER -->
-  <div class="mobile-header">
-    <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-    </button>
-    <div class="mobile-logo">Om<span class="mobile-logo-text">inus</span></div>
-  </div>
+<!-- MOBILE HEADER -->
+<div class="mobile-header">
+  <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+  <div class="mobile-logo">Om<span class="mobile-logo-text">inus</span></div>
+</div>
 
-  <!-- SIDEBAR OVERLAY -->
-  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-  <!-- LOADER -->
-  <div class="loader-overlay" id="loader">
+<div class="loader-overlay" id="loader">
     <div class="loader-ring"></div>
-    <div class="loader-text">PROCESSANDO...</div>
-  </div>
+    <div class="loader-text">CONSULTANDO AGENDA...</div>
+</div>
 
-  <!-- TOAST CONTAINER -->
-  <div id="toast-container"></div>
+<div id="toast-container"></div>
 
-  <!-- SIDEBAR -->
-  <nav id="sidebar">
+<nav id="sidebar">
     <div class="sidebar-logo"><span class="sidebar-logo-icon">Om</span><span>inus</span></div>
-
-    <a href="dashboard.html" class="nav-item">
-      <span class="nav-icon">◈</span>
-      <span class="nav-label">Dashboard</span>
-    </a>
-    <a href="financeiro.html" class="nav-item">
-      <span class="nav-icon">◎</span>
-      <span class="nav-label">Financeiro</span>
-    </a>
-    <a href="barbeiros.html" class="nav-item">
-      <span class="nav-icon">◉</span>
-      <span class="nav-label">Barbeiros</span>
-    </a>
-    <a href="agenda.html" class="nav-item">
-      <span class="nav-icon">▦</span>
-      <span class="nav-label">Agenda</span>
-    </a>
-    <!-- Clientes (ativo nesta página) -->
-    <a href="clientes.html" class="nav-item active">
+    <div class="sidebar-perfil">
+        <img src="anderson.png" alt="Anderson" class="sidebar-perfil__foto" onerror="this.style.display='none'">
+        <span class="sidebar-perfil__nome">Anderson</span>
+    </div>
+    <a href="clientes-barbeiro.html" class="nav-item">
       <span class="nav-icon">◈</span>
       <span class="nav-label">Clientes</span>
     </a>
-  </nav>
+</nav>
 
-  <!-- MAIN CONTENT -->
-  <main id="app">
+<main id="app" style="display:none;">
     <div class="page-header">
-      <div class="page-title">Clientes Regulares</div>
-      <p class="page-subtitle">Relação completa de todos os clientes que já passaram pela barbearia</p>
+        <div class="page-title">Painel do Barbeiro — Anderson</div>
+        <div class="page-subtitle">Seus atendimentos, horários e faturamento do dia</div>
     </div>
 
-    <div style="margin-bottom: 26px;">
-      <button class="btn btn-outline" onclick="carregarClientes()">
-        ⟳ &nbsp;Atualizar Lista
-      </button>
+    <div class="grid-2" style="margin-bottom: 22px;">
+        <div class="card metric-card">
+            <div class="metric-value" id="metric-atendimentos">0</div>
+            <div class="metric-label">Atendimentos no dia</div>
+        </div>
+        <div class="card metric-card">
+            <div class="metric-value" id="metric-faturamento">R$ 0</div>
+            <div class="metric-label">Faturamento estimado do dia</div>
+        </div>
     </div>
 
-    <!-- Stat Cards -->
-    <div class="stat-grid">
-      <div class="stat-card">
-        <div class="stat-label">Total de clientes</div>
-        <div class="stat-value" id="total-clientes">0</div>
-        <div class="stat-change">Cadastrados no sistema</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Clientes VIP (5+ visitas)</div>
-        <div class="stat-value" id="total-vip">0</div>
-        <div class="stat-change">Com fidelidade</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Total de visitas</div>
-        <div class="stat-value" id="total-visitas">0</div>
-        <div class="stat-change">Acumuladas</div>
-      </div>
-    </div>
+    <div class="grid-2">
+        <div class="card card--faixa">
+            <div class="card-title">Calendário de Atendimentos</div>
+            <div class="cal-nav">
+                <button class="cal-btn" onclick="mudarMes(-1)">◀</button>
+                <span class="cal-title" id="cal-month-label">—</span>
+                <button class="cal-btn" onclick="mudarMes(1)">▶</button>
+            </div>
+            <div class="calendar-grid" id="calendar-grid"></div>
+        </div>
 
-    <!-- Tabela -->
-    <div class="card">
-      <div class="card-title">Lista de Clientes</div>
-      <div style="margin-bottom: 16px;">
-        <input type="text" id="searchInput" placeholder="🔍 Buscar por nome ou WhatsApp..." style="width:100%; padding:10px 14px; border:1px solid var(--linha); border-radius:var(--radius-peq); font-family:var(--fonte-corpo); font-size:0.9rem; background:var(--pedra);">
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>WhatsApp</th>
-              <th style="text-align:center;">Visitas</th>
-              <th style="text-align:center;">Status</th>
-            </tr>
-          </thead>
-          <tbody id="table-body">
-            <tr>
-              <td colspan="4" style="text-align:center; color:var(--texto-suave); padding:32px;">
-                Carregando clientes...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </main>
+        <div class="card card--faixa">
+            <div class="card-title">Compromissos — <span id="selected-date-label" style="color:var(--tinta)">Selecione uma data</span></div>
 
-  <script>
+            <span class="section-label">Status dos horários (clique para gerenciar)</span>
+            <div class="time-status-grid" id="timeStatusGrid"></div>
+
+            <div class="divider"></div>
+
+            <span class="section-label">Cortes e serviços marcados</span>
+            <div id="dia-agendamentos">
+                <div style="text-align:center; color: var(--texto-suave); padding: 26px; border: 1px dashed var(--linha); border-radius: var(--radius); background: var(--pedra);">
+                    Selecione um dia no calendário para visualizar os agendamentos.
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ================= MODAL ================= -->
+<div class="modal-overlay" id="modalGerenciar">
+    <div class="modal">
+        <button class="btn-fechar" id="modalFechar">&times;</button>
+        <h2 id="modalTitulo">Gerenciar Horário</h2>
+        <div class="modal-sub">
+            <strong id="modalDataHora">—</strong>
+        </div>
+
+        <!-- Etapa 1: Opções principais (Agendar / Indisponível) -->
+        <div id="modalOpcoes">
+            <div class="opcoes">
+                <button class="primario" id="btnAgendarCliente">📋 Agendar Cliente</button>
+                <button class="perigo" id="btnIndisponivel">🚫 Indisponível</button>
+            </div>
+        </div>
+
+        <!-- Etapa 2: Escolha do tipo de cliente (Novo / Regular) -->
+        <div id="modalEscolhaCliente" style="display:none;">
+            <button class="btn-voltar" id="btnVoltarEscolha">← Voltar</button>
+            <div class="opcoes">
+                <button class="primario" id="btnNovoCliente">🆕 Novo Cliente</button>
+                <button class="secundario" id="btnClienteRegular">🔄 Cliente Regular</button>
+            </div>
+        </div>
+
+        <!-- Etapa 3: Lista de clientes regulares -->
+        <div id="modalListaClientes" style="display:none;">
+            <button class="btn-voltar" id="btnVoltarLista">← Voltar</button>
+            <div class="busca-cliente">
+                <input type="text" id="buscaCliente" placeholder="Buscar cliente...">
+            </div>
+            <button class="btn-recargar" id="btnRecarregarClientes">🔄 Recarregar</button>
+            <div id="listaClientesContainer">
+                <!-- Itens renderizados dinamicamente -->
+            </div>
+        </div>
+
+        <!-- Etapa 4: Formulário de agendamento -->
+        <div id="modalFormAgendamento" style="display:none;">
+            <button class="btn-voltar" id="btnVoltarForm">← Voltar</button>
+            <div class="form-group">
+                <label>Nome do cliente</label>
+                <input type="text" id="modalNome" placeholder="Ex: João Silva">
+            </div>
+            <div class="form-group">
+                <label>WhatsApp</label>
+                <input type="text" id="modalWhatsapp" placeholder="(84) 9 9999-9999">
+            </div>
+            <div class="form-group">
+                <label>Serviço</label>
+                <select id="modalServico">
+                    <option value="">Selecione um serviço</option>
+                    <option value="Alinhamento de Fios">Alinhamento de Fios</option>
+                    <option value="Cabelo e Barba">Cabelo e Barba</option>
+                    <option value="Cabelo e Hidratação Capilar">Cabelo e Hidratação Capilar</option>
+                    <option value="Cabelo e Sobrancelhas">Cabelo e Sobrancelhas</option>
+                    <option value="Corte de Cabelo">Corte de Cabelo</option>
+                    <option value="Hidratação Capilar">Hidratação Capilar</option>
+                    <option value="Sobrancelhas">Sobrancelhas</option>
+                    <option value="Barboterapia">Barboterapia</option>
+                    <option value="Limpeza de Pele">Limpeza de Pele</option>
+                    <option value="Acabamento de Cabelo">Acabamento de Cabelo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Observações (opcional)</label>
+                <textarea id="modalObs" placeholder="Alguma observação..."></textarea>
+            </div>
+            <button class="btn-enviar" id="btnEnviarAgendamento">Agendar</button>
+        </div>
+
+        <!-- Etapa 5: Confirmação de indisponibilidade -->
+        <div id="modalConfirmIndisponivel" style="display:none;">
+            <button class="btn-voltar" id="btnVoltarIndisponivel">← Voltar</button>
+            <div class="confirm-text">
+                Tem certeza que deseja marcar este horário como <strong>INDISPONÍVEL</strong>?<br>
+                <span style="font-size:0.85rem; color:var(--texto-suave);">Nenhum cliente poderá agendar neste horário.</span>
+            </div>
+            <button class="btn-enviar" id="btnConfirmarIndisponivel" style="background:var(--perigo);">Confirmar Indisponibilidade</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ================= SISTEMA DE SENHA =================
+    const SENHA_CORRETA = '2027anderson';
+    const STORAGE_KEY = 'auth_data_anderson';
+
+    function getAuthData() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return null;
+            return JSON.parse(raw);
+        } catch { return null; }
+    }
+
+    function setAuthData() {
+        const hoje = new Date();
+        const dataStr = hoje.getFullYear() + '-' +
+                       String(hoje.getMonth()+1).padStart(2,'0') + '-' +
+                       String(hoje.getDate()).padStart(2,'0');
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: dataStr }));
+    }
+
+    function precisaAutenticar() {
+        const auth = getAuthData();
+        if (!auth) return true;
+
+        const hoje = new Date();
+        const diaAtual = hoje.getDate();
+        const mesAtual = hoje.getMonth() + 1;
+        const anoAtual = hoje.getFullYear();
+
+        // Se hoje é dia 8, sempre pede senha (independente do armazenado)
+        if (diaAtual === 8) {
+            // Se não tiver dado salvo ou se o dado salvo for de um dia diferente (ou de outro mês/ano), pede
+            if (!auth.data) return true;
+            const partes = auth.data.split('-');
+            if (partes.length !== 3) return true;
+            const anoSalvo = parseInt(partes[0], 10);
+            const mesSalvo = parseInt(partes[1], 10);
+            const diaSalvo = parseInt(partes[2], 10);
+            // Se o dado salvo não é o dia 8 do mês atual, pede senha
+            if (anoSalvo !== anoAtual || mesSalvo !== mesAtual || diaSalvo !== 8) {
+                return true;
+            }
+            // Se já autenticou no dia 8 de hoje, permite
+            return false;
+        } else {
+            // Se não for dia 8, verifica se a última autenticação foi em algum dia
+            // Se não houver dado, pede
+            if (!auth.data) return true;
+            // Se houver dado, não pede (a menos que seja dia 8, que já tratamos)
+            return false;
+        }
+    }
+
+    function autenticar(senha) {
+        if (senha === SENHA_CORRETA) {
+            setAuthData();
+            document.getElementById('login-overlay').classList.remove('active');
+            document.getElementById('app').style.display = 'block';
+            // Inicializa a aplicação após login
+            iniciarAplicacao();
+            return true;
+        } else {
+            const erro = document.getElementById('login-erro');
+            erro.classList.add('visible');
+            setTimeout(() => erro.classList.remove('visible'), 3000);
+            return false;
+        }
+    }
+
+    // Evento de login
+    document.getElementById('btn-login').addEventListener('click', function() {
+        const input = document.getElementById('senha-input');
+        autenticar(input.value);
+        input.value = '';
+    });
+
+    document.getElementById('senha-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            document.getElementById('btn-login').click();
+        }
+    });
+
+    // Verifica se precisa autenticar ao carregar a página
+    document.addEventListener('DOMContentLoaded', function() {
+        if (precisaAutenticar()) {
+            document.getElementById('login-overlay').classList.add('active');
+            document.getElementById('app').style.display = 'none';
+            document.getElementById('senha-input').focus();
+        } else {
+            document.getElementById('login-overlay').classList.remove('active');
+            document.getElementById('app').style.display = 'block';
+            iniciarAplicacao();
+        }
+    });
+
     // ================= CONFIGURAÇÕES =================
+    const BARBEIRO_ID = 'anderson';
+    const BARBEIRO_NOME = 'Anderson';
+
+    const CONSULTA_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/consultar-disponibilidade';
+    const DELETAR_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/deletar-agendamento';
+    const WEBHOOK_BARBEIRO = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/agendamento-do-barbeiro';
     const CLIENTES_REGULARES_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/clientes-regulares';
 
-    // ================= ESTADO =================
-    let clientes = [];
-    let filtro = '';
+    const HORARIOS_PADRAO = [
+      '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
+      '11:00', '11:30', '13:00', '13:30', '14:00', '14:30',
+      '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
+      '18:00', '18:30', '19:00'
+    ];
+
+    const PRECOS_SERVICOS = {
+      'Alinhamento de Fios': 140,
+      'Cabelo e Barba': 120,
+      'Cabelo e Hidratação Capilar': 105,
+      'Cabelo e Sobrancelhas': 85,
+      'Corte de Cabelo': 65,
+      'Hidratação Capilar': 40,
+      'Sobrancelhas': 20,
+      'Barboterapia': 60,
+      'Limpeza de Pele': 50,
+      'Acabamento de Cabelo': 25
+    };
+
+    // ================= ESTADO GLOBAL =================
+    let STATE = {
+      calMes: new Date().getMonth(),
+      calAno: new Date().getFullYear(),
+      diaSelecionado: null,
+      agendamentosAtuais: [],
+      modalHora: null,
+      modalData: null,
+      modalOcupado: false,
+      clientesRegulares: [],
+    };
 
     // ================= UTILITÁRIOS =================
-    function showLoader(msg = 'CARREGANDO...') {
+    function showLoader(msg = 'CONSULTANDO AGENDA...') {
       document.getElementById('loader').classList.add('visible');
       document.querySelector('.loader-text').textContent = msg;
     }
-
     function hideLoader() {
       document.getElementById('loader').classList.remove('visible');
     }
 
-    function toast(msg, type = 'info', duration = 4000) {
-      const icons = { success: '✓', error: '✕', info: '✦', warning: '⚠' };
+    function toast(msg, type = 'info', duration = 3000) {
       const container = document.getElementById('toast-container');
       const el = document.createElement('div');
       el.className = `toast ${type}`;
-      el.innerHTML = `
-        <span class="toast-icon">${icons[type] || '✦'}</span>
-        <span class="toast-msg">${msg}</span>
-      `;
+      el.innerHTML = `<span class="toast-msg">${msg}</span>`;
       container.appendChild(el);
       setTimeout(() => el.remove(), duration);
     }
 
-    // ================= CARREGAR CLIENTES =================
-    async function carregarClientes() {
-      const tbody = document.getElementById('table-body');
-      tbody.innerHTML =
-        `<tr><td colspan="4" style="text-align:center; color:var(--texto-suave); padding:32px;">Carregando clientes...</td></tr>`;
+    function formatDataFormatada(dataISO) {
+      if (!dataISO) return '—';
+      const parts = dataISO.split('-');
+      if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      return dataISO;
+    }
 
-      showLoader('CARREGANDO CLIENTES...');
+    function obterValorAgendamento(ag) {
+      const valorDireto = ag['ag-preco'] || ag['ag-valor'] || ag.valor || ag.preco ||
+                           ag.price || ag.total || ag['ag-total'] || ag['valor_total'] ||
+                           ag['ag-valor-servico'];
+      if (valorDireto && !isNaN(parseFloat(String(valorDireto).replace(',', '.')))) {
+        const num = parseFloat(String(valorDireto).replace(',', '.'));
+        if (num > 0) return num;
+      }
+      const camposTexto = [
+        ag['ag-servico'], ag.servico, ag['ag-nome'], ag.nome,
+        ag.descricao, ag.description, ag.title, ag.summary, ag['ag-descricao']
+      ].filter(Boolean);
+      for (const texto of camposTexto) {
+        const match = String(texto).match(/valor\s*:?\s*R?\$?\s*([\d.,]+)/i);
+        if (match) {
+          const num = parseFloat(match[1].replace(/\./g, '').replace(',', '.')) ||
+                      parseFloat(match[1].replace(',', '.'));
+          if (!isNaN(num) && num > 0) return num;
+        }
+      }
+      const servicoBruto = ag['ag-servico'] || ag.servico || '';
+      const servicoNormalizado = servicoBruto.trim();
+      if (PRECOS_SERVICOS[servicoNormalizado]) return PRECOS_SERVICOS[servicoNormalizado];
+      const chaveEncontrada = Object.keys(PRECOS_SERVICOS).find(
+        chave => servicoNormalizado.toLowerCase().includes(chave.trim().toLowerCase())
+      );
+      if (chaveEncontrada) return PRECOS_SERVICOS[chaveEncontrada];
+      return 0;
+    }
 
+    // ================= FILTRO DE AGENDAMENTOS DO ANDERSON =================
+    function agendamentoPertenceAoAnderson(ag) {
+      // Lista de campos que podem conter o nome do barbeiro
+      const camposBarbeiro = [
+        ag['ag-barbeiro'], ag.barbeiro, ag.barber, ag['barber-id'],
+        ag['ag-barbeiro-nome'], ag.barbeiroNome, ag.barberName,
+        ag['ag-barbeiro-id'], ag['barbeiro_id'], ag['barber_id']
+      ].filter(Boolean).map(v => String(v).trim().toLowerCase());
+
+      // Verifica se algum campo corresponde a "anderson"
+      if (camposBarbeiro.some(v => v === 'anderson' || v === 'anderson' || v.includes('anderson'))) {
+        return true;
+      }
+
+      // Se não achou, procura no texto combinado de título, descrição, resumo
+      const textoCombinado = [
+        ag.summary, ag.title, ag.description, ag.descricao,
+        ag['ag-descricao'], ag['ag-servico'], ag.servico
+      ].filter(Boolean).join(' ').toLowerCase();
+
+      // Expressão regular para "barbeiro: anderson" (com ou sem acento)
+      if (/barbeiro\s*:\s*(anderson)/i.test(textoCombinado)) {
+        return true;
+      }
+
+      // Fallback: verifica se em qualquer campo aparece "anderson" como palavra isolada
+      const todosTextos = Object.values(ag).filter(Boolean).join(' ').toLowerCase();
+      if (/\b(anderson)\b/.test(todosTextos)) {
+        return true;
+      }
+
+      return false;
+    }
+
+    // ================= CALENDÁRIO =================
+    function renderCalendario() {
+      const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+      const dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+      document.getElementById('cal-month-label').textContent = `${meses[STATE.calMes]} ${STATE.calAno}`;
+
+      const grid = document.getElementById('calendar-grid');
+      grid.innerHTML = '';
+
+      dias.forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'cal-header';
+        el.textContent = d;
+        grid.appendChild(el);
+      });
+
+      const primeiroDia = new Date(STATE.calAno, STATE.calMes, 1).getDay();
+      const totalDias = new Date(STATE.calAno, STATE.calMes + 1, 0).getDate();
+      const hoje = new Date();
+
+      for (let i = 0; i < primeiroDia; i++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day empty';
+        grid.appendChild(el);
+      }
+
+      for (let dia = 1; dia <= totalDias; dia++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day';
+        el.textContent = dia;
+
+        const diaStr = String(dia).padStart(2, '0');
+        const mesStr = String(STATE.calMes + 1).padStart(2, '0');
+        const dataStr = `${STATE.calAno}-${mesStr}-${diaStr}`;
+        el.dataset.date = dataStr;
+
+        if (dia === hoje.getDate() && STATE.calMes === hoje.getMonth() && STATE.calAno === hoje.getFullYear()) {
+          el.classList.add('today');
+        }
+
+        if (STATE.diaSelecionado === dataStr) {
+          el.classList.add('selected');
+        }
+
+        el.onclick = () => selecionarDia(dataStr);
+        grid.appendChild(el);
+      }
+    }
+
+    function mudarMes(delta) {
+      STATE.calMes += delta;
+      if (STATE.calMes > 11) { STATE.calMes = 0; STATE.calAno++; }
+      if (STATE.calMes < 0) { STATE.calMes = 11; STATE.calAno--; }
+      renderCalendario();
+    }
+
+    // ================= CONSULTA AGENDA =================
+    async function selecionarDia(dataStr) {
+      STATE.diaSelecionado = dataStr;
+
+      document.querySelectorAll('.cal-day').forEach(el => {
+        el.classList.toggle('selected', el.dataset.date === dataStr);
+      });
+
+      document.getElementById('selected-date-label').textContent = formatDataFormatada(dataStr);
+
+      showLoader('BUSCANDO SEUS CORTES...');
+
+      try {
+        // Envia requisição para o webhook com o barbeiro específico
+        const response = await fetch(CONSULTA_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ "ag-data": dataStr, "ag-barbeiro": BARBEIRO_ID })
+        });
+
+        if (!response.ok) throw new Error(`Status ${response.status}`);
+
+        const dados = await response.json();
+        // Pega todos os agendamentos e filtra apenas os do Anderson
+        const todosAgendamentos = Array.isArray(dados.agendamentos) ? dados.agendamentos : [];
+        const agendamentosFiltrados = todosAgendamentos.filter(agendamentoPertenceAoAnderson);
+
+        // Extrai os horários ocupados a partir dos agendamentos filtrados
+        const horariosOcupados = agendamentosFiltrados
+          .map(ag => ag['ag-hora'] || ag.hora)
+          .filter(Boolean);
+
+        STATE.agendamentosAtuais = agendamentosFiltrados;
+
+        // Renderiza usando os ocupados (que são os horários dos agendamentos do Anderson)
+        renderDetalhesDia(horariosOcupados, agendamentosFiltrados);
+        toast('Agenda do dia atualizada!', 'success');
+      } catch (err) {
+        console.error('Erro ao consultar agenda:', err);
+        STATE.agendamentosAtuais = [];
+        renderDetalhesDia([], []);
+        toast('Erro ao buscar dados do dia.', 'error');
+      } finally {
+        hideLoader();
+      }
+    }
+
+    // ================= RENDER DETALHES DO DIA =================
+    function renderDetalhesDia(ocupados = [], agendamentos = []) {
+      const statusGrid = document.getElementById('timeStatusGrid');
+      const containerList = document.getElementById('dia-agendamentos');
+
+      statusGrid.innerHTML = '';
+      containerList.innerHTML = '';
+
+      const horariosOcupados = new Set(ocupados);
+
+      HORARIOS_PADRAO.forEach(hora => {
+        const ocupado = horariosOcupados.has(hora);
+        const badge = document.createElement('div');
+        badge.className = `time-badge ${ocupado ? 'busy' : 'free'}`;
+        badge.innerText = `${hora} • ${ocupado ? 'Ocupado' : 'Livre'}`;
+        badge.dataset.hora = hora;
+        badge.dataset.ocupado = ocupado ? 'true' : 'false';
+
+        badge.addEventListener('click', () => {
+          abrirModal(hora, ocupado);
+        });
+
+        statusGrid.appendChild(badge);
+      });
+
+      let faturamentoDia = 0;
+      agendamentos.forEach(ag => {
+        faturamentoDia += obterValorAgendamento(ag);
+      });
+      document.getElementById('metric-atendimentos').textContent = agendamentos.length || ocupados.length || 0;
+      document.getElementById('metric-faturamento').textContent =
+        'R$ ' + faturamentoDia.toLocaleString('pt-BR', { minimumFractionDigits: 0 });
+
+      if (agendamentos.length > 0) {
+        agendamentos.forEach((ag, index) => {
+          const nome = ag['ag-nome'] || ag.nome || ag.nome_cliente || 'Cliente Agendado';
+          const hora = ag['ag-hora'] || ag.hora || '--:--';
+          const servico = ag['ag-servico'] || ag.servico || 'Corte Tradicional';
+          const whatsapp = ag['ag-whatsapp'] || ag.whatsapp || '';
+          const cleanZap = whatsapp.replace(/\D/g, '');
+          const preco = obterValorAgendamento(ag);
+
+          const el = document.createElement('div');
+          el.className = 'agendamento-item';
+          el.innerHTML = `
+            <div>
+              <div class="cliente">${nome}</div>
+              <div class="servico"><strong>Serviço:</strong> ${servico}</div>
+              ${preco ? `<div class="preco">R$ ${preco.toLocaleString('pt-BR')}</div>` : ''}
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                ${whatsapp ? `<a href="https://wa.me/${cleanZap}" target="_blank" class="whatsapp-link whatsapp-btn">💬 ${whatsapp}</a>` : ''}
+                <button class="btn-deletar" onclick="deletarAgendamento(${index})">🗑️ Excluir</button>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div class="hora">${hora} hs</div>
+              <span class="status-badge">Confirmado</span>
+            </div>
+          `;
+          containerList.appendChild(el);
+        });
+      } else if (ocupados.length > 0) {
+        ocupados.forEach(hora => {
+          const el = document.createElement('div');
+          el.className = 'agendamento-item';
+          el.innerHTML = `
+            <div>
+              <div class="cliente">Horário Reservado</div>
+              <div class="servico">Agendamento registrado no sistema.</div>
+              <button class="btn-deletar" onclick="deletarAgendamentoPorHora('${hora}')">🗑️ Excluir</button>
+            </div>
+            <div style="text-align: right;">
+              <div class="hora">${hora} hs</div>
+              <span class="status-badge">Reservado</span>
+            </div>
+          `;
+          containerList.appendChild(el);
+        });
+      } else {
+        containerList.innerHTML = `
+          <div style="text-align:center; color: var(--texto-suave); padding: 26px; border: 1px dashed var(--linha); border-radius: var(--radius); background: var(--pedra);">
+            <p>Nenhum corte ou horário reservado para você neste dia.</p>
+          </div>`;
+      }
+    }
+
+    // ================= MODAL - GERENCIAR HORÁRIO =================
+    function abrirModal(hora, ocupado) {
+      if (!STATE.diaSelecionado) {
+        toast('Selecione um dia no calendário primeiro.', 'error');
+        return;
+      }
+
+      STATE.modalHora = hora;
+      STATE.modalData = STATE.diaSelecionado;
+      STATE.modalOcupado = ocupado;
+
+      const modal = document.getElementById('modalGerenciar');
+      document.getElementById('modalDataHora').textContent =
+        `${formatDataFormatada(STATE.diaSelecionado)} — ${hora}`;
+
+      // Mostra apenas as opções principais
+      document.getElementById('modalOpcoes').style.display = 'block';
+      document.getElementById('modalEscolhaCliente').style.display = 'none';
+      document.getElementById('modalListaClientes').style.display = 'none';
+      document.getElementById('modalFormAgendamento').style.display = 'none';
+      document.getElementById('modalConfirmIndisponivel').style.display = 'none';
+      document.getElementById('modalTitulo').textContent = 'Gerenciar Horário';
+
+      modal.classList.add('active');
+    }
+
+    function fecharModal() {
+      document.getElementById('modalGerenciar').classList.remove('active');
+      document.getElementById('modalNome').value = '';
+      document.getElementById('modalWhatsapp').value = '';
+      document.getElementById('modalServico').value = '';
+      document.getElementById('modalObs').value = '';
+      document.getElementById('buscaCliente').value = '';
+      document.getElementById('listaClientesContainer').innerHTML = '<div style="text-align:center; color: var(--texto-suave); padding: 20px;">Carregando clientes...</div>';
+    }
+
+    document.getElementById('modalFechar').addEventListener('click', fecharModal);
+    document.getElementById('modalGerenciar').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) fecharModal();
+    });
+
+    // Botão "Agendar Cliente" -> vai para escolha de tipo
+    document.getElementById('btnAgendarCliente').addEventListener('click', () => {
+      document.getElementById('modalOpcoes').style.display = 'none';
+      document.getElementById('modalEscolhaCliente').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Tipo de Cliente';
+    });
+
+    // Botão "Indisponível" -> vai para confirmação
+    document.getElementById('btnIndisponivel').addEventListener('click', () => {
+      document.getElementById('modalOpcoes').style.display = 'none';
+      document.getElementById('modalConfirmIndisponivel').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Marcar Indisponível';
+    });
+
+    // Voltar da escolha de cliente para opções principais
+    document.getElementById('btnVoltarEscolha').addEventListener('click', () => {
+      document.getElementById('modalEscolhaCliente').style.display = 'none';
+      document.getElementById('modalOpcoes').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Gerenciar Horário';
+    });
+
+    // Voltar da lista de clientes para escolha de tipo
+    document.getElementById('btnVoltarLista').addEventListener('click', () => {
+      document.getElementById('modalListaClientes').style.display = 'none';
+      document.getElementById('modalEscolhaCliente').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Tipo de Cliente';
+    });
+
+    // Voltar do formulário para escolha de tipo
+    document.getElementById('btnVoltarForm').addEventListener('click', () => {
+      document.getElementById('modalFormAgendamento').style.display = 'none';
+      document.getElementById('modalEscolhaCliente').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Tipo de Cliente';
+    });
+
+    // Voltar da confirmação de indisponível para opções principais
+    document.getElementById('btnVoltarIndisponivel').addEventListener('click', () => {
+      document.getElementById('modalConfirmIndisponivel').style.display = 'none';
+      document.getElementById('modalOpcoes').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Gerenciar Horário';
+    });
+
+    // ================= CLIENTE REGULAR (para agendamento) =================
+    async function carregarClientesRegulares() {
       try {
         const response = await fetch(CLIENTES_REGULARES_URL, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         });
-
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
         let data = await response.json();
         let lista = [];
-
-        // Extrai array de várias estruturas possíveis
         if (Array.isArray(data)) {
           lista = data;
         } else if (data && typeof data === 'object') {
@@ -612,153 +1382,281 @@
             lista = data.data;
           }
         }
-
-        clientes = lista
+        STATE.clientesRegulares = lista
           .filter(item => item && (item.nome || item.name))
           .map(item => ({
-            nome: item.nome || item.name || 'Sem nome',
+            nome: item.nome || item.name || '',
             whatsapp: item.whatsapp || item.numero || '',
             visitas: parseInt(item.visitas || 0, 10)
           }));
-
-        console.log('Clientes carregados:', clientes.length);
-
-        if (clientes.length === 0) {
-          tbody.innerHTML =
-            `<tr><td colspan="4" style="text-align:center; color:var(--texto-suave); padding:32px;">Nenhum cliente encontrado.</td></tr>`;
-          atualizarStats();
-          hideLoader();
-          return;
-        }
-
-        renderizarTabela();
-        atualizarStats();
-        toast(`${clientes.length} clientes carregados com sucesso!`, 'success');
-
+        console.log('Clientes regulares carregados:', STATE.clientesRegulares);
       } catch (err) {
-        console.error('Erro ao buscar clientes:', err);
-        tbody.innerHTML =
-          `<tr><td colspan="4" style="text-align:center; color:var(--texto-suave); padding:32px;">Erro ao carregar clientes. Verifique sua conexão.</td></tr>`;
-        toast('Erro ao carregar clientes.', 'error');
+        console.error('Erro ao buscar clientes regulares:', err);
+        STATE.clientesRegulares = [];
+      }
+    }
+
+    function renderizarListaClientes(filtro = '') {
+      const container = document.getElementById('listaClientesContainer');
+      let lista = STATE.clientesRegulares.filter(c =>
+        (c.nome && c.nome.toLowerCase().includes(filtro.toLowerCase())) ||
+        (c.whatsapp && c.whatsapp.includes(filtro))
+      );
+      // Ordena por visitas (do maior para o menor)
+      lista.sort((a, b) => (b.visitas || 0) - (a.visitas || 0));
+
+      if (lista.length === 0) {
+        container.innerHTML = `<div style="text-align:center; color: var(--texto-suave); padding: 20px;">Nenhum cliente regular encontrado.</div>`;
+        return;
+      }
+
+      container.innerHTML = '';
+      lista.forEach(cliente => {
+        const div = document.createElement('div');
+        div.className = 'cliente-item';
+        const whatsExibido = cliente.whatsapp ? cliente.whatsapp : 'Sem WhatsApp';
+        div.innerHTML = `
+          <div>
+            <div class="cliente-nome">${cliente.nome || 'Sem nome'}</div>
+            <div class="cliente-info">${whatsExibido} • ${cliente.visitas || 0} visita(s)</div>
+          </div>
+          <div class="cliente-actions">
+            <span class="cliente-badge">Selecionar</span>
+          </div>
+        `;
+        div.addEventListener('click', () => selecionarClienteRegular(cliente));
+        container.appendChild(div);
+      });
+    }
+
+    function selecionarClienteRegular(cliente) {
+      // Preenche automaticamente os campos
+      document.getElementById('modalNome').value = cliente.nome || '';
+      document.getElementById('modalWhatsapp').value = cliente.whatsapp || '';
+      document.getElementById('modalServico').value = ''; // mantém vazio para o barbeiro escolher
+
+      // Mostra o formulário
+      document.getElementById('modalListaClientes').style.display = 'none';
+      document.getElementById('modalFormAgendamento').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Novo Atendimento';
+    }
+
+    document.getElementById('btnNovoCliente').addEventListener('click', () => {
+      document.getElementById('modalNome').value = '';
+      document.getElementById('modalWhatsapp').value = '';
+      document.getElementById('modalServico').value = '';
+      document.getElementById('modalObs').value = '';
+      document.getElementById('modalEscolhaCliente').style.display = 'none';
+      document.getElementById('modalFormAgendamento').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Novo Atendimento';
+    });
+
+    document.getElementById('btnClienteRegular').addEventListener('click', async () => {
+      if (STATE.clientesRegulares.length === 0) {
+        showLoader('CARREGANDO CLIENTES...');
+        await carregarClientesRegulares();
+        hideLoader();
+      }
+      document.getElementById('modalEscolhaCliente').style.display = 'none';
+      document.getElementById('modalListaClientes').style.display = 'block';
+      document.getElementById('modalTitulo').textContent = 'Selecione um Cliente';
+      renderizarListaClientes('');
+    });
+
+    document.getElementById('btnRecarregarClientes').addEventListener('click', async () => {
+      showLoader('RECARREGANDO...');
+      await carregarClientesRegulares();
+      hideLoader();
+      renderizarListaClientes(document.getElementById('buscaCliente').value);
+      toast('Lista recarregada!', 'success');
+    });
+
+    document.getElementById('buscaCliente').addEventListener('input', function() {
+      renderizarListaClientes(this.value);
+    });
+
+    // ================= ENVIAR AGENDAMENTO =================
+    document.getElementById('btnEnviarAgendamento').addEventListener('click', async () => {
+      const nome = document.getElementById('modalNome').value.trim();
+      const whatsapp = document.getElementById('modalWhatsapp').value.trim();
+      const servico = document.getElementById('modalServico').value;
+      const obs = document.getElementById('modalObs').value.trim();
+
+      const preco = PRECOS_SERVICOS[servico] || 0;
+
+      const payload = {
+        "ag-data": STATE.modalData,
+        "ag-hora": STATE.modalHora,
+        "ag-nome": nome || '',
+        "ag-servico": servico || '',
+        "ag-whatsapp": whatsapp || '',
+        "ag-barbeiro": BARBEIRO_ID,
+        "ag-preco": String(preco)
+      };
+
+      await enviarParaWebhook(payload);
+    });
+
+    // ================= CONFIRMAR INDISPONIBILIDADE =================
+    document.getElementById('btnConfirmarIndisponivel').addEventListener('click', async () => {
+      const payload = {
+        "ag-data": STATE.modalData,
+        "ag-hora": STATE.modalHora,
+        "ag-nome": "INDISPONÍVEL",
+        "ag-servico": "Indisponível",
+        "ag-whatsapp": "",
+        "ag-barbeiro": BARBEIRO_ID,
+        "ag-preco": "0"
+      };
+
+      await enviarParaWebhook(payload);
+    });
+
+    // ================= ENVIO PARA WEBHOOK =================
+    async function enviarParaWebhook(payload) {
+      showLoader('ENVIANDO...');
+      try {
+        const response = await fetch(WEBHOOK_BARBEIRO, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          toast('Operação realizada com sucesso!', 'success');
+          fecharModal();
+          await selecionarDia(STATE.diaSelecionado);
+        } else {
+          const texto = await response.text();
+          toast(`Erro ${response.status}: ${texto}`, 'error');
+        }
+      } catch (err) {
+        console.error('Erro ao enviar:', err);
+        toast('Erro de conexão ao enviar dados.', 'error');
       } finally {
         hideLoader();
       }
     }
 
-    // ================= RENDERIZAR TABELA =================
-    function renderizarTabela() {
-      const tbody = document.getElementById('table-body');
+    // ================= DELETAR =================
+    async function deletarAgendamento(index) {
+      const ag = STATE.agendamentosAtuais[index];
+      if (!ag) return;
+      const nome = ag['ag-nome'] || ag.nome || ag.nome_cliente || 'Cliente';
+      if (!confirm(`Tem certeza de que deseja excluir o agendamento de "${nome}"?`)) return;
 
-      // Aplica filtro
-      let dados = clientes;
-      if (filtro.trim()) {
-        const termo = filtro.trim().toLowerCase();
-        dados = dados.filter(c =>
-          c.nome.toLowerCase().includes(termo) ||
-          c.whatsapp.toLowerCase().includes(termo)
-        );
-      }
+      showLoader('DELETANDO AGENDAMENTO...');
+      try {
+        const payload = {
+          "ag-id": ag.id || ag['ag-id'] || '',
+          "ag-data": STATE.diaSelecionado,
+          "ag-hora": ag['ag-hora'] || ag.hora || '',
+          "ag-nome": nome,
+          "ag-servico": ag['ag-servico'] || ag.servico || '',
+          "ag-barbeiro": BARBEIRO_ID
+        };
 
-      // Ordena por visitas (decrescente)
-      dados.sort((a, b) => b.visitas - a.visitas);
+        const response = await fetch(DELETAR_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
 
-      if (dados.length === 0) {
-        tbody.innerHTML =
-          `<tr><td colspan="4" style="text-align:center; color:var(--texto-suave); padding:32px;">Nenhum cliente encontrado com este filtro.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = '';
-      dados.forEach(cliente => {
-        const tr = document.createElement('tr');
-
-        // Badge de status
-        let badgeClass = 'badge-info';
-        let badgeText = 'Novo';
-        if (cliente.visitas >= 5) {
-          badgeClass = 'badge-success';
-          badgeText = 'VIP';
-        } else if (cliente.visitas >= 2) {
-          badgeClass = 'badge-warning';
-          badgeText = 'Frequente';
+        if (response.ok) {
+          toast('Agendamento excluído com sucesso!', 'success');
+          selecionarDia(STATE.diaSelecionado);
+        } else {
+          toast('Erro ao excluir agendamento.', 'error');
         }
-
-        // Link do WhatsApp
-        let wppLink = '—';
-        if (cliente.whatsapp) {
-          const cleanNumber = cliente.whatsapp.replace(/\D/g, '');
-          if (cleanNumber.length >= 10) {
-            wppLink = `<a href="https://wa.me/${cleanNumber}" target="_blank" style="color:var(--whatsapp); font-weight:600; text-decoration:none;">${cliente.whatsapp}</a>`;
-          } else {
-            wppLink = cliente.whatsapp;
-          }
-        }
-
-        tr.innerHTML = `
-          <td><strong>${cliente.nome}</strong></td>
-          <td>${wppLink}</td>
-          <td style="text-align:center; font-family:var(--fonte-dados); font-weight:600; color:var(--bordo);">${cliente.visitas}</td>
-          <td style="text-align:center;"><span class="badge ${badgeClass}">${badgeText}</span></td>
-        `;
-        tbody.appendChild(tr);
-      });
+      } catch (err) {
+        console.error('Erro ao deletar:', err);
+        toast('Erro de conexão ao tentar excluir.', 'error');
+      } finally {
+        hideLoader();
+      }
     }
 
-    // ================= ATUALIZAR STATS =================
-    function atualizarStats() {
-      document.getElementById('total-clientes').textContent = clientes.length;
-      const vip = clientes.filter(c => c.visitas >= 5).length;
-      document.getElementById('total-vip').textContent = vip;
-      const totalVisitas = clientes.reduce((acc, c) => acc + c.visitas, 0);
-      document.getElementById('total-visitas').textContent = totalVisitas;
+    async function deletarAgendamentoPorHora(hora) {
+      if (!confirm(`Tem certeza de que deseja excluir o agendamento das ${hora}?`)) return;
+      showLoader('DELETANDO AGENDAMENTO...');
+      try {
+        const payload = {
+          "ag-data": STATE.diaSelecionado,
+          "ag-hora": hora,
+          "ag-barbeiro": BARBEIRO_ID
+        };
+        const response = await fetch(DELETAR_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (response.ok) {
+          toast('Agendamento excluído com sucesso!', 'success');
+          selecionarDia(STATE.diaSelecionado);
+        } else {
+          toast('Erro ao excluir agendamento.', 'error');
+        }
+      } catch (err) {
+        console.error('Erro ao deletar:', err);
+        toast('Erro de conexão ao tentar excluir.', 'error');
+      } finally {
+        hideLoader();
+      }
     }
 
-    // ================= EVENTOS =================
-    document.addEventListener('DOMContentLoaded', () => {
-      // Carrega clientes automaticamente
-      carregarClientes();
+    // ================= MENU =================
+    function toggleMenu() {
+      const hamburger = document.getElementById('hamburger-btn');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      hamburger.classList.toggle('active');
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.style.overflow = hamburger.classList.contains('active') ? 'hidden' : '';
+    }
 
-      // Busca em tempo real
-      document.getElementById('searchInput').addEventListener('input', function() {
-        filtro = this.value;
-        renderizarTabela();
-      });
+    function closeMenu() {
+      const hamburger = document.getElementById('hamburger-btn');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      hamburger.classList.remove('active');
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
 
-      // Menu hambúrguer (mesmo do index)
+    // ================= INICIALIZAÇÃO =================
+    function iniciarAplicacao() {
+      renderCalendario();
+
+      const hoje = new Date();
+      const diaStr = String(hoje.getDate()).padStart(2, '0');
+      const mesStr = String(hoje.getMonth() + 1).padStart(2, '0');
+      const anoStr = hoje.getFullYear();
+
+      selecionarDia(`${anoStr}-${mesStr}-${diaStr}`);
+
+      // Carrega clientes regulares para o modal (não exibe na página inicial)
+      carregarClientesRegulares();
+
       const hamburger = document.getElementById('hamburger-btn');
       const overlay = document.getElementById('sidebar-overlay');
-      const sidebar = document.getElementById('sidebar');
-
-      function toggleMenu() {
-        hamburger.classList.toggle('active');
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-        document.body.style.overflow = hamburger.classList.contains('active') ? 'hidden' : '';
-      }
-
-      function closeMenu() {
-        hamburger.classList.remove('active');
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
-      }
+      const navItems = document.querySelectorAll('.nav-item');
 
       hamburger.addEventListener('click', toggleMenu);
       overlay.addEventListener('click', closeMenu);
-
-      // Fecha o menu ao clicar em qualquer nav-item
-      document.querySelectorAll('.nav-item').forEach(item => {
+      navItems.forEach(item => {
         item.addEventListener('click', closeMenu);
       });
 
-      // Fecha o menu ao redimensionar para desktop
       window.addEventListener('resize', () => {
         if (window.innerWidth > 880) {
           closeMenu();
         }
       });
-    });
-  </script>
+    }
 
+    // A aplicação será iniciada após autenticação (ou se já estiver autenticado)
+</script>
 </body>
 </html>
