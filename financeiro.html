@@ -80,108 +80,625 @@
     }
     .form-group { margin-bottom: 16px; }
 
+    /* ================= HEADER MOBILE ================= */
+    .mobile-header {
+        display: none;
+        position: fixed;
+        top: 5px;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: var(--tinta);
+        border-bottom: 1px solid rgba(185,144,47,0.25);
+        z-index: 101;
+        align-items: center;
+        padding: 0 16px;
+        gap: 16px;
+    }
+
+    .hamburger-btn {
+        display: none;
+        width: 40px;
+        height: 40px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        padding: 0;
+    }
+
+    .hamburger-line {
+        width: 24px;
+        height: 2px;
+        background: var(--latao);
+        transition: all 0.3s ease;
+    }
+
+    .hamburger-btn.active .hamburger-line:nth-child(1) {
+        transform: rotate(45deg) translate(8px, 8px);
+    }
+
+    .hamburger-btn.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger-btn.active .hamburger-line:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+    }
+
+    .mobile-logo {
+        flex: 1;
+        font-family: var(--fonte-cartaz);
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--pedra);
+        white-space: nowrap;
+    }
+
+    .mobile-logo-text {
+        color: var(--latao);
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(24, 23, 27, 0.5);
+        z-index: 99;
+        backdrop-filter: blur(4px);
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
     /* ================= SIDEBAR ================= */
     #sidebar {
-        position: fixed; left: 0; top: 5px; bottom: 0;
-        width: 72px; background: var(--tinta); border-right: 1px solid rgba(185,144,47,0.25);
-        display: flex; flex-direction: column; align-items: center; padding: 22px 0;
-        z-index: 100; transition: width .3s ease; overflow: hidden;
+        position: fixed;
+        left: 0;
+        top: 5px;
+        bottom: 0;
+        width: 72px;
+        background: var(--tinta);
+        border-right: 1px solid rgba(185,144,47,0.25);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 22px 0;
+        z-index: 100;
+        transition: width .3s ease;
+        overflow: hidden;
     }
-    #sidebar:hover { width: 220px; }
+
+    #sidebar:hover {
+        width: 220px;
+    }
+
     .sidebar-logo {
-        font-family: var(--fonte-cartaz); font-size: 1.05rem; font-weight: 600; letter-spacing: 0.1em;
-        text-transform: uppercase; color: var(--pedra); white-space: nowrap; overflow: hidden;
-        width: 100%; text-align: center; padding: 0 16px; margin-bottom: 18px;
+        font-family: var(--fonte-cartaz);
+        font-size: 1.05rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--pedra);
+        white-space: nowrap;
+        overflow: hidden;
+        width: 100%;
+        text-align: center;
+        padding: 0 16px;
+        margin-bottom: 18px;
     }
-    .sidebar-logo span:last-child { color: var(--latao); opacity: 0; transition: opacity .2s; }
-    #sidebar:hover .sidebar-logo span:last-child { opacity: 1; }
-    .sidebar-logo-icon { min-width: 40px; display: inline-block; }
+
+    .sidebar-logo span:last-child {
+        color: var(--latao);
+        opacity: 0;
+        transition: opacity .2s;
+    }
+
+    #sidebar:hover .sidebar-logo span:last-child {
+        opacity: 1;
+    }
+
+    .sidebar-logo-icon {
+        min-width: 40px;
+        display: inline-block;
+    }
 
     .nav-item {
-        width: 100%; display: flex; align-items: center; gap: 14px; padding: 13px 16px;
-        transition: background .15s, border-color .15s; border-left: 3px solid transparent; white-space: nowrap;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 13px 16px;
+        transition: background .15s, border-color .15s;
+        border-left: 3px solid transparent;
+        white-space: nowrap;
     }
-    .nav-item:hover { background: rgba(185,144,47,0.1); border-left-color: var(--latao-escuro); }
-    .nav-item.active { background: rgba(185,144,47,0.16); border-left-color: var(--latao); }
-    .nav-item.active .nav-icon, .nav-item.active .nav-label { color: var(--latao); }
-    .nav-icon { min-width: 40px; text-align: center; color: #a39d8f; font-size: 1.05rem; }
-    .nav-label { font-size: 0.82rem; font-weight: 500; color: #a39d8f; opacity: 0; transition: opacity .2s; }
-    #sidebar:hover .nav-label { opacity: 1; }
+
+    .nav-item:hover {
+        background: rgba(185,144,47,0.1);
+        border-left-color: var(--latao-escuro);
+    }
+
+    .nav-item.active {
+        background: rgba(185,144,47,0.16);
+        border-left-color: var(--latao);
+    }
+
+    .nav-item.active .nav-icon,
+    .nav-item.active .nav-label {
+        color: var(--latao);
+    }
+
+    .nav-icon {
+        min-width: 40px;
+        text-align: center;
+        color: #a39d8f;
+        font-size: 1.05rem;
+    }
+
+    .nav-label {
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: #a39d8f;
+        opacity: 0;
+        transition: opacity .2s;
+    }
+
+    #sidebar:hover .nav-label {
+        opacity: 1;
+    }
 
     /* ================= APP ================= */
-    #app { margin-left: 72px; min-height: 100vh; padding: 36px 40px 60px; max-width: 1180px; }
+    #app {
+        margin-left: 72px;
+        min-height: 100vh;
+        padding: 36px 40px 60px;
+        max-width: 1180px;
+    }
 
-    .page-header { padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px; }
-    .page-title { font-family: var(--fonte-cartaz); font-size: 1.9rem; text-transform: uppercase; letter-spacing: 0.02em; color: var(--tinta); margin-bottom: 4px; }
-    .page-subtitle { color: var(--texto-suave); font-size: 0.88rem; }
+    .page-header {
+        padding: 0 0 24px;
+        border-bottom: 2px solid var(--linha);
+        margin-bottom: 28px;
+    }
+
+    .page-title {
+        font-family: var(--fonte-cartaz);
+        font-size: 1.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: var(--tinta);
+        margin-bottom: 4px;
+    }
+
+    .page-subtitle {
+        color: var(--texto-suave);
+        font-size: 0.88rem;
+    }
 
     /* KPIS */
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 30px; }
-    .kpi-card { background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); padding: 20px; box-shadow: var(--sombra); }
-    .kpi-title { font-family: var(--fonte-cartaz); font-size: 0.7rem; text-transform: uppercase; color: var(--texto-suave); letter-spacing: 0.06em; }
-    .kpi-value { font-family: var(--fonte-dados); font-size: 1.5rem; font-weight: 600; margin-top: 8px; color: var(--texto); }
-    .kpi-value.green { color: var(--navalha); }
-    .kpi-value.red { color: var(--bordo); }
-    .kpi-value.gold { color: var(--latao-escuro); }
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+        margin-bottom: 30px;
+    }
+
+    .kpi-card {
+        background: var(--pedra-card);
+        border: 1px solid var(--linha);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--sombra);
+    }
+
+    .kpi-title {
+        font-family: var(--fonte-cartaz);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        color: var(--texto-suave);
+        letter-spacing: 0.06em;
+    }
+
+    .kpi-value {
+        font-family: var(--fonte-dados);
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-top: 8px;
+        color: var(--texto);
+    }
+
+    .kpi-value.green {
+        color: var(--navalha);
+    }
+
+    .kpi-value.red {
+        color: var(--bordo);
+    }
+
+    .kpi-value.gold {
+        color: var(--latao-escuro);
+    }
 
     /* GRIDS E CARDS */
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 30px; }
-    @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
-    @media (max-width: 880px) { #app { margin-left: 0; padding-top: 90px; } #sidebar { width: 100%; height: auto; bottom: auto; flex-direction: row; padding: 10px; } }
-
-    .card { background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); padding: 24px; box-shadow: var(--sombra); position: relative; overflow: hidden; }
-    .card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--faixa); background-size: 48px 48px; }
-    .card-title {
-        font-family: var(--fonte-cartaz); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
-        color: var(--bordo); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+        margin-bottom: 30px;
     }
-    .card-title::after { content: ""; flex: 1; height: 1px; background: var(--linha); }
+
+    @media (max-width: 900px) {
+        .grid-2 {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .card {
+        background: var(--pedra-card);
+        border: 1px solid var(--linha);
+        border-radius: var(--radius);
+        padding: 24px;
+        box-shadow: var(--sombra);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: var(--faixa);
+        background-size: 48px 48px;
+    }
+
+    .card-title {
+        font-family: var(--fonte-cartaz);
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: var(--bordo);
+        text-transform: uppercase;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .card-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--linha);
+    }
 
     /* BOTÕES */
     .btn {
-        display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 24px;
-        border-radius: var(--radius-peq); font-family: var(--fonte-cartaz); font-size: 0.82rem; font-weight: 600;
-        text-transform: uppercase; letter-spacing: 0.03em; transition: background .15s, transform .12s; border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 13px 24px;
+        border-radius: var(--radius-peq);
+        font-family: var(--fonte-cartaz);
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        transition: background .15s, transform .12s;
+        border: none;
     }
-    .btn:active { transform: scale(0.98); }
-    .btn-success { background: var(--navalha); color: #fff; }
-    .btn-success:hover { background: #24473d; }
-    .btn-danger { background: var(--bordo); color: #fff; }
-    .btn-danger:hover { background: var(--bordo-escuro); }
-    .btn-full { width: 100%; }
+
+    .btn:active {
+        transform: scale(0.98);
+    }
+
+    .btn-success {
+        background: var(--navalha);
+        color: #fff;
+    }
+
+    .btn-success:hover {
+        background: #24473d;
+    }
+
+    .btn-danger {
+        background: var(--bordo);
+        color: #fff;
+    }
+
+    .btn-danger:hover {
+        background: var(--bordo-escuro);
+    }
+
+    .btn-full {
+        width: 100%;
+    }
 
     /* TABELA */
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    th { text-align: left; padding: 11px 12px; font-family: var(--fonte-cartaz); font-size: 0.68rem; color: var(--bordo); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 2px solid var(--linha); }
-    td { padding: 11px 12px; border-bottom: 1px solid var(--linha); color: var(--texto); }
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+    }
+
+    th {
+        text-align: left;
+        padding: 11px 12px;
+        font-family: var(--fonte-cartaz);
+        font-size: 0.68rem;
+        color: var(--bordo);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        border-bottom: 2px solid var(--linha);
+    }
+
+    td {
+        padding: 11px 12px;
+        border-bottom: 1px solid var(--linha);
+        color: var(--texto);
+    }
 
     .badge {
-        display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.66rem; font-weight: 700; text-transform: uppercase;
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.66rem;
+        font-weight: 700;
+        text-transform: uppercase;
     }
-    .badge-entrada { background: #eaf2ee; color: var(--navalha); border: 1px solid var(--navalha); }
-    .badge-saida { background: #f8ecec; color: var(--bordo); border: 1px solid var(--bordo); }
+
+    .badge-entrada {
+        background: #eaf2ee;
+        color: var(--navalha);
+        border: 1px solid var(--navalha);
+    }
+
+    .badge-saida {
+        background: #f8ecec;
+        color: var(--bordo);
+        border: 1px solid var(--bordo);
+    }
 
     /* LOADER & TOAST */
     .loader-overlay {
-        position: fixed; inset: 0; background: rgba(239,238,231,0.92); backdrop-filter: blur(6px);
-        display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 9000;
+        position: fixed;
+        inset: 0;
+        background: rgba(239, 238, 231, 0.92);
+        backdrop-filter: blur(6px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        z-index: 9000;
     }
-    .loader-overlay.visible { display: flex; }
-    .loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--linha); border-top-color: var(--bordo); animation: spin .8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loader-text { margin-top: 18px; font-family: var(--fonte-cartaz); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bordo); }
 
-    #toast-container { position: fixed; bottom: 28px; right: 28px; z-index: 9998; display: flex; flex-direction: column; gap: 10px; }
-    .toast { padding: 14px 18px; background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); font-size: 0.85rem; color: var(--texto); min-width: 280px; box-shadow: var(--sombra-forte); }
-    .toast.success { border-color: var(--navalha); }
-    .toast.error { border-color: var(--perigo); }
-    .toast.info { border-color: var(--latao); }
+    .loader-overlay.visible {
+        display: flex;
+    }
+
+    .loader-ring {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 3px solid var(--linha);
+        border-top-color: var(--bordo);
+        animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loader-text {
+        margin-top: 18px;
+        font-family: var(--fonte-cartaz);
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--bordo);
+    }
+
+    #toast-container {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        z-index: 9998;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .toast {
+        padding: 14px 18px;
+        background: var(--pedra-card);
+        border: 1px solid var(--linha);
+        border-radius: var(--radius);
+        font-size: 0.85rem;
+        color: var(--texto);
+        min-width: 280px;
+        box-shadow: var(--sombra-forte);
+    }
+
+    .toast.success {
+        border-color: var(--navalha);
+    }
+
+    .toast.error {
+        border-color: var(--perigo);
+    }
+
+    .toast.info {
+        border-color: var(--latao);
+    }
+
+    /* ================= MOBILE RESPONSIVE ================= */
+    @media (max-width: 880px) {
+        .mobile-header {
+            display: flex;
+        }
+
+        .hamburger-btn {
+            display: flex;
+        }
+
+        #sidebar {
+            position: fixed;
+            left: 0;
+            top: 65px;
+            bottom: 0;
+            width: 280px;
+            height: auto;
+            max-height: calc(100vh - 65px);
+            overflow-y: auto;
+            flex-direction: column;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 102;
+        }
+
+        #sidebar.active {
+            transform: translateX(0);
+        }
+
+        #sidebar:hover {
+            width: 280px;
+        }
+
+        .sidebar-logo span:last-child {
+            opacity: 1;
+        }
+
+        .nav-label {
+            opacity: 1;
+        }
+
+        #app {
+            margin-left: 0;
+            padding-top: 80px;
+            padding: 80px 16px 40px;
+        }
+
+        .kpi-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .grid-2 {
+            grid-template-columns: 1fr;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-size: 0.75rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .card {
+            padding: 16px;
+        }
+
+        table {
+            font-size: 0.75rem;
+        }
+
+        th,
+        td {
+            padding: 8px 10px;
+        }
+
+        #toast-container {
+            bottom: 16px;
+            right: 16px;
+        }
+
+        .toast {
+            min-width: 250px;
+            font-size: 0.75rem;
+            padding: 12px 16px;
+        }
+    }
+
+    @media (max-width: 520px) {
+        .kpi-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .page-title {
+            font-size: 1.2rem;
+        }
+
+        #app {
+            padding: 80px 12px 30px;
+        }
+
+        .card {
+            padding: 12px;
+        }
+
+        table {
+            font-size: 0.7rem;
+        }
+
+        th,
+        td {
+            padding: 6px 8px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            font-size: 0.7rem;
+        }
+
+        .toast {
+            min-width: 200px;
+            font-size: 0.7rem;
+            padding: 10px 12px;
+        }
+
+        .kpi-value {
+            font-size: 1.2rem;
+        }
+
+        .mobile-logo {
+            font-size: 0.8rem;
+        }
+    }
   </style>
 </head>
 <body>
 
 <div class="faixa-topo" aria-hidden="true"></div>
+
+<!-- MOBILE HEADER -->
+<div class="mobile-header">
+  <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+  <div class="mobile-logo">Om<span class="mobile-logo-text">inus</span></div>
+</div>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
 
   <div class="loader-overlay" id="loader">
     <div class="loader-ring"></div>
@@ -194,7 +711,7 @@
   <nav id="sidebar">
     <div class="sidebar-logo"><span class="sidebar-logo-icon">Om</span><span>inus</span></div>
 
-    <a href="dashboard.html" class="nav-item">
+    <a href="index.html" class="nav-item">
       <span class="nav-icon">◈</span>
       <span class="nav-label">Dashboard</span>
     </a>
@@ -210,12 +727,12 @@
       <span class="nav-icon">▦</span>
       <span class="nav-label">Agenda</span>
     </a>
-    <!-- NOVO LINK PARA CLIENTES -->
     <a href="clientes.html" class="nav-item">
       <span class="nav-icon">◈</span>
       <span class="nav-label">Clientes</span>
     </a>
   </nav>
+
   <main id="app">
     <div class="page-header">
       <div class="page-title">Caixa & Frente de Loja</div>
@@ -316,7 +833,7 @@
           </thead>
           <tbody id="caixa-table">
             <tr>
-              <td colspan="5" style="text-align:center; color:var(--texto-suave); padding:24px;">Nenhuma movimentação hoje.</td>
+              <td colspan="5" style="text-align:center; color:var(--texto-suave); padding:24px;">Carregando movimentações...</td>
             </tr>
           </tbody>
         </table>
@@ -325,12 +842,47 @@
   </main>
 
   <script>
+    // ================= MENU HAMBÚRGUER =================
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    function toggleMenu() {
+      hamburgerBtn.classList.toggle('active');
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+    }
+
+    function closeMenu() {
+      hamburgerBtn.classList.remove('active');
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    hamburgerBtn.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', closeMenu);
+
+    // Fecha o menu ao clicar em qualquer link do sidebar
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', closeMenu);
+    });
+
+    // Fecha o menu ao redimensionar para desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 880) {
+        closeMenu();
+      }
+    });
+
     /* =============================================
        WEBHOOK N8N CONFIG
+       (URLs e método de fetch inalterados - não mexer)
     ============================================= */
     const API_CONFIG = {
-      REGISTRAR_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-registrar', // POST
-      OBTER_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter' // GET
+      REGISTRAR_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-registrar',
+      OBTER_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter'
     };
 
     let movimentacoes = [];
@@ -352,6 +904,71 @@
 
     function formatMoeda(val) {
       return 'R$ ' + parseFloat(val || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    }
+
+    /* =============================================
+       PARSING DA RESPOSTA DA DATA TABLE (n8n)
+       A Data Table do n8n retorna as linhas com as
+       chaves em maiúscula: Descricao, Valor, Tipo, Data.
+       Como Categoria e FormaPagamento ainda não existem
+       como colunas na tabela, tratamos como opcionais.
+    ============================================= */
+    function normalizarLinha(row) {
+      return {
+        tipo: String(row.Tipo ?? row.tipo ?? '').toLowerCase(),
+        categoria: row.Categoria ?? row.categoria ?? '—',
+        descricao: row.Descricao ?? row.descricao ?? '',
+        valor: parseFloat(row.Valor ?? row.valor ?? 0) || 0,
+        forma_pagamento: row.FormaPagamento ?? row.forma_pagamento ?? '—',
+        data_hora: row.Data ?? row.data_hora ?? null
+      };
+    }
+
+    function ehHoje(dataHora) {
+      if (!dataHora) return false;
+      const d = new Date(dataHora);
+      if (isNaN(d)) return false;
+      const hoje = new Date();
+      return d.getFullYear() === hoje.getFullYear() &&
+             d.getMonth() === hoje.getMonth() &&
+             d.getDate() === hoje.getDate();
+    }
+
+    /* =============================================
+       CARREGAR CAIXA DO DIA AO ABRIR A PÁGINA
+       Isso é o que faltava: o endpoint OBTER_CAIXA
+       nunca era chamado, então o extrato sempre
+       começava vazio mesmo com dados salvos no n8n.
+    ============================================= */
+    async function carregarCaixaDoDia() {
+      showLoader('CARREGANDO CAIXA...');
+      try {
+        const resp = await fetch(API_CONFIG.OBTER_CAIXA);
+        if (!resp.ok) throw new Error('Resposta HTTP ' + resp.status);
+
+        const data = await resp.json();
+
+        // Aceita tanto um array puro quanto { data: [...] } ou item único
+        const linhas = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.data)
+            ? data.data
+            : (data ? [data] : []);
+
+        movimentacoes = linhas
+          .map(item => normalizarLinha(item.json ?? item))
+          .filter(m => ehHoje(m.data_hora))
+          .sort((a, b) => new Date(b.data_hora) - new Date(a.data_hora));
+
+        atualizarTela();
+      } catch (err) {
+        console.warn('Não foi possível carregar o caixa do backend.', err);
+        movimentacoes = [];
+        atualizarTela();
+        toast('Não foi possível carregar o extrato salvo. Verifique a conexão com o n8n.', 'error');
+      } finally {
+        hideLoader();
+      }
     }
 
     // Registrar Entrada ou Saída
@@ -390,11 +1007,13 @@
 
       try {
         // Tenta enviar para o n8n
-        await fetch(API_CONFIG.REGISTRAR_CAIXA, {
+        const resp = await fetch(API_CONFIG.REGISTRAR_CAIXA, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
+
+        if (!resp.ok) throw new Error('Resposta HTTP ' + resp.status);
 
         movimentacoes.unshift(payload);
         atualizarTela();
@@ -404,7 +1023,7 @@
         console.warn('Servidor offline. Registrando localmente.', err);
         movimentacoes.unshift(payload);
         atualizarTela();
-        toast('Registrado localmente!', 'info');
+        toast('Servidor não respondeu — registrado apenas localmente. Recarregar a página pode perder este lançamento.', 'info');
         event.target.reset();
       } finally {
         hideLoader();
@@ -430,7 +1049,8 @@
             totalSaidas += m.valor;
           }
 
-          const hora = new Date(m.data_hora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          const dataObj = new Date(m.data_hora);
+          const hora = isNaN(dataObj) ? '—' : dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
           return `
             <tr>
@@ -453,6 +1073,9 @@
       document.getElementById('kpi-saidas').textContent = formatMoeda(totalSaidas);
       document.getElementById('kpi-pix-dinheiro').textContent = formatMoeda(pixDinheiro);
     }
+
+    // Busca o extrato do dia assim que a página carrega
+    document.addEventListener('DOMContentLoaded', carregarCaixaDoDia);
   </script>
 </body>
 </html>
