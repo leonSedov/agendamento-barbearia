@@ -20,6 +20,8 @@
         --texto-suave: #6b6459;
         --linha: #ddd8cc;
         --perigo: #a8332a;
+        --info: #3f6a8f;
+        --whatsapp: #25D366;
 
         --fonte-cartaz: 'Oswald', sans-serif;
         --fonte-corpo: 'Inter', sans-serif;
@@ -32,9 +34,9 @@
 
         --faixa: repeating-linear-gradient(
             45deg,
-            var(--bordo) 0px, var(--bordo) 14px,
+            #c8102e 0px, #c8102e 14px,
             var(--pedra-card) 14px, var(--pedra-card) 28px,
-            var(--latao) 28px, var(--latao) 42px,
+            #1e40af 28px, #1e40af 42px,
             var(--pedra-card) 42px, var(--pedra-card) 56px
         );
     }
@@ -61,133 +63,118 @@
     .faixa-topo { height: 5px; width: 100%; background: var(--faixa); background-size: 70px 70px; animation: girarFaixa 3.2s linear infinite; }
     @keyframes girarFaixa { from { background-position: 0 0; } to { background-position: 70px 0; } }
 
-    input, select {
-        font-family: var(--fonte-corpo);
-        background: var(--pedra);
-        border: 2px solid var(--linha);
-        border-radius: var(--radius-peq);
-        color: var(--texto);
-        padding: 11px 14px;
-        width: 100%;
-        font-size: 0.9rem;
-        transition: border-color .15s;
-    }
-    input:focus, select:focus { outline: none; border-color: var(--latao); }
-    label {
-        display: block; font-family: var(--fonte-cartaz); font-size: 0.72rem; font-weight: 600;
-        letter-spacing: 0.06em; text-transform: uppercase; color: var(--bordo); margin-bottom: 7px;
-    }
-    .form-group { margin-bottom: 16px; }
-
-    /* ================= HEADER MOBILE ================= */
-    .mobile-header {
-        display: none;
-        position: fixed;
-        top: 5px;
-        left: 0;
-        right: 0;
-        height: 60px;
-        background: var(--tinta);
-        border-bottom: 1px solid rgba(185,144,47,0.25);
-        z-index: 101;
-        align-items: center;
-        padding: 0 16px;
-        gap: 16px;
-    }
-
-    .hamburger-btn {
-        display: none;
-        width: 40px;
-        height: 40px;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
-        padding: 0;
-    }
-
-    .hamburger-line {
-        width: 24px;
-        height: 2px;
-        background: var(--latao);
-        transition: all 0.3s ease;
-    }
-
-    .hamburger-btn.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
-    .hamburger-btn.active .hamburger-line:nth-child(2) { opacity: 0; }
-    .hamburger-btn.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
-
-    .mobile-logo {
-        flex: 1;
-        font-family: var(--fonte-cartaz);
-        font-size: 0.95rem;
-        font-weight: 600;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--pedra);
-        white-space: nowrap;
-    }
-    .mobile-logo-text { color: var(--latao); }
-
-    .sidebar-overlay {
-        display: none;
+    /* ================= LOGIN OVERLAY ================= */
+    #login-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(24, 23, 27, 0.5);
-        z-index: 99;
-        backdrop-filter: blur(4px);
+        background: rgba(24, 23, 27, 0.92);
+        backdrop-filter: blur(8px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999;
+        padding: 20px;
     }
-    .sidebar-overlay.active { display: block; }
+    #login-overlay.active { display: flex; }
+    .login-box {
+        background: var(--pedra-card);
+        border-radius: var(--radius);
+        padding: 40px 36px;
+        max-width: 420px;
+        width: 100%;
+        box-shadow: var(--sombra-forte);
+        text-align: center;
+        animation: modalEntrar 0.4s ease;
+    }
+    @keyframes modalEntrar {
+        from { opacity: 0; transform: translateY(-20px) scale(0.96); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .login-box h1 {
+        font-family: var(--fonte-cartaz);
+        font-size: 1.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--tinta);
+        margin-bottom: 6px;
+    }
+    .login-box .sub {
+        color: var(--texto-suave);
+        font-size: 0.9rem;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--linha);
+        padding-bottom: 16px;
+    }
+    .login-box .login-icon {
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+        color: var(--latao);
+    }
+    .login-box input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid var(--linha);
+        border-radius: var(--radius-peq);
+        font-size: 1rem;
+        font-family: var(--fonte-corpo);
+        background: var(--pedra);
+        color: var(--texto);
+        transition: border-color 0.2s;
+        margin-bottom: 16px;
+        text-align: center;
+        letter-spacing: 2px;
+    }
+    .login-box input:focus {
+        outline: none;
+        border-color: var(--latao);
+    }
+    .login-box .btn-entrar {
+        width: 100%;
+        padding: 14px;
+        background: var(--bordo);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-peq);
+        font-family: var(--fonte-cartaz);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 600;
+        transition: background 0.15s;
+    }
+    .login-box .btn-entrar:hover {
+        background: var(--bordo-escuro);
+    }
+    .login-box .erro {
+        color: var(--perigo);
+        font-size: 0.85rem;
+        margin-top: 12px;
+        display: none;
+    }
+    .login-box .erro.visible {
+        display: block;
+    }
 
     /* ================= SIDEBAR ================= */
     #sidebar {
-        position: fixed;
-        left: 0;
-        top: 5px;
-        bottom: 0;
-        width: 72px;
-        background: var(--tinta);
-        border-right: 1px solid rgba(185,144,47,0.25);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 22px 0;
-        z-index: 100;
-        transition: width .3s ease;
-        overflow: hidden;
+        position: fixed; left: 0; top: 5px; bottom: 0;
+        width: 72px; background: var(--tinta); border-right: 1px solid rgba(185,144,47,0.25);
+        display: flex; flex-direction: column; align-items: center; padding: 22px 0;
+        z-index: 100; transition: width .3s ease; overflow: hidden;
     }
     #sidebar:hover { width: 220px; }
-
     .sidebar-logo {
-        font-family: var(--fonte-cartaz);
-        font-size: 1.05rem;
-        font-weight: 600;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--pedra);
-        white-space: nowrap;
-        overflow: hidden;
-        width: 100%;
-        text-align: center;
-        padding: 0 16px;
-        margin-bottom: 18px;
+        font-family: var(--fonte-cartaz); font-size: 1.05rem; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--pedra); white-space: nowrap; overflow: hidden;
+        width: 100%; text-align: center; padding: 0 16px; margin-bottom: 18px;
     }
     .sidebar-logo span:last-child { color: var(--latao); opacity: 0; transition: opacity .2s; }
     #sidebar:hover .sidebar-logo span:last-child { opacity: 1; }
     .sidebar-logo-icon { min-width: 40px; display: inline-block; }
 
     .nav-item {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 13px 16px;
-        transition: background .15s, border-color .15s;
-        border-left: 3px solid transparent;
-        white-space: nowrap;
+        width: 100%; display: flex; align-items: center; gap: 14px; padding: 13px 16px;
+        transition: background .15s, border-color .15s; border-left: 3px solid transparent; white-space: nowrap;
     }
     .nav-item:hover { background: rgba(185,144,47,0.1); border-left-color: var(--latao-escuro); }
     .nav-item.active { background: rgba(185,144,47,0.16); border-left-color: var(--latao); }
@@ -199,9 +186,48 @@
     /* ================= APP ================= */
     #app { margin-left: 72px; min-height: 100vh; padding: 36px 40px 60px; max-width: 1180px; }
 
-    .page-header { padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px; display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .page-header {
+        padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px; position: relative; overflow: hidden;
+    }
+    .page-header::after {
+        content: '⌗'; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+        font-size: 64px; color: rgba(185,144,47,0.1); pointer-events: none;
+    }
     .page-title { font-family: var(--fonte-cartaz); font-size: 1.9rem; text-transform: uppercase; letter-spacing: 0.02em; color: var(--tinta); margin-bottom: 4px; }
     .page-subtitle { color: var(--texto-suave); font-size: 0.88rem; }
+
+    .card {
+        background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius);
+        padding: 24px; box-shadow: var(--sombra); position: relative; overflow: hidden; transition: border-color .15s, box-shadow .15s;
+        margin-bottom: 24px;
+    }
+    .card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--faixa); background-size: 48px 48px; }
+    .card:hover { border-color: var(--latao); }
+    .card-title {
+        font-family: var(--fonte-cartaz); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
+        color: var(--bordo); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+    }
+    .card-title::after { content: ""; flex: 1; height: 1px; background: var(--linha); }
+    .card-title .total-inline { margin-left: auto; color: var(--texto); font-family: var(--fonte-dados); font-size: 0.9rem; text-transform: none; letter-spacing: 0; }
+
+    /* BOTÕES */
+    .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 26px;
+        border-radius: var(--radius-peq); font-family: var(--fonte-cartaz); font-size: 0.8rem; font-weight: 600;
+        letter-spacing: 0.04em; text-transform: uppercase; transition: background .15s, transform .12s, box-shadow .15s; border: none;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-outline { background: transparent; color: var(--bordo); border: 2px solid var(--linha); }
+    .btn-outline:hover { border-color: var(--bordo); background: #fbf3ee; }
+
+    /* TABELA */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    thead tr { border-bottom: 2px solid var(--linha); }
+    th { text-align: left; padding: 11px 14px; font-family: var(--fonte-cartaz); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--bordo); }
+    td { padding: 13px 14px; border-bottom: 1px solid var(--linha); color: var(--texto); }
+    tbody tr { transition: background .15s; }
+    tbody tr:hover { background: #f7f3e9; }
 
     /* FILTRO DE PERÍODO */
     .filtro-periodo {
@@ -214,9 +240,25 @@
         border-radius: var(--radius);
         padding: 16px 18px;
         box-shadow: var(--sombra);
-        margin-bottom: 28px;
+        margin-bottom: 24px;
     }
     .filtro-periodo .form-group { margin-bottom: 0; min-width: 150px; flex: 1; }
+    .filtro-periodo label {
+        display: block; font-family: var(--fonte-cartaz); font-size: 0.7rem; font-weight: 600;
+        letter-spacing: 0.06em; text-transform: uppercase; color: var(--bordo); margin-bottom: 7px;
+    }
+    .filtro-periodo input[type="date"] {
+        font-family: var(--fonte-corpo);
+        background: var(--pedra);
+        border: 2px solid var(--linha);
+        border-radius: var(--radius-peq);
+        color: var(--texto);
+        padding: 10px 12px;
+        width: 100%;
+        font-size: 0.88rem;
+        transition: border-color .15s;
+    }
+    .filtro-periodo input[type="date"]:focus { outline: none; border-color: var(--latao); }
     .filtro-atalhos { display: flex; gap: 8px; flex-wrap: wrap; }
     .btn-atalho {
         padding: 9px 14px;
@@ -234,7 +276,7 @@
     }
     .btn-atalho:hover, .btn-atalho.active { border-color: var(--latao); color: var(--latao-escuro); background: #faf6ec; }
 
-    /* KPIS */
+    /* KPIs */
     .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 30px; }
     .kpi-card { background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); padding: 20px; box-shadow: var(--sombra); }
     .kpi-title { font-family: var(--fonte-cartaz); font-size: 0.7rem; text-transform: uppercase; color: var(--texto-suave); letter-spacing: 0.06em; }
@@ -320,8 +362,6 @@
     }
     .bloco-divisao.origem .valor { color: var(--latao-escuro); }
     .bloco-divisao.destino .valor { color: var(--navalha); }
-    .bloco-divisao.alerta .valor { color: var(--perigo); }
-    .bloco-divisao.socio1::before, .bloco-divisao.socio2::before { background: var(--faixa); }
 
     .aviso-saldo-negativo {
         background: #fdecea;
@@ -335,82 +375,206 @@
     }
     .aviso-saldo-negativo.visible { display: block; }
 
-    /* CARD / TABELA */
-    .card {
-        background: var(--pedra-card);
-        border: 1px solid var(--linha);
-        border-radius: var(--radius);
-        padding: 24px;
-        box-shadow: var(--sombra);
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 24px;
+    /* LOADER / TOAST */
+    .loader-overlay {
+        position: fixed; inset: 0; background: rgba(239,238,231,0.92); backdrop-filter: blur(6px);
+        display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 9000;
     }
-    .card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--faixa); background-size: 48px 48px; }
-    .card-title {
-        font-family: var(--fonte-cartaz); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
-        color: var(--bordo); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
-    }
-    .card-title .total-inline { margin-left: auto; color: var(--texto); font-family: var(--fonte-dados); font-size: 0.9rem; text-transform: none; letter-spacing: 0; }
-
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    th { text-align: left; padding: 11px 12px; font-family: var(--fonte-cartaz); font-size: 0.68rem; color: var(--bordo); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 2px solid var(--linha); }
-    td { padding: 11px 12px; border-bottom: 1px solid var(--linha); color: var(--texto); }
-    tfoot td { font-weight: 700; border-top: 2px solid var(--linha); border-bottom: none; }
-
-    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.66rem; font-weight: 700; text-transform: uppercase; }
-    .badge-entrada { background: #eaf2ee; color: var(--navalha); border: 1px solid var(--navalha); }
-    .badge-saida { background: #f8ecec; color: var(--bordo); border: 1px solid var(--bordo); }
-
-    /* LOADER & TOAST */
-    .loader-overlay { position: fixed; inset: 0; background: rgba(239, 238, 231, 0.92); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 9000; }
     .loader-overlay.visible { display: flex; }
     .loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--linha); border-top-color: var(--bordo); animation: spin .8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loader-text { margin-top: 18px; font-family: var(--fonte-cartaz); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bordo); }
 
     #toast-container { position: fixed; bottom: 28px; right: 28px; z-index: 9998; display: flex; flex-direction: column; gap: 10px; }
-    .toast { padding: 14px 18px; background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); font-size: 0.85rem; color: var(--texto); min-width: 280px; box-shadow: var(--sombra-forte); }
+    .toast {
+        display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--pedra-card); border: 1px solid var(--linha);
+        border-radius: var(--radius); min-width: 300px; box-shadow: var(--sombra-forte); animation: slideIn .35s ease; font-size: 0.85rem; color: var(--texto);
+    }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     .toast.success { border-color: var(--navalha); }
     .toast.error { border-color: var(--perigo); }
     .toast.info { border-color: var(--latao); }
 
-    .vazio { text-align: center; color: var(--texto-suave); padding: 24px; }
+    /* ================= HEADER MOBILE ================= */
+    .mobile-header {
+        display: none;
+        position: fixed;
+        top: 5px;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: var(--tinta);
+        border-bottom: 1px solid rgba(185,144,47,0.25);
+        z-index: 101;
+        align-items: center;
+        padding: 0 16px;
+        gap: 16px;
+    }
+
+    .hamburger-btn {
+        display: none;
+        width: 40px;
+        height: 40px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        padding: 0;
+    }
+
+    .hamburger-line {
+        width: 24px;
+        height: 2px;
+        background: var(--latao);
+        transition: all 0.3s ease;
+    }
+
+    .hamburger-btn.active .hamburger-line:nth-child(1) {
+        transform: rotate(45deg) translate(8px, 8px);
+    }
+
+    .hamburger-btn.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger-btn.active .hamburger-line:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+    }
+
+    .mobile-logo {
+        flex: 1;
+        font-family: var(--fonte-cartaz);
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--pedra);
+        white-space: nowrap;
+    }
+
+    .mobile-logo-text {
+        color: var(--latao);
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(24, 23, 27, 0.5);
+        z-index: 99;
+        backdrop-filter: blur(4px);
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
 
     /* ================= MOBILE RESPONSIVE ================= */
     @media (max-width: 880px) {
         .mobile-header { display: flex; }
         .hamburger-btn { display: flex; }
+
         #sidebar {
-            position: fixed; left: 0; top: 65px; bottom: 0; width: 280px; height: auto;
-            max-height: calc(100vh - 65px); overflow-y: auto; flex-direction: column;
-            transform: translateX(-100%); transition: transform 0.3s ease; z-index: 102;
+            position: fixed;
+            left: 0;
+            top: 65px;
+            bottom: 0;
+            width: 280px;
+            height: auto;
+            max-height: calc(100vh - 65px);
+            overflow-y: auto;
+            flex-direction: column;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 102;
         }
+
         #sidebar.active { transform: translateX(0); }
         #sidebar:hover { width: 280px; }
         .sidebar-logo span:last-child { opacity: 1; }
         .nav-label { opacity: 1; }
-        #app { margin-left: 0; padding: 80px 16px 40px; }
-        .kpi-grid { grid-template-columns: 1fr 1fr; }
-        .page-title { font-size: 1.5rem; }
-        .card { padding: 16px; }
-        table { font-size: 0.75rem; }
-        th, td { padding: 8px 10px; }
-        #toast-container { bottom: 16px; right: 16px; }
-        .toast { min-width: 250px; font-size: 0.75rem; padding: 12px 16px; }
+
+        #app {
+            margin-left: 0;
+            padding-top: 80px;
+        }
+
+        .kpi-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 0.75rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .card {
+            padding: 16px;
+        }
+
+        table {
+            font-size: 0.75rem;
+        }
+
+        th, td {
+            padding: 8px 10px;
+        }
+
+        #toast-container {
+            bottom: 16px;
+            right: 16px;
+        }
+
+        .toast {
+            min-width: 250px;
+            font-size: 0.75rem;
+        }
     }
+
     @media (max-width: 520px) {
         .kpi-grid { grid-template-columns: 1fr; }
         .page-title { font-size: 1.2rem; }
-        #app { padding: 80px 12px 30px; }
+
+        #app {
+            padding: 80px 16px 40px;
+        }
+
         .card { padding: 12px; }
         table { font-size: 0.7rem; }
         th, td { padding: 6px 8px; }
-        .toast { min-width: 200px; font-size: 0.7rem; padding: 10px 12px; }
+
+        .btn {
+            padding: 8px 16px;
+            font-size: 0.7rem;
+        }
+
+        .toast {
+            min-width: 200px;
+            font-size: 0.7rem;
+            padding: 10px 12px;
+        }
+
+        .page-header {
+            padding: 0 0 16px;
+            margin-bottom: 20px;
+        }
+
         .kpi-value { font-size: 1.2rem; }
         .bloco-divisao .valor { font-size: 1.3rem; }
+    }
+
+    @media (max-width: 380px) {
         .mobile-logo { font-size: 0.8rem; }
+        #app { padding: 80px 12px 40px; }
+        .page-title { font-size: 1rem; }
+        table { font-size: 0.65rem; }
     }
   </style>
 </head>
@@ -418,422 +582,553 @@
 
 <div class="faixa-topo" aria-hidden="true"></div>
 
-<!-- MOBILE HEADER -->
-<div class="mobile-header">
-  <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-  </button>
-  <div class="mobile-logo">Om<span class="mobile-logo-text">inus</span></div>
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay" class="active">
+    <div class="login-box">
+        <div class="login-icon">🔐</div>
+        <h1>Ominus Tech</h1>
+        <div class="sub">Painel Administrativo</div>
+        <input type="password" id="senha-input" placeholder="Digite a senha" autocomplete="off">
+        <button class="btn-entrar" id="btn-login">Entrar</button>
+        <div class="erro" id="login-erro">Senha incorreta. Tente novamente.</div>
+    </div>
 </div>
 
-<!-- SIDEBAR OVERLAY -->
-<div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <!-- MOBILE HEADER -->
+  <div class="mobile-header">
+    <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+    <div class="mobile-logo">Om<span class="mobile-logo-text">inus</span></div>
+  </div>
 
-<div class="loader-overlay" id="loader">
-  <div class="loader-ring"></div>
-  <div class="loader-text">PROCESSANDO...</div>
-</div>
+  <!-- SIDEBAR OVERLAY -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-<div id="toast-container"></div>
+  <!-- LOADER -->
+  <div class="loader-overlay" id="loader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">PROCESSANDO...</div>
+  </div>
 
-<!-- SIDEBAR -->
-<nav id="sidebar">
-  <div class="sidebar-logo"><span class="sidebar-logo-icon">Om</span><span>inus</span></div>
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container"></div>
 
-  <a href="index.html" class="nav-item">
-    <span class="nav-icon">◈</span>
-    <span class="nav-label">Dashboard</span>
-  </a>
-  <a href="financeiro.html" class="nav-item">
-    <span class="nav-icon">◎</span>
-    <span class="nav-label">Caixa</span>
-  </a>
-  <a href="divisao-socios.html" class="nav-item active">
-    <span class="nav-icon">⌗</span>
-    <span class="nav-label">Divisão de Lucros</span>
-  </a>
-  <a href="barbeiros.html" class="nav-item">
-    <span class="nav-icon">◉</span>
-    <span class="nav-label">Barbeiros</span>
-  </a>
-  <a href="agenda.html" class="nav-item">
-    <span class="nav-icon">▦</span>
-    <span class="nav-label">Agenda</span>
-  </a>
-  <a href="clientes.html" class="nav-item">
-    <span class="nav-icon">◈</span>
-    <span class="nav-label">Clientes</span>
-  </a>
-</nav>
+  <!-- SIDEBAR -->
+  <nav id="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">Om</span><span>inus</span></div>
 
-<main id="app">
-  <div class="page-header">
-    <div>
+    <a href="dashboard.html" class="nav-item active">
+      <span class="nav-icon">◈</span>
+      <span class="nav-label">Dashboard</span>
+    </a>
+    <a href="financeiro.html" class="nav-item">
+      <span class="nav-icon">◎</span>
+      <span class="nav-label">Financeiro</span>
+    </a>
+    <a href="barbeiros.html" class="nav-item">
+      <span class="nav-icon">◉</span>
+      <span class="nav-label">Barbeiros</span>
+    </a>
+    <a href="agenda.html" class="nav-item">
+      <span class="nav-icon">▦</span>
+      <span class="nav-label">Agenda</span>
+    </a>
+    <a href="clientes.html" class="nav-item">
+      <span class="nav-icon">◈</span>
+      <span class="nav-label">Clientes</span>
+    </a>
+  </nav>
+
+  <!-- MAIN CONTENT (DASHBOARD — apenas Divisão de Lucros) -->
+  <main id="app" style="display:none;">
+
+    <div class="page-header">
       <div class="page-title">Divisão de Lucros</div>
       <p class="page-subtitle">Renda total, despesas e repasse entre barbeiro e sócios no período selecionado</p>
     </div>
-  </div>
 
-  <!-- FILTRO DE PERÍODO -->
-  <div class="filtro-periodo">
-    <div class="form-group">
-      <label>Data Inicial</label>
-      <input type="date" id="filtro-inicio" />
+    <div style="margin-bottom: 26px;">
+      <button class="btn btn-outline" onclick="carregarDadosDivisao()">
+        ⟳ &nbsp;Atualizar Dados
+      </button>
     </div>
-    <div class="form-group">
-      <label>Data Final</label>
-      <input type="date" id="filtro-fim" />
-    </div>
-    <div class="filtro-atalhos">
-      <button class="btn-atalho" data-atalho="hoje">Hoje</button>
-      <button class="btn-atalho" data-atalho="semana">7 Dias</button>
-      <button class="btn-atalho active" data-atalho="mes">Este Mês</button>
-      <button class="btn-atalho" data-atalho="tudo">Tudo</button>
-    </div>
-  </div>
 
-  <!-- RESUMO GERAL -->
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-title">Renda Total do Período</div>
-      <div class="kpi-value gold" id="kpi-renda">R$ 0,00</div>
+    <!-- FILTRO DE PERÍODO -->
+    <div class="filtro-periodo">
+      <div class="form-group">
+        <label>Data Inicial</label>
+        <input type="date" id="filtro-inicio" />
+      </div>
+      <div class="form-group">
+        <label>Data Final</label>
+        <input type="date" id="filtro-fim" />
+      </div>
+      <div class="filtro-atalhos">
+        <button class="btn-atalho" data-atalho="hoje">Hoje</button>
+        <button class="btn-atalho" data-atalho="semana">7 Dias</button>
+        <button class="btn-atalho active" data-atalho="mes">Este Mês</button>
+        <button class="btn-atalho" data-atalho="tudo">Tudo</button>
+      </div>
     </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Despesas Totais do Período</div>
-      <div class="kpi-value red" id="kpi-despesas">R$ 0,00</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">Saldo Líquido p/ Sócios</div>
-      <div class="kpi-value green" id="kpi-saldo-liquido">R$ 0,00</div>
-    </div>
-  </div>
 
-  <div class="aviso-saldo-negativo" id="aviso-negativo">
-    ⚠ As despesas do período superaram o fundo operacional. O saldo dos sócios ficará negativo até esse déficit ser coberto.
-  </div>
-
-  <!-- ETAPA 1: DIVISÃO INICIAL -->
-  <div class="secao-titulo"><span class="numero">1</span> Divisão Inicial da Renda</div>
-  <div class="fluxo-grid">
-    <div class="bloco-divisao origem">
-      <div class="rotulo">Renda Total Recebida</div>
-      <div class="valor" id="fluxo-renda">R$ 0,00</div>
+    <!-- RESUMO GERAL -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Renda Total do Período</div>
+        <div class="kpi-value gold" id="kpi-renda">R$ 0,00</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Despesas Totais do Período</div>
+        <div class="kpi-value red" id="kpi-despesas">R$ 0,00</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Saldo Líquido p/ Sócios</div>
+        <div class="kpi-value green" id="kpi-saldo-liquido">R$ 0,00</div>
+      </div>
     </div>
-    <div class="fluxo-seta">→</div>
-    <div class="fluxo-grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
+
+    <div class="aviso-saldo-negativo" id="aviso-negativo">
+      ⚠ As despesas do período superaram o fundo operacional. O saldo dos sócios ficará negativo até esse déficit ser coberto.
+    </div>
+
+    <!-- ETAPA 1: DIVISÃO INICIAL -->
+    <div class="secao-titulo"><span class="numero">1</span> Divisão Inicial da Renda</div>
+    <div class="fluxo-grid">
+      <div class="bloco-divisao origem">
+        <div class="rotulo">Renda Total Recebida</div>
+        <div class="valor" id="fluxo-renda">R$ 0,00</div>
+      </div>
+      <div class="fluxo-seta">→</div>
+      <div class="fluxo-grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
+        <div class="bloco-divisao">
+          <div class="percentual">50%</div>
+          <div class="rotulo">Repasse Barbeiro Muniz</div>
+          <div class="valor" id="fluxo-barbeiro">R$ 0,00</div>
+        </div>
+        <div class="bloco-divisao">
+          <div class="percentual">50%</div>
+          <div class="rotulo">Vai pro Caixa</div>
+          <div class="valor" id="fluxo-fundo">R$ 0,00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESPESAS -->
+    <div class="card" style="margin-top: 22px;">
+      <div class="card-title">Despesas do Período <span class="total-inline" id="total-despesas-inline">R$ 0,00</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Descrição</th><th>Data</th><th>Valor</th></tr>
+          </thead>
+          <tbody id="tabela-despesas">
+            <tr><td colspan="3" style="text-align:center; color:var(--texto-suave); padding:24px;">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ETAPA 2: DIVISÃO FINAL -->
+    <div class="secao-titulo"><span class="numero">2</span> Divisão Final entre Sócios</div>
+    <div class="fluxo-grid">
       <div class="bloco-divisao">
-        <div class="percentual">50%</div>
-        <div class="rotulo">Repasse Barbeiro Muniz</div>
-        <div class="valor" id="fluxo-barbeiro">R$ 0,00</div>
+        <div class="rotulo">Caixa − Despesas Pagas</div>
+        <div class="valor" id="fluxo-saldo">R$ 0,00</div>
       </div>
-      <div class="bloco-divisao">
-        <div class="percentual">50%</div>
-        <div class="rotulo">Vai pro Caixa</div>
-        <div class="valor" id="fluxo-fundo">R$ 0,00</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- DESPESAS -->
-  <div class="card" style="margin-top: 22px;">
-    <div class="card-title">Despesas do Período <span class="total-inline" id="total-despesas-inline">R$ 0,00</span></div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Descrição</th><th>Data</th><th>Valor</th></tr>
-        </thead>
-        <tbody id="tabela-despesas">
-          <tr><td colspan="3" class="vazio">Carregando...</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ETAPA 2: DIVISÃO FINAL -->
-  <div class="secao-titulo"><span class="numero">2</span> Divisão Final entre Sócios</div>
-  <div class="fluxo-grid">
-    <div class="bloco-divisao">
-      <div class="rotulo">Caixa − Despesas Pagas</div>
-      <div class="valor" id="fluxo-saldo">R$ 0,00</div>
-    </div>
-    <div class="fluxo-seta">→</div>
-    <div class="fluxo-grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
-      <div class="bloco-divisao destino">
-        <div class="percentual">50%</div>
-        <div class="rotulo">Sócio Kayo Melo</div>
-        <div class="valor" id="fluxo-kayo">R$ 0,00</div>
-      </div>
-      <div class="bloco-divisao destino">
-        <div class="percentual">50%</div>
-        <div class="rotulo">Sócio Muniz</div>
-        <div class="valor" id="fluxo-muniz-socio">R$ 0,00</div>
+      <div class="fluxo-seta">→</div>
+      <div class="fluxo-grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
+        <div class="bloco-divisao destino">
+          <div class="percentual">50%</div>
+          <div class="rotulo">Sócio Kayo Melo</div>
+          <div class="valor" id="fluxo-kayo">R$ 0,00</div>
+        </div>
+        <div class="bloco-divisao destino">
+          <div class="percentual">50%</div>
+          <div class="rotulo">Sócio Muniz</div>
+          <div class="valor" id="fluxo-muniz-socio">R$ 0,00</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ENTRADAS (TRANSPARÊNCIA DA RENDA) -->
-  <div class="card" style="margin-top: 30px;">
-    <div class="card-title">Lançamentos de Entrada (compõem a Renda Total) <span class="total-inline" id="total-entradas-inline">R$ 0,00</span></div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Descrição</th><th>Data</th><th>Valor</th></tr>
-        </thead>
-        <tbody id="tabela-entradas">
-          <tr><td colspan="3" class="vazio">Carregando...</td></tr>
-        </tbody>
-      </table>
+    <!-- ENTRADAS (TRANSPARÊNCIA DA RENDA) -->
+    <div class="card" style="margin-top: 30px;">
+      <div class="card-title">Lançamentos de Entrada (compõem a Renda Total) <span class="total-inline" id="total-entradas-inline">R$ 0,00</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Descrição</th><th>Data</th><th>Valor</th></tr>
+          </thead>
+          <tbody id="tabela-entradas">
+            <tr><td colspan="3" style="text-align:center; color:var(--texto-suave); padding:24px;">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-</main>
 
-<script>
-  // ================= MENU HAMBÚRGUER =================
-  const hamburgerBtn = document.getElementById('hamburger-btn');
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
+  </main>
 
-  function toggleMenu() {
-    hamburgerBtn.classList.toggle('active');
-    sidebar.classList.toggle('active');
-    overlay.classList.toggle('active');
-    document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
-  }
-  function closeMenu() {
-    hamburgerBtn.classList.remove('active');
-    sidebar.classList.remove('active');
-    overlay.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-  hamburgerBtn.addEventListener('click', toggleMenu);
-  overlay.addEventListener('click', closeMenu);
-  document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', closeMenu));
-  window.addEventListener('resize', () => { if (window.innerWidth > 880) closeMenu(); });
+  <script>
+    // ================= SISTEMA DE SENHA =================
+    const SENHA_CORRETA = 'km12873';
+    const STORAGE_KEY = 'auth_data_dashboard';
 
-  /* =============================================
-     WEBHOOK N8N CONFIG
-     Reutiliza o MESMO endpoint de leitura já usado
-     em financeiro.html (caixa-obter). Nenhum endpoint
-     novo é criado e a URL não é alterada.
-  ============================================= */
-  const API_CONFIG = {
-    OBTER_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter'
-  };
+    function getAuthData() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return null;
+            return JSON.parse(raw);
+        } catch { return null; }
+    }
 
-  let movimentacoes = [];
+    function setAuthData() {
+        const hoje = new Date();
+        const dataStr = hoje.getFullYear() + '-' +
+                       String(hoje.getMonth()+1).padStart(2,'0') + '-' +
+                       String(hoje.getDate()).padStart(2,'0');
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: dataStr }));
+    }
 
-  function showLoader(msg = 'PROCESSANDO...') {
-    document.getElementById('loader').classList.add('visible');
-    document.querySelector('.loader-text').textContent = msg;
-  }
-  function hideLoader() { document.getElementById('loader').classList.remove('visible'); }
+    function precisaAutenticar() {
+        const auth = getAuthData();
+        if (!auth) return true;
 
-  function toast(msg, type = 'info') {
-    const container = document.getElementById('toast-container');
-    const el = document.createElement('div');
-    el.className = `toast ${type}`;
-    el.innerHTML = msg;
-    container.appendChild(el);
-    setTimeout(() => el.remove(), 4000);
-  }
+        const hoje = new Date();
+        const diaAtual = hoje.getDate();
+        const mesAtual = hoje.getMonth() + 1;
+        const anoAtual = hoje.getFullYear();
 
-  function formatMoeda(val) {
-    const sinal = val < 0 ? '-' : '';
-    return sinal + 'R$ ' + Math.abs(parseFloat(val || 0)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-  }
+        if (diaAtual === 8) {
+            if (!auth.data) return true;
+            const partes = auth.data.split('-');
+            if (partes.length !== 3) return true;
+            const anoSalvo = parseInt(partes[0], 10);
+            const mesSalvo = parseInt(partes[1], 10);
+            const diaSalvo = parseInt(partes[2], 10);
+            if (anoSalvo !== anoAtual || mesSalvo !== mesAtual || diaSalvo !== 8) {
+                return true;
+            }
+            return false;
+        } else {
+            if (!auth.data) return true;
+            return false;
+        }
+    }
 
-  /* =============================================
-     PARSING DA RESPOSTA DA DATA TABLE (n8n)
-     Mesma normalização usada em financeiro.html:
-     a Data Table retorna chaves capitalizadas
-     (Descricao, Valor, Tipo, Data).
-  ============================================= */
-  function normalizarLinha(row) {
-    return {
-      tipo: String(row.Tipo ?? row.tipo ?? '').toLowerCase(),
-      descricao: row.Descricao ?? row.descricao ?? '',
-      valor: parseFloat(row.Valor ?? row.valor ?? 0) || 0,
-      data_hora: row.Data ?? row.data_hora ?? null
+    function autenticar(senha) {
+        if (senha === SENHA_CORRETA) {
+            setAuthData();
+            document.getElementById('login-overlay').classList.remove('active');
+            document.getElementById('app').style.display = 'block';
+            iniciarDashboard();
+            return true;
+        } else {
+            const erro = document.getElementById('login-erro');
+            erro.classList.add('visible');
+            setTimeout(() => erro.classList.remove('visible'), 3000);
+            return false;
+        }
+    }
+
+    /* =============================================
+       WEBHOOK CONFIG
+    ============================================= */
+    const API_CONFIG = {
+      OBTER_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter'
     };
-  }
 
-  function pad(n) { return String(n).padStart(2, '0'); }
-  function dataParaInput(d) { return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
-
-  /* =============================================
-     CARREGAR TODAS AS MOVIMENTAÇÕES
-     Como o node "Get row(s)7" ainda não filtra por
-     data no backend, o filtro de período é aplicado
-     aqui no front, sobre a base completa retornada.
-  ============================================= */
-  async function carregarDados() {
-    showLoader('CARREGANDO LANÇAMENTOS...');
-    try {
-      const resp = await fetch(API_CONFIG.OBTER_CAIXA);
-      if (!resp.ok) throw new Error('Resposta HTTP ' + resp.status);
-      const data = await resp.json();
-
-      const linhas = Array.isArray(data)
-        ? data
-        : Array.isArray(data?.data)
-          ? data.data
-          : (data ? [data] : []);
-
-      movimentacoes = linhas.map(item => normalizarLinha(item.json ?? item));
-      aplicarFiltro();
-    } catch (err) {
-      console.warn('Não foi possível carregar os lançamentos.', err);
-      movimentacoes = [];
-      aplicarFiltro();
-      toast('Não foi possível carregar os dados do n8n. Verifique a conexão.', 'error');
-    } finally {
-      hideLoader();
-    }
-  }
-
-  function definirAtalho(tipo) {
-    const hoje = new Date();
-    let inicio, fim = new Date(hoje);
-
-    if (tipo === 'hoje') {
-      inicio = new Date(hoje);
-    } else if (tipo === 'semana') {
-      inicio = new Date(hoje);
-      inicio.setDate(inicio.getDate() - 6);
-    } else if (tipo === 'mes') {
-      inicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-    } else {
-      inicio = new Date(2000, 0, 1);
+    /* =============================================
+       UTILITÁRIOS
+    ============================================= */
+    function showLoader(msg = 'PROCESSANDO...') {
+      document.getElementById('loader').classList.add('visible');
+      document.querySelector('.loader-text').textContent = msg;
     }
 
-    document.getElementById('filtro-inicio').value = dataParaInput(inicio);
-    document.getElementById('filtro-fim').value = dataParaInput(fim);
+    function hideLoader() {
+      document.getElementById('loader').classList.remove('visible');
+    }
 
-    document.querySelectorAll('.btn-atalho').forEach(b => b.classList.toggle('active', b.dataset.atalho === tipo));
-    aplicarFiltro();
-  }
+    function toast(msg, type = 'info', duration = 4000) {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.innerHTML = `<span class="toast-msg">${msg}</span>`;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), duration);
+    }
 
-  document.querySelectorAll('.btn-atalho').forEach(btn => {
-    btn.addEventListener('click', () => definirAtalho(btn.dataset.atalho));
-  });
-  document.getElementById('filtro-inicio').addEventListener('change', () => {
-    document.querySelectorAll('.btn-atalho').forEach(b => b.classList.remove('active'));
-    aplicarFiltro();
-  });
-  document.getElementById('filtro-fim').addEventListener('change', () => {
-    document.querySelectorAll('.btn-atalho').forEach(b => b.classList.remove('active'));
-    aplicarFiltro();
-  });
+    function formatMoeda(val) {
+      const sinal = val < 0 ? '-' : '';
+      return sinal + 'R$ ' + Math.abs(parseFloat(val || 0)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    }
 
-  function aplicarFiltro() {
-    const inicioStr = document.getElementById('filtro-inicio').value;
-    const fimStr = document.getElementById('filtro-fim').value;
-    const inicio = inicioStr ? new Date(inicioStr + 'T00:00:00') : new Date(0);
-    const fim = fimStr ? new Date(fimStr + 'T23:59:59.999') : new Date(8640000000000000);
+    /* =============================================
+       PARSING DA RESPOSTA DA DATA TABLE (n8n)
+    ============================================= */
+    function normalizarLinha(row) {
+      return {
+        tipo: String(row.Tipo ?? row.tipo ?? '').toLowerCase(),
+        descricao: row.Descricao ?? row.descricao ?? '',
+        valor: parseFloat(row.Valor ?? row.valor ?? 0) || 0,
+        data_hora: row.Data ?? row.data_hora ?? null
+      };
+    }
 
-    const filtradas = movimentacoes.filter(m => {
-      if (!m.data_hora) return false;
-      const d = new Date(m.data_hora);
-      if (isNaN(d)) return false;
-      return d >= inicio && d <= fim;
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function dataParaInput(d) { return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
+
+    /* =============================================
+       CARREGAR DADOS DO CAIXA
+    ============================================= */
+    let movimentacoes = [];
+
+    async function carregarDadosDivisao() {
+      showLoader('CARREGANDO LANÇAMENTOS...');
+      try {
+        const resp = await fetch(API_CONFIG.OBTER_CAIXA);
+        if (!resp.ok) throw new Error('Resposta HTTP ' + resp.status);
+        const data = await resp.json();
+
+        const linhas = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.data)
+            ? data.data
+            : (data ? [data] : []);
+
+        movimentacoes = linhas.map(item => normalizarLinha(item.json ?? item));
+        aplicarFiltro();
+        toast('Dados atualizados com sucesso!', 'success');
+      } catch (err) {
+        console.warn('Não foi possível carregar os lançamentos.', err);
+        movimentacoes = [];
+        aplicarFiltro();
+        toast('Não foi possível carregar os dados do n8n. Verifique a conexão.', 'error');
+      } finally {
+        hideLoader();
+      }
+    }
+
+    function definirAtalho(tipo) {
+      const hoje = new Date();
+      let inicio, fim = new Date(hoje);
+
+      if (tipo === 'hoje') {
+        inicio = new Date(hoje);
+      } else if (tipo === 'semana') {
+        inicio = new Date(hoje);
+        inicio.setDate(inicio.getDate() - 6);
+      } else if (tipo === 'mes') {
+        inicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+      } else {
+        inicio = new Date(2000, 0, 1);
+      }
+
+      document.getElementById('filtro-inicio').value = dataParaInput(inicio);
+      document.getElementById('filtro-fim').value = dataParaInput(fim);
+
+      document.querySelectorAll('.btn-atalho').forEach(b => b.classList.toggle('active', b.dataset.atalho === tipo));
+      aplicarFiltro();
+    }
+
+    document.querySelectorAll('.btn-atalho').forEach(btn => {
+      btn.addEventListener('click', () => definirAtalho(btn.dataset.atalho));
+    });
+    document.getElementById('filtro-inicio').addEventListener('change', () => {
+      document.querySelectorAll('.btn-atalho').forEach(b => b.classList.remove('active'));
+      aplicarFiltro();
+    });
+    document.getElementById('filtro-fim').addEventListener('change', () => {
+      document.querySelectorAll('.btn-atalho').forEach(b => b.classList.remove('active'));
+      aplicarFiltro();
     });
 
-    calcularDivisao(filtradas);
-  }
+    function aplicarFiltro() {
+      const inicioStr = document.getElementById('filtro-inicio').value;
+      const fimStr = document.getElementById('filtro-fim').value;
+      const inicio = inicioStr ? new Date(inicioStr + 'T00:00:00') : new Date(0);
+      const fim = fimStr ? new Date(fimStr + 'T23:59:59.999') : new Date(8640000000000000);
 
-  /* =============================================
-     REGRA DE NEGÓCIO DA DIVISÃO FINANCEIRA
-     1) Renda Total = soma de todas as entradas do período
-     2) Renda Total ÷ 2:
-          - 50% → Repasse para o barbeiro Muniz
-          - 50% → Vai pro Caixa
-     3) Caixa − Despesas do período = Saldo Líquido
-     4) Saldo Líquido ÷ 2:
-          - 50% → Sócio Kayo Melo
-          - 50% → Sócio Muniz (como sócio, além do repasse de barbeiro)
-  ============================================= */
-  function calcularDivisao(lista) {
-    let renda = 0;
-    let despesas = 0;
-    const entradas = [];
-    const saidas = [];
+      const filtradas = movimentacoes.filter(m => {
+        if (!m.data_hora) return false;
+        const d = new Date(m.data_hora);
+        if (isNaN(d)) return false;
+        return d >= inicio && d <= fim;
+      });
 
-    lista.forEach(m => {
-      if (m.tipo === 'entrada') {
-        renda += m.valor;
-        entradas.push(m);
-      } else if (m.tipo === 'saida') {
-        despesas += m.valor;
-        saidas.push(m);
+      calcularDivisao(filtradas);
+    }
+
+    /* =============================================
+       REGRA DE NEGÓCIO DA DIVISÃO FINANCEIRA
+       1) Renda Total = soma de todas as entradas do período
+       2) Renda Total ÷ 2:
+            - 50% → Repasse para o barbeiro Muniz
+            - 50% → Vai pro Caixa
+       3) Caixa − Despesas do período = Saldo Líquido
+       4) Saldo Líquido ÷ 2:
+            - 50% → Sócio Kayo Melo
+            - 50% → Sócio Muniz
+    ============================================= */
+    function calcularDivisao(lista) {
+      let renda = 0;
+      let despesas = 0;
+      const entradas = [];
+      const saidas = [];
+
+      lista.forEach(m => {
+        if (m.tipo === 'entrada') {
+          renda += m.valor;
+          entradas.push(m);
+        } else if (m.tipo === 'saida') {
+          despesas += m.valor;
+          saidas.push(m);
+        }
+      });
+
+      entradas.sort((a, b) => new Date(b.data_hora) - new Date(a.data_hora));
+      saidas.sort((a, b) => new Date(b.data_hora) - new Date(a.data_hora));
+
+      const repasseBarbeiro = renda / 2;
+      const fundoDespesas = renda / 2;
+      const saldoLiquido = fundoDespesas - despesas;
+      const parteKayo = saldoLiquido / 2;
+      const parteMuniz = saldoLiquido / 2;
+
+      // KPIs
+      document.getElementById('kpi-renda').textContent = formatMoeda(renda);
+      document.getElementById('kpi-despesas').textContent = formatMoeda(despesas);
+      const kpiSaldo = document.getElementById('kpi-saldo-liquido');
+      kpiSaldo.textContent = formatMoeda(saldoLiquido);
+      kpiSaldo.className = 'kpi-value ' + (saldoLiquido < 0 ? 'red' : 'green');
+
+      // Fluxo etapa 1
+      document.getElementById('fluxo-renda').textContent = formatMoeda(renda);
+      document.getElementById('fluxo-barbeiro').textContent = formatMoeda(repasseBarbeiro);
+      document.getElementById('fluxo-fundo').textContent = formatMoeda(fundoDespesas);
+
+      // Fluxo etapa 2
+      const fluxoSaldoEl = document.getElementById('fluxo-saldo');
+      fluxoSaldoEl.textContent = formatMoeda(saldoLiquido);
+      fluxoSaldoEl.style.color = saldoLiquido < 0 ? 'var(--perigo)' : '';
+      document.getElementById('fluxo-kayo').textContent = formatMoeda(parteKayo);
+      document.getElementById('fluxo-muniz-socio').textContent = formatMoeda(parteMuniz);
+
+      document.getElementById('aviso-negativo').classList.toggle('visible', saldoLiquido < 0);
+
+      // Totais inline
+      document.getElementById('total-despesas-inline').textContent = formatMoeda(despesas);
+      document.getElementById('total-entradas-inline').textContent = formatMoeda(renda);
+
+      renderTabela('tabela-despesas', saidas, 3);
+      renderTabela('tabela-entradas', entradas, 3);
+    }
+
+    function renderTabela(idTbody, lista, colspan) {
+      const tbody = document.getElementById(idTbody);
+      if (!lista.length) {
+        tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center; color:var(--texto-suave); padding:24px;">Nenhum lançamento no período selecionado.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = lista.map(m => {
+        const d = new Date(m.data_hora);
+        const dataFmt = isNaN(d) ? '—' : d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        const cor = m.tipo === 'entrada' ? 'var(--navalha)' : 'var(--bordo)';
+        const sinal = m.tipo === 'entrada' ? '+' : '-';
+        return `
+          <tr>
+            <td>${m.descricao || '—'}</td>
+            <td>${dataFmt}</td>
+            <td style="color:${cor}; font-weight:600;">${sinal} ${formatMoeda(m.valor)}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    /* =============================================
+       MENU HAMBÚRGUER
+    ============================================= */
+    function toggleMenu() {
+      const hamburger = document.getElementById('hamburger-btn');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+
+      hamburger.classList.toggle('active');
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.style.overflow = hamburger.classList.contains('active') ? 'hidden' : '';
+    }
+
+    function closeMenu() {
+      const hamburger = document.getElementById('hamburger-btn');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+
+      hamburger.classList.remove('active');
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    /* =============================================
+       INICIALIZAÇÃO
+    ============================================= */
+    function iniciarDashboard() {
+      // Período padrão = mês atual
+      definirAtalho('mes');
+
+      // Carrega dados automaticamente
+      carregarDadosDivisao();
+
+      // Marca o item ativo na sidebar
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      document.querySelector('a[href="dashboard.html"]')?.classList.add('active');
+
+      // Menu hambúrguer
+      const hamburger = document.getElementById('hamburger-btn');
+      const overlay = document.getElementById('sidebar-overlay');
+      const navItems = document.querySelectorAll('.nav-item');
+
+      hamburger.addEventListener('click', toggleMenu);
+      overlay.addEventListener('click', closeMenu);
+
+      navItems.forEach(item => {
+        item.addEventListener('click', closeMenu);
+      });
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 880) {
+          closeMenu();
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('btn-login').addEventListener('click', function() {
+        const input = document.getElementById('senha-input');
+        autenticar(input.value);
+        input.value = '';
+      });
+
+      document.getElementById('senha-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          document.getElementById('btn-login').click();
+        }
+      });
+
+      if (precisaAutenticar()) {
+        document.getElementById('login-overlay').classList.add('active');
+        document.getElementById('app').style.display = 'none';
+        document.getElementById('senha-input').focus();
+      } else {
+        document.getElementById('login-overlay').classList.remove('active');
+        document.getElementById('app').style.display = 'block';
+        iniciarDashboard();
       }
     });
+  </script>
 
-    entradas.sort((a, b) => new Date(b.data_hora) - new Date(a.data_hora));
-    saidas.sort((a, b) => new Date(b.data_hora) - new Date(a.data_hora));
-
-    const repasseBarbeiro = renda / 2;
-    const fundoDespesas = renda / 2;
-    const saldoLiquido = fundoDespesas - despesas;
-    const parteKayo = saldoLiquido / 2;
-    const parteMuniz = saldoLiquido / 2;
-
-    // KPIs de resumo
-    document.getElementById('kpi-renda').textContent = formatMoeda(renda);
-    document.getElementById('kpi-despesas').textContent = formatMoeda(despesas);
-    const kpiSaldo = document.getElementById('kpi-saldo-liquido');
-    kpiSaldo.textContent = formatMoeda(saldoLiquido);
-    kpiSaldo.className = 'kpi-value ' + (saldoLiquido < 0 ? 'red' : 'green');
-
-    // Fluxo etapa 1
-    document.getElementById('fluxo-renda').textContent = formatMoeda(renda);
-    document.getElementById('fluxo-barbeiro').textContent = formatMoeda(repasseBarbeiro);
-    document.getElementById('fluxo-fundo').textContent = formatMoeda(fundoDespesas);
-
-    // Fluxo etapa 2
-    const fluxoSaldoEl = document.getElementById('fluxo-saldo');
-    fluxoSaldoEl.textContent = formatMoeda(saldoLiquido);
-    fluxoSaldoEl.style.color = saldoLiquido < 0 ? 'var(--perigo)' : '';
-    document.getElementById('fluxo-kayo').textContent = formatMoeda(parteKayo);
-    document.getElementById('fluxo-muniz-socio').textContent = formatMoeda(parteMuniz);
-
-    document.getElementById('aviso-negativo').classList.toggle('visible', saldoLiquido < 0);
-
-    // Totais inline das tabelas
-    document.getElementById('total-despesas-inline').textContent = formatMoeda(despesas);
-    document.getElementById('total-entradas-inline').textContent = formatMoeda(renda);
-
-    renderTabela('tabela-despesas', saidas, 3);
-    renderTabela('tabela-entradas', entradas, 3);
-  }
-
-  function renderTabela(idTbody, lista, colspan) {
-    const tbody = document.getElementById(idTbody);
-    if (!lista.length) {
-      tbody.innerHTML = `<tr><td colspan="${colspan}" class="vazio">Nenhum lançamento no período selecionado.</td></tr>`;
-      return;
-    }
-    tbody.innerHTML = lista.map(m => {
-      const d = new Date(m.data_hora);
-      const dataFmt = isNaN(d) ? '—' : d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-      const cor = m.tipo === 'entrada' ? 'var(--navalha)' : 'var(--bordo)';
-      const sinal = m.tipo === 'entrada' ? '+' : '-';
-      return `
-        <tr>
-          <td>${m.descricao || '—'}</td>
-          <td>${dataFmt}</td>
-          <td style="color:${cor}; font-weight:600;">${sinal} ${formatMoeda(m.valor)}</td>
-        </tr>
-      `;
-    }).join('');
-  }
-
-  // Inicialização: período padrão = mês atual
-  document.addEventListener('DOMContentLoaded', () => {
-    definirAtalho('mes');
-    carregarDados();
-  });
-</script>
 </body>
 </html>
