@@ -33,9 +33,9 @@
 
         --faixa: repeating-linear-gradient(
             45deg,
-            var(--bordo) 0px, var(--bordo) 14px,
+            #c8102e 0px, #c8102e 14px,
             var(--pedra-card) 14px, var(--pedra-card) 28px,
-            var(--latao) 28px, var(--latao) 42px,
+            #1e40af 28px, #1e40af 42px,
             var(--pedra-card) 42px, var(--pedra-card) 56px
         );
     }
@@ -424,6 +424,22 @@
         width: 100%;
     }
 
+    /* PREVIEW DE TAXA CARTÃO */
+    .preview-taxa {
+        display: none;
+        margin-top: 10px;
+        padding: 10px 12px;
+        background: #faf6ec;
+        border: 1px solid var(--latao);
+        border-radius: var(--radius-peq);
+        font-size: 0.76rem;
+        color: var(--latao-escuro);
+        font-family: var(--fonte-dados);
+        line-height: 1.5;
+    }
+    .preview-taxa.visible { display: block; }
+    .preview-taxa strong { color: var(--bordo); }
+
     /* TABELA */
     .table-wrap {
         overflow-x: auto;
@@ -784,9 +800,10 @@
               <select id="ent-forma" required>
                 <option value="PIX">Pix</option>
                 <option value="Dinheiro">Dinheiro (Espécie)</option>
-                <option value="Cartão de Crédito">Cartão de Crédito</option>
-                <option value="Cartão de Débito">Cartão de Débito</option>
+                <option value="Cartão de Crédito">Cartão de Crédito (taxa 3,09%)</option>
+                <option value="Cartão de Débito">Cartão de Débito (taxa 0,89%)</option>
               </select>
+              <div class="preview-taxa" id="ent-preview-taxa"></div>
             </div>
           </div>
           <button type="submit" class="btn btn-success btn-full">Confirmar Entrada / Recebimento</button>
@@ -885,6 +902,17 @@
       OBTER_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter'
     };
 
+    /* =============================================
+       TAXAS DE CARTÃO
+       Crédito: 3,09%  |  Débito: 0,89%
+       Aplicadas apenas em ENTRADAS via cartão.
+       O valor líquido (após taxa) é o que vai pro caixa.
+    ============================================= */
+    const TAXAS_CARTAO = {
+      'Cartão de Crédito': 0.0309,
+      'Cartão de Débito': 0.0089
+    };
+
     let movimentacoes = [];
 
     function showLoader(msg = 'PROCESSANDO...') {
@@ -899,12 +927,38 @@
       el.className = `toast ${type}`;
       el.innerHTML = msg;
       container.appendChild(el);
-      setTimeout(() => el.remove(), 4000);
+      setTimeout(() => el.remove(), 5000);
     }
 
     function formatMoeda(val) {
       return 'R$ ' + parseFloat(val || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
     }
+
+    /* =============================================
+       PREVIEW DE TAXA (mostra em tempo real)
+    ============================================= */
+    function atualizarPreviewTaxa() {
+      const valor = parseFloat(document.getElementById('ent-valor').value) || 0;
+      const forma = document.getElementById('ent-forma').value;
+      const taxa = TAXAS_CARTAO[forma] || 0;
+      const preview = document.getElementById('ent-preview-taxa');
+
+      if (taxa > 0 && valor > 0) {
+        const valorTaxa = valor * taxa;
+        const valorLiquido = valor - valorTaxa;
+        const percentual = (taxa * 100).toFixed(2).replace('.', ',');
+        preview.innerHTML =
+          `💳 Taxa ${percentual}% = <strong>-${formatMoeda(valorTaxa)}</strong><br>` +
+          `Valor líquido no caixa: <strong>${formatMoeda(valorLiquido)}</strong>`;
+        preview.classList.add('visible');
+      } else {
+        preview.classList.remove('visible');
+        preview.innerHTML = '';
+      }
+    }
+
+    document.getElementById('ent-valor').addEventListener('input', atualizarPreviewTaxa);
+    document.getElementById('ent-forma').addEventListener('change', atualizarPreviewTaxa);
 
     /* =============================================
        PARSING DA RESPOSTA DA DATA TABLE (n8n)
@@ -936,9 +990,6 @@
 
     /* =============================================
        CARREGAR CAIXA DO DIA AO ABRIR A PÁGINA
-       Isso é o que faltava: o endpoint OBTER_CAIXA
-       nunca era chamado, então o extrato sempre
-       começava vazio mesmo com dados salvos no n8n.
     ============================================= */
     async function carregarCaixaDoDia() {
       showLoader('CARREGANDO CAIXA...');
@@ -948,7 +999,6 @@
 
         const data = await resp.json();
 
-        // Aceita tanto um array puro quanto { data: [...] } ou item único
         const linhas = Array.isArray(data)
           ? data
           : Array.isArray(data?.data)
@@ -994,19 +1044,42 @@
         return;
       }
 
+      /* =============================================
+         APLICAÇÃO DA TAXA DE CARTÃO (apenas entradas)
+         Crédito: 3,09%  |  Débito: 0,89%
+         O valor enviado ao webhook é o LÍQUIDO.
+      ============================================= */
+      let valorBruto = valor;
+      let valorTaxa = 0;
+      let valorFinal = valor;
+
+      if (tipo === 'entrada') {
+        const taxa = TAXAS_CARTAO[forma] || 0;
+        if (taxa > 0) {
+          valorTaxa = valor * taxa;
+          valorFinal = valor - valorTaxa;
+        }
+      }
+
       const payload = {
         tipo, // 'entrada' ou 'saida'
         categoria,
         descricao,
-        valor,
+        valor: parseFloat(valorFinal.toFixed(2)),
         forma_pagamento: forma,
         data_hora: new Date().toISOString()
       };
 
+      // Campos extras de rastreio da taxa (opcional — n8n pode ignorar)
+      if (valorTaxa > 0) {
+        payload.valor_bruto = parseFloat(valorBruto.toFixed(2));
+        payload.taxa_cartao = parseFloat(valorTaxa.toFixed(2));
+        payload.percentual_taxa = TAXAS_CARTAO[forma];
+      }
+
       showLoader('REGISTRANDO CAIXA...');
 
       try {
-        // Tenta enviar para o n8n
         const resp = await fetch(API_CONFIG.REGISTRAR_CAIXA, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1017,14 +1090,27 @@
 
         movimentacoes.unshift(payload);
         atualizarTela();
-        toast(`${tipo === 'entrada' ? 'Recebimento' : 'Saída'} registrado com sucesso!`, 'success');
+
+        if (valorTaxa > 0) {
+          toast(
+            `Recebimento registrado!<br>Bruto: ${formatMoeda(valorBruto)} | ` +
+            `Taxa: -${formatMoeda(valorTaxa)} | ` +
+            `Líquido: <strong>${formatMoeda(valorFinal)}</strong>`,
+            'success'
+          );
+        } else {
+          toast(`${tipo === 'entrada' ? 'Recebimento' : 'Saída'} registrado com sucesso!`, 'success');
+        }
+
         event.target.reset();
+        atualizarPreviewTaxa();
       } catch (err) {
         console.warn('Servidor offline. Registrando localmente.', err);
         movimentacoes.unshift(payload);
         atualizarTela();
         toast('Servidor não respondeu — registrado apenas localmente. Recarregar a página pode perder este lançamento.', 'info');
         event.target.reset();
+        atualizarPreviewTaxa();
       } finally {
         hideLoader();
       }
