@@ -1,0 +1,4 @@
+colocar link do instagram na mensagem de confirmação do cliente.
+igor registrar o pagamento, mensagem de agradecemos a preferecncia.
+
+
