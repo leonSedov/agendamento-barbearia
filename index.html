@@ -885,10 +885,41 @@
 
     /* =============================================
        PARSING DA RESPOSTA DA DATA TABLE (n8n)
+       
+       ⚠️ CORREÇÃO IMPORTANTE:
+       O campo `Tipo` pode vir como:
+         - "entrada" / "saida" (correto)
+         - "Cabelo e Barba" / "Corte de Cabelo" / etc. (bug antigo — serviço no lugar do tipo)
+       
+       Regra: se NÃO contiver palavras de saída (saida, despesa, sangria, perda, pagamento),
+       consideramos que é ENTRADA (porque serviços/produtos são entradas).
     ============================================= */
     function normalizarLinha(row) {
+      const tipoBruto = String(row.Tipo ?? row.tipo ?? '').toLowerCase().trim();
+
+      // Palavras-chave que identificam uma SAÍDA
+      const PALAVRAS_SAIDA = ['saida', 'saída', 'despesa', 'sangria', 'perda', 'retirada', 'pagamento'];
+
+      // Palavras-chave que identificam uma ENTRADA
+      const PALAVRAS_ENTRADA = ['entrada', 'receita', 'venda', 'recebimento', 'ganho'];
+
+      let tipo = 'entrada'; // padrão
+
+      if (PALAVRAS_SAIDA.some(p => tipoBruto.includes(p))) {
+        tipo = 'saida';
+      } else if (PALAVRAS_ENTRADA.some(p => tipoBruto.includes(p))) {
+        tipo = 'entrada';
+      } else if (tipoBruto === '') {
+        // Se veio vazio, assume entrada também
+        tipo = 'entrada';
+      } else {
+        // Se é o nome de um serviço/produto (ex: "Cabelo e Barba"), assume ENTRADA
+        tipo = 'entrada';
+      }
+
       return {
-        tipo: String(row.Tipo ?? row.tipo ?? '').toLowerCase(),
+        tipo,
+        tipo_original: tipoBruto,
         descricao: row.Descricao ?? row.descricao ?? '',
         valor: parseFloat(row.Valor ?? row.valor ?? 0) || 0,
         data_hora: row.Data ?? row.data_hora ?? null
@@ -917,8 +948,17 @@
             : (data ? [data] : []);
 
         movimentacoes = linhas.map(item => normalizarLinha(item.json ?? item));
+
+        // DEBUG: mostra no console o que veio
+        console.log('📊 Movimentações recebidas:', movimentacoes.length, movimentacoes);
+
         aplicarFiltro();
-        toast('Dados atualizados com sucesso!', 'success');
+
+        if (movimentacoes.length > 0) {
+          toast(`${movimentacoes.length} lançamentos carregados`, 'success');
+        } else {
+          toast('Nenhum lançamento encontrado no backend.', 'info');
+        }
       } catch (err) {
         console.warn('Não foi possível carregar os lançamentos.', err);
         movimentacoes = [];
@@ -966,8 +1006,17 @@
     function aplicarFiltro() {
       const inicioStr = document.getElementById('filtro-inicio').value;
       const fimStr = document.getElementById('filtro-fim').value;
-      const inicio = inicioStr ? new Date(inicioStr + 'T00:00:00') : new Date(0);
-      const fim = fimStr ? new Date(fimStr + 'T23:59:59.999') : new Date(8640000000000000);
+
+      // Se as datas estiverem vazias, mostra TUDO
+      let inicio, fim;
+      if (!inicioStr && !fimStr) {
+        inicio = new Date(0);
+        fim = new Date(8640000000000000);
+      } else {
+        // Ajusta pra início e fim do dia no fuso local (Brasil)
+        inicio = inicioStr ? new Date(inicioStr + 'T00:00:00') : new Date(0);
+        fim = fimStr ? new Date(fimStr + 'T23:59:59.999') : new Date(8640000000000000);
+      }
 
       const filtradas = movimentacoes.filter(m => {
         if (!m.data_hora) return false;
@@ -975,6 +1024,9 @@
         if (isNaN(d)) return false;
         return d >= inicio && d <= fim;
       });
+
+      console.log('📅 Filtro:', inicioStr || '—', 'até', fimStr || '—');
+      console.log('📌 Movimentações no período:', filtradas.length);
 
       calcularDivisao(filtradas);
     }
