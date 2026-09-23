@@ -36,6 +36,7 @@
         --texto: #201e1b;
         --texto-suave: #6b6459;
         --linha: #ddd8cc;
+        --perigo: #a8332a;
 
         --fonte-cartaz: 'Oswald', sans-serif;
         --fonte-corpo: 'Inter', sans-serif;
@@ -136,6 +137,27 @@
     .btn-cta:active { transform: scale(0.98); }
     .btn-cta--fantasma { background: transparent; border: 2px solid var(--linha); color: var(--texto-suave); }
     .btn-cta--fantasma:hover { border-color: var(--texto-suave); }
+
+    .btn-cta--meus {
+        background: var(--tinta);
+        color: var(--pedra);
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-cta--meus:hover { background: var(--tinta-suave); }
+    .btn-cta--meus .badge-count {
+        background: var(--latao);
+        color: var(--tinta);
+        font-family: var(--fonte-dados);
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 20px;
+        display: none;
+    }
+    .btn-cta--meus .badge-count.visible { display: inline-block; }
 
     /* ================= LAYOUT PRINCIPAL ================= */
     .pagina { max-width: 1080px; margin: 0 auto; padding: 0 24px 60px; }
@@ -276,6 +298,188 @@
     #step-sucesso h2 { font-family: var(--fonte-cartaz); color: var(--tinta); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 8px; text-align:center; }
     #step-sucesso p { color: var(--texto-suave); font-size: 0.92rem; margin-bottom: 24px; text-align:center; }
 
+    /* ================= MODAL ================= */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+        background: var(--pedra-card);
+        border-radius: var(--radius);
+        max-width: 520px;
+        width: 100%;
+        padding: 28px 32px;
+        box-shadow: var(--sombra-forte);
+        position: relative;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: modalEntrar .25s ease;
+    }
+    @keyframes modalEntrar {
+        from { opacity: 0; transform: translateY(-20px) scale(0.96); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal h2 {
+        font-family: var(--fonte-cartaz);
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--tinta);
+        margin: 0 0 6px;
+    }
+    .modal .modal-sub {
+        color: var(--texto-suave);
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--linha);
+        padding-bottom: 14px;
+    }
+    .modal .btn-fechar {
+        position: absolute;
+        top: 16px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 1.6rem;
+        line-height: 1;
+        color: var(--texto-suave);
+        transition: color .15s;
+        padding: 0 6px;
+        cursor: pointer;
+    }
+    .modal .btn-fechar:hover { color: var(--tinta); }
+    .modal .form-group { margin-bottom: 14px; }
+    .modal .form-group label { display: block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--texto-suave); margin-bottom: 4px; }
+    .modal .btn-enviar { width: 100%; padding: 14px; background: var(--bordo); color: #fff; border: none; border-radius: var(--radius-peq); font-family: var(--fonte-cartaz); font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; transition: background .15s; margin-top: 6px; cursor: pointer; }
+    .modal .btn-enviar:hover { background: var(--bordo-escuro); }
+
+    /* ================= MEUS AGENDAMENTOS — LISTA ================= */
+    .meus-agend-lista { display: flex; flex-direction: column; gap: 12px; }
+    .meus-agend-item {
+        border: 1px solid var(--linha);
+        border-radius: var(--radius);
+        background: var(--pedra);
+        padding: 14px 16px;
+        position: relative;
+        overflow: hidden;
+    }
+    .meus-agend-item::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; bottom: 0;
+        width: 4px;
+        background: var(--latao);
+    }
+    .meus-agend-item.passado::before { background: var(--texto-suave); }
+    .meus-agend-item__linha {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 6px;
+    }
+    .meus-agend-item__data {
+        font-family: var(--fonte-dados);
+        font-weight: 600;
+        color: var(--bordo);
+        font-size: 0.95rem;
+    }
+    .meus-agend-item__hora {
+        font-family: var(--fonte-dados);
+        font-weight: 600;
+        color: var(--tinta);
+        font-size: 1rem;
+    }
+    .meus-agend-item__info {
+        font-size: 0.8rem;
+        color: var(--texto-suave);
+        line-height: 1.5;
+        margin-bottom: 8px;
+    }
+    .meus-agend-item__info strong { color: var(--texto); }
+    .meus-agend-item__acoes {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .btn-mini {
+        border: none;
+        padding: 6px 12px;
+        border-radius: var(--radius-peq);
+        font-family: var(--fonte-cartaz);
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        cursor: pointer;
+        transition: all .15s;
+    }
+    .btn-mini--remarcar {
+        background: #f5f0e4;
+        border: 1px solid var(--latao);
+        color: var(--latao-escuro);
+    }
+    .btn-mini--remarcar:hover { background: #ebe3cc; }
+    .btn-mini--desmarcar {
+        background: #fbeceb;
+        border: 1px solid var(--perigo);
+        color: var(--perigo);
+    }
+    .btn-mini--desmarcar:hover { background: #f5d9d7; }
+
+    .meus-agend-vazio {
+        text-align: center;
+        padding: 30px 20px;
+        border: 1px dashed var(--linha);
+        border-radius: var(--radius);
+        background: var(--pedra);
+        color: var(--texto-suave);
+        font-size: 0.9rem;
+    }
+    .meus-agend-vazio .icone {
+        font-size: 2rem;
+        color: var(--latao);
+        margin-bottom: 8px;
+    }
+
+    .meus-agend-tag {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.62rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        background: #eaf2ee;
+        color: var(--navalha);
+        border: 1px solid var(--navalha);
+        margin-bottom: 6px;
+    }
+    .meus-agend-tag.passado {
+        background: #f5efe0;
+        color: var(--latao-escuro);
+        border-color: var(--latao);
+    }
+
+    .aviso-filtro {
+        font-size: 0.8rem;
+        color: var(--texto-suave);
+        background: #faf6ec;
+        border-left: 3px solid var(--latao);
+        padding: 10px 14px;
+        border-radius: var(--radius-peq);
+        line-height: 1.5;
+        margin-bottom: 14px;
+    }
+
     /* ================= RODAPÉ ================= */
     footer { background: var(--tinta); color: #a39d8f; padding: 26px 24px; text-align: center; font-size: 0.82rem; }
     footer strong { color: var(--pedra); }
@@ -313,6 +517,10 @@
         <div class="perfil-info__tag">Barbearia — Lagoa Seca, Natal - RN</div>
         <div class="perfil-info__acoes">
             <button class="btn-cta" onclick="document.getElementById('aba-servicos').scrollIntoView({behavior:'smooth'})">Agendar horário</button>
+            <button class="btn-cta btn-cta--meus" onclick="abrirModalMeusAgendamentos()">
+                <span>📋 Meus Agendamentos</span>
+                <span class="badge-count" id="badge-count-meus">0</span>
+            </button>
         </div>
     </div>
 </div>
@@ -621,9 +829,37 @@
     © <span id="ano-atual"></span> Ominus Tech. Todos os direitos reservados.
 </footer>
 
+<!-- ================= MODAL: MEUS AGENDAMENTOS ================= -->
+<div class="modal-overlay" id="modalMeusAgendamentos">
+    <div class="modal">
+        <button class="btn-fechar" onclick="fecharModalMeusAgendamentos()">&times;</button>
+        <h2>Meus Agendamentos</h2>
+        <div class="modal-sub" id="meusAgendSub">Digite seu WhatsApp para ver seus agendamentos</div>
+
+        <!-- Etapa 1: pedir WhatsApp -->
+        <div id="meusAgendFiltro">
+            <div class="aviso-filtro">
+                🔒 Por segurança, mostramos apenas os agendamentos feitos com o WhatsApp que você digitar abaixo.
+            </div>
+            <div class="form-group">
+                <label>Seu WhatsApp (com DDD)</label>
+                <input type="tel" id="meusAgendWhats" placeholder="(84) 9 9999-9999" autocomplete="off">
+            </div>
+            <button class="btn-enviar" onclick="filtraMeusAgendamentos()">Ver meus agendamentos</button>
+        </div>
+
+        <!-- Etapa 2: lista -->
+        <div id="meusAgendLista" style="display:none;">
+            <button class="btn-voltar" style="background:none;border:none;color:var(--texto-suave);font-size:0.8rem;display:flex;align-items:center;gap:6px;padding:4px 0;margin-bottom:12px;cursor:pointer;" onclick="voltarFiltroMeus()">← Trocar WhatsApp</button>
+            <div class="meus-agend-lista" id="meusAgendListaConteudo"></div>
+        </div>
+    </div>
+</div>
+
 <script>
 const WEBHOOK_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/agendamento';
 const CONSULTA_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/consultar-disponibilidade';
+const DELETAR_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/deletar-agendamento';
 
 // Preços dos serviços
 const PRECOS_SERVICOS = {
@@ -644,6 +880,291 @@ let selectedTime = null;
 let viewDate = new Date();
 
 document.getElementById('ano-atual').textContent = new Date().getFullYear();
+
+/* ================= LOCAL STORAGE — MEUS AGENDAMENTOS ================= */
+const LS_KEY_MEUS = 'ominus_meus_agendamentos';
+
+function carregarMeusAgendamentos() {
+    try {
+        const raw = localStorage.getItem(LS_KEY_MEUS);
+        if (!raw) return [];
+        const lista = JSON.parse(raw);
+        return Array.isArray(lista) ? lista : [];
+    } catch { return []; }
+}
+
+function salvarMeusAgendamentos(lista) {
+    try { localStorage.setItem(LS_KEY_MEUS, JSON.stringify(lista)); } catch {}
+}
+
+function adicionarMeuAgendamento(ag) {
+    const lista = carregarMeusAgendamentos();
+    // Evita duplicar (mesma data + hora + whatsapp + barbeiro)
+    const chaveNova = `${ag.whatsapp}|${ag.data}|${ag.hora}|${ag.barbeiro}`;
+    const existe = lista.some(item => `${item.whatsapp}|${item.data}|${item.hora}|${item.barbeiro}` === chaveNova);
+    if (existe) return;
+    lista.push(ag);
+    salvarMeusAgendamentos(lista);
+    atualizarBadgeMeus();
+}
+
+function removerMeuAgendamento(whatsapp, data, hora, barbeiro) {
+    let lista = carregarMeusAgendamentos();
+    lista = lista.filter(item => !(item.whatsapp === whatsapp && item.data === data && item.hora === hora && item.barbeiro === barbeiro));
+    salvarMeusAgendamentos(lista);
+    atualizarBadgeMeus();
+}
+
+function normalizarTelefone(tel) {
+    if (!tel) return '';
+    let clean = String(tel).replace(/\D/g, '');
+    if (clean.startsWith('0')) clean = clean.substring(1);
+    while (clean.startsWith('5555')) clean = clean.substring(2);
+    if (clean.length === 8 || clean.length === 9) return '5584' + clean;
+    if (clean.length === 10 || clean.length === 11) return '55' + clean;
+    return clean;
+}
+
+function atualizarBadgeMeus() {
+    const lista = carregarMeusAgendamentos();
+    const badge = document.getElementById('badge-count-meus');
+    if (!badge) return;
+    // Só mostra agendamentos futuros
+    const hojeStr = new Date().toISOString().slice(0, 10);
+    const futuros = lista.filter(a => a.data >= hojeStr);
+    if (futuros.length > 0) {
+        badge.textContent = futuros.length;
+        badge.classList.add('visible');
+    } else {
+        badge.classList.remove('visible');
+    }
+}
+
+function formatarDataBR(dataISO) {
+    if (!dataISO) return '—';
+    const [a, m, d] = dataISO.split('-');
+    return `${d}/${m}/${a}`;
+}
+
+/* ================= MODAL MEUS AGENDAMENTOS ================= */
+function abrirModalMeusAgendamentos() {
+    document.getElementById('modalMeusAgendamentos').classList.add('active');
+    document.getElementById('meusAgendFiltro').style.display = 'block';
+    document.getElementById('meusAgendLista').style.display = 'none';
+    document.getElementById('meusAgendSub').textContent = 'Digite seu WhatsApp para ver seus agendamentos';
+
+    // Se já tem número salvo no localStorage de alguma reserva, pré-preenche
+    const lista = carregarMeusAgendamentos();
+    if (lista.length > 0 && !document.getElementById('meusAgendWhats').value) {
+        // Pega o whatsapp do agendamento mais recente
+        const ultimo = lista[lista.length - 1];
+        document.getElementById('meusAgendWhats').value = ultimo.whatsapp || '';
+    }
+}
+
+function fecharModalMeusAgendamentos() {
+    document.getElementById('modalMeusAgendamentos').classList.remove('active');
+}
+
+function voltarFiltroMeus() {
+    document.getElementById('meusAgendFiltro').style.display = 'block';
+    document.getElementById('meusAgendLista').style.display = 'none';
+    document.getElementById('meusAgendSub').textContent = 'Digite seu WhatsApp para ver seus agendamentos';
+}
+
+function filtraMeusAgendamentos() {
+    const telInput = document.getElementById('meusAgendWhats').value.trim();
+    if (!telInput) {
+        alert('Digite seu WhatsApp para continuar.');
+        return;
+    }
+
+    const telNorm = normalizarTelefone(telInput);
+    if (telNorm.length < 10) {
+        alert('Número de WhatsApp inválido.');
+        return;
+    }
+
+    const lista = carregarMeusAgendamentos();
+    // Filtra por WhatsApp normalizado OU pelo valor cru (tolerância)
+    const filtrados = lista.filter(a => {
+        const aNorm = normalizarTelefone(a.whatsapp);
+        const aRaw = String(a.whatsapp || '').replace(/\D/g, '');
+        const telDig = telInput.replace(/\D/g, '');
+        return aNorm === telNorm || aRaw === telDig || aRaw.endsWith(telDig) || telDig.endsWith(aRaw);
+    });
+
+    // Ordena por data + hora (mais próximo primeiro)
+    filtrados.sort((a, b) => {
+        const ka = `${a.data} ${a.hora}`;
+        const kb = `${b.data} ${b.hora}`;
+        return ka.localeCompare(kb);
+    });
+
+    renderizarListaMeus(filtrados);
+    document.getElementById('meusAgendFiltro').style.display = 'none';
+    document.getElementById('meusAgendLista').style.display = 'block';
+    document.getElementById('meusAgendSub').textContent = `Agendamentos para ${telInput}`;
+}
+
+function renderizarListaMeus(lista) {
+    const container = document.getElementById('meusAgendListaConteudo');
+    container.innerHTML = '';
+
+    if (lista.length === 0) {
+        container.innerHTML = `
+            <div class="meus-agend-vazio">
+                <div class="icone">✦</div>
+                <p>Nenhum agendamento encontrado para este WhatsApp.</p>
+            </div>`;
+        return;
+    }
+
+    const hojeStr = new Date().toISOString().slice(0, 10);
+
+    lista.forEach((ag, idx) => {
+        const passado = ag.data < hojeStr;
+        const item = document.createElement('div');
+        item.className = 'meus-agend-item' + (passado ? ' passado' : '');
+
+        const barbeiroNome = ag.barbeiro === 'Igor' ? 'Igor Muniz' : (ag.barbeiro === 'Anderson' ? 'Anderson' : ag.barbeiro);
+
+        item.innerHTML = `
+            <div class="meus-agend-item__linha">
+                <div>
+                    <span class="meus-agend-tag ${passado ? 'passado' : ''}">${passado ? 'Passado' : 'Confirmado'}</span>
+                    <div class="meus-agend-item__data">${formatarDataBR(ag.data)}</div>
+                </div>
+                <div class="meus-agend-item__hora">${ag.hora} hs</div>
+            </div>
+            <div class="meus-agend-item__info">
+                <strong>Serviço:</strong> ${ag.servico}<br>
+                <strong>Profissional:</strong> ${barbeiroNome}<br>
+                ${ag.preco ? `<strong>Valor:</strong> R$ ${Number(ag.preco).toLocaleString('pt-BR')}` : ''}
+            </div>
+            ${!passado ? `
+                <div class="meus-agend-item__acoes">
+                    <button class="btn-mini btn-mini--remarcar" onclick="remarcarMeuAgendamento(${idx})">🔄 Remarcar</button>
+                    <button class="btn-mini btn-mini--desmarcar" onclick="desmarcarMeuAgendamento(${idx}, '${ag.data}', '${ag.hora}', '${ag.barbeiro}', '${ag.servico.replace(/'/g, "\\'")}')">🗑️ Desmarcar</button>
+                </div>
+            ` : `
+                <div class="meus-agend-item__info" style="margin-top:6px;font-size:0.75rem;">
+                    Este agendamento já passou e não pode ser alterado.
+                </div>
+            `}
+        `;
+        container.appendChild(item);
+    });
+}
+
+/* ================= DESMARCAR ================= */
+async function desmarcarMeuAgendamento(idx, data, hora, barbeiro, servico) {
+    if (!confirm(`Tem certeza que deseja desmarcar o agendamento das ${hora} do dia ${formatarDataBR(data)}?`)) return;
+
+    // Desabilita botões visualmente
+    const whatsEl = document.getElementById('meusAgendWhats');
+    const telNorm = normalizarTelefone(whatsEl.value);
+
+    try {
+        const resp = await fetch(DELETAR_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                "ag-data": data,
+                "ag-hora": hora,
+                "ag-barbeiro": barbeiro,
+                "ag-servico": servico
+            })
+        });
+
+        if (resp.ok) {
+            // Remove do local storage pelo whatsapp + data + hora + barbeiro
+            const lista = carregarMeusAgendamentos();
+            const alvo = lista.find(a => a.data === data && a.hora === hora && a.barbeiro === barbeiro);
+            if (alvo) {
+                removerMeuAgendamento(alvo.whatsapp, data, hora, barbeiro);
+            } else {
+                // fallback: remove por data/hora/barbeiro
+                const novaLista = lista.filter(a => !(a.data === data && a.hora === hora && a.barbeiro === barbeiro));
+                salvarMeusAgendamentos(novaLista);
+                atualizarBadgeMeus();
+            }
+
+            alert('✅ Agendamento desmarcado com sucesso!');
+            // Recarrega a lista no modal
+            filtraMeusAgendamentos();
+        } else {
+            alert('Não foi possível desmarcar o agendamento. Tente novamente.');
+        }
+    } catch (err) {
+        console.error('Erro ao desmarcar:', err);
+        alert('Erro de conexão. Verifique sua internet e tente novamente.');
+    }
+}
+
+/* ================= REMARCAR ================= */
+function remarcarMeuAgendamento(idx) {
+    const telNorm = normalizarTelefone(document.getElementById('meusAgendWhats').value);
+    const lista = carregarMeusAgendamentos().filter(a => {
+        const aNorm = normalizarTelefone(a.whatsapp);
+        return aNorm === telNorm;
+    });
+    lista.sort((a, b) => `${a.data} ${a.hora}`.localeCompare(`${b.data} ${b.hora}`));
+
+    const ag = lista[idx];
+    if (!ag) return;
+
+    if (!confirm(`Você vai desmarcar o agendamento atual (${ag.hora} do dia ${formatDataBR(ag.data)}) para escolher outro horário. Continuar?`)) return;
+
+    // Desmarca o antigo (sem confirmação dupla)
+    desmarcarParaRemarcar(ag);
+}
+
+async function desmarcarParaRemarcar(ag) {
+    try {
+        const resp = await fetch(DELETAR_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                "ag-data": ag.data,
+                "ag-hora": ag.hora,
+                "ag-barbeiro": ag.barbeiro,
+                "ag-servico": ag.servico
+            })
+        });
+
+        if (resp.ok) {
+            removerMeuAgendamento(ag.whatsapp, ag.data, ag.hora, ag.barbeiro);
+            fecharModalMeusAgendamentos();
+
+            // Abre o wizard já com o serviço e profissional pré-selecionados
+            document.getElementById('servico').value = ag.servico;
+            document.getElementById('barbeiro').value = ag.barbeiro;
+            document.getElementById('nome').value = ag.nome || '';
+            document.getElementById('whatsapp').value = ag.whatsapp || '';
+
+            document.getElementById('secao-servicos').style.display = 'none';
+            document.getElementById('secao-agendamento').style.display = 'block';
+
+            // Marca o cartão do barbeiro como selecionado visualmente
+            document.querySelectorAll('#lista-barbeiros .cartao-opcao').forEach((card) => {
+                const nomeCard = card.querySelector('.cartao-opcao__nome').textContent.trim().toLowerCase();
+                const alvo = (ag.barbeiro === 'Igor') ? 'igor muniz' : (ag.barbeiro === 'Anderson' ? 'anderson' : '');
+                if (alvo && nomeCard === alvo) {
+                    card.classList.add('selecionado');
+                }
+            });
+
+            // Vai direto pro passo de escolher data
+            nextStep(1);
+        } else {
+            alert('Não foi possível remarcar. Tente novamente.');
+        }
+    } catch (err) {
+        console.error('Erro ao remarcar:', err);
+        alert('Erro de conexão. Tente novamente.');
+    }
+}
 
 /* ================= CARROSSEL ================= */
 let indiceSlideAtual = 0;
@@ -689,8 +1210,7 @@ function atualizarSlide() {
 inicializarCarrossel();
 
 /* ---------------------------------------------------------------
- * Abaixo: SOMENTE navegação/visual (abas do perfil, entrada e saída
- * do painel de agendamento, barra de progresso do wizard).
+ * Abaixo: SOMENTE navegação/visual
  * ------------------------------------------------------------- */
 function mostrarAba(nome) {
     document.querySelectorAll('.aba').forEach((el) => el.classList.toggle('ativa', el.dataset.aba === nome));
@@ -762,12 +1282,10 @@ function nextStep(step) {
     }
     if(step === 1) renderCalendar();
     atualizarProgresso(step);
-    // Removido scrollTo para evitar salto ao topo
 }
 
 /* ---------------------------------------------------------------
- * Monta o resumo antes do envio final (apenas leitura dos campos
- * já existentes — a chamada de envio em si é enviarAgendamento()).
+ * Monta o resumo
  * ------------------------------------------------------------- */
 function irParaResumo() {
     const nome = document.getElementById('nome').value;
@@ -929,6 +1447,7 @@ async function enviarAgendamento() {
 
         const servicoSelecionado = document.getElementById('servico').value;
         const preco = PRECOS_SERVICOS[servicoSelecionado] || 0;
+        const barbeiroSelecionado = document.getElementById('barbeiro').value;
 
         const response = await fetch(WEBHOOK_URL, {
             method: 'POST',
@@ -937,7 +1456,7 @@ async function enviarAgendamento() {
                 "ag-nome": nome,
                 "ag-whatsapp": zap,
                 "ag-servico": servicoSelecionado,
-                "ag-barbeiro": document.getElementById('barbeiro').value,
+                "ag-barbeiro": barbeiroSelecionado,
                 "ag-data": selectedDate,
                 "ag-hora": selectedTime,
                 "ag-preco": preco
@@ -955,6 +1474,20 @@ async function enviarAgendamento() {
         }
 
         if (response.ok) {
+            // ============================================
+            // SALVA LOCALMENTE PARA O CLIENTE PODER DESMARCAR DEPOIS
+            // ============================================
+            adicionarMeuAgendamento({
+                nome: nome,
+                whatsapp: zap,
+                servico: servicoSelecionado,
+                barbeiro: barbeiroSelecionado,
+                data: selectedDate,
+                hora: selectedTime,
+                preco: preco,
+                criado_em: new Date().toISOString()
+            });
+
             nextStep('sucesso');
         } else {
             alert("Erro ao agendar.");
@@ -969,7 +1502,18 @@ async function enviarAgendamento() {
     }
 }
 
+// Fecha modal clicando fora
+document.getElementById('modalMeusAgendamentos').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) fecharModalMeusAgendamentos();
+});
+
+// Enter no campo de WhatsApp do modal também filtra
+document.getElementById('meusAgendWhats').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') filtraMeusAgendamentos();
+});
+
 renderCalendar();
+atualizarBadgeMeus();
 </script>
 </body>
 </html>
