@@ -156,7 +156,6 @@
     .btn-recargar { display: inline-block; background: var(--latao); color: #fff; border: none; padding: 6px 14px; border-radius: var(--radius-peq); font-size: 0.7rem; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: background .15s; margin-bottom: 12px; }
     .btn-recargar:hover { background: var(--latao-escuro); }
 
-    /* ================= EDITAR — LISTA DE SERVIÇOS ================= */
     .lista-edit-servicos { display: flex; flex-direction: column; gap: 6px; max-height: 320px; overflow-y: auto; padding: 6px; border: 1px solid var(--linha); border-radius: var(--radius-peq); background: var(--pedra); }
     .edit-servico-item { display: flex; align-items: center; gap: 12px; padding: 11px 13px; border: 2px solid transparent; border-radius: var(--radius-peq); cursor: pointer; transition: all 0.15s; background: var(--pedra-card); }
     .edit-servico-item:hover { border-color: var(--latao); background: #faf8f3; }
@@ -365,7 +364,6 @@
     </div>
 </div>
 
-<!-- ================= MODAL EDITAR ATENDIMENTO ================= -->
 <div class="modal-overlay" id="modalEditar">
     <div class="modal">
         <button class="btn-fechar" id="btnFecharEditar">&times;</button>
@@ -524,13 +522,11 @@
        Prioriza "Corte - NOME (Barbeiro: ...)" e "Cliente: NOME"
     ============================================= */
     function extrairNomeCliente(ag) {
-        // Reúne todos os textos possíveis
         const textos = [
             ag['ag-nome'], ag.nome, ag.nome_cliente,
             ag.summary, ag.title, ag.description, ag['ag-descricao']
         ].filter(Boolean).map(String);
 
-        // 1. Prioridade: extrair de "Corte - NOME (Barbeiro: ...)"
         for (const t of textos) {
             const m = t.match(/corte\s*-\s*([^(]+?)(?:\s*\(|$)/i);
             if (m && m[1].trim().length > 1 && m[1].trim().length < 60) {
@@ -538,7 +534,6 @@
             }
         }
 
-        // 2. Depois: "Cliente: NOME"
         for (const t of textos) {
             const m = t.match(/cliente\s*:?\s*([A-ZÀ-Ú][^\n|]+?)(?:\s+(?:servi[çc]o|whats?app|barbeiro|valor)\s*:|$)/i);
             if (m && m[1].trim().length > 1 && m[1].trim().length < 60) {
@@ -546,7 +541,6 @@
             }
         }
 
-        // 3. Só usa o campo direto se ele estiver LIMPO (sem prefixos de summary)
         const direto = (ag['ag-nome'] || ag.nome || ag.nome_cliente || '').trim();
         if (direto && direto.length < 60 && !/corte\s*-|cliente\s*:|whats?app|servi[çc]o\s*:|barbeiro\s*:/i.test(direto)) {
             return direto;
@@ -653,12 +647,42 @@
         } finally { hideLoader(); }
     }
 
+    /* =============================================
+       RENDER DETALHES DO DIA
+       Cada atendimento ocupa 1 HORA = 2 slots de 30min.
+       O horário seguinte é marcado como ocupado automaticamente.
+    ============================================= */
     function renderDetalhesDia(ocupados = [], agendamentos = []) {
         const statusGrid = document.getElementById('timeStatusGrid');
         const containerList = document.getElementById('dia-agendamentos');
         statusGrid.innerHTML = '';
         containerList.innerHTML = '';
+
         const horariosOcupados = new Set(ocupados);
+
+        // === PROPAGAR OCUPAÇÃO PARA O PRÓXIMO SLOT (30min depois) ===
+        // Cada atendimento dura 1h, então ocupa o slot atual + o próximo.
+        // Ex: 09:00 ocupado → 09:30 também fica ocupado
+        //     11:30 ocupado → 12:00 não existe na grade (almoço), então nada
+        //     19:00 ocupado → 19:30 não existe na grade, então nada
+        const ocupadosOriginais = Array.from(horariosOcupados);
+        ocupadosOriginais.forEach(hora => {
+            const partes = String(hora).split(':');
+            if (partes.length !== 2) return;
+            const hh = parseInt(partes[0], 10);
+            const mm = parseInt(partes[1], 10);
+            if (isNaN(hh) || isNaN(mm)) return;
+
+            let novoMin = mm + 30;
+            let novaHora = hh;
+            if (novoMin >= 60) { novoMin -= 60; novaHora += 1; }
+
+            const proximoSlot = `${String(novaHora).padStart(2, '0')}:${String(novoMin).padStart(2, '0')}`;
+
+            if (HORARIOS_PADRAO.includes(proximoSlot)) {
+                horariosOcupados.add(proximoSlot);
+            }
+        });
 
         HORARIOS_PADRAO.forEach(hora => {
             const ocupado = horariosOcupados.has(hora);
