@@ -110,6 +110,7 @@
     .time-badge.indisponivel { border-color: var(--perigo); color: var(--perigo); background: #fde8e6; }
     .agendamento-item { border: 1px solid var(--linha); border-radius: var(--radius); padding: 15px 16px; margin-bottom: 12px; background: var(--pedra-card); display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: border-color .15s, box-shadow .15s; }
     .agendamento-item:hover { border-color: var(--latao); box-shadow: var(--sombra); }
+    .agendamento-item.pago { border-color: var(--navalha); background: #f4faf7; }
     .agendamento-item .hora { font-family: var(--fonte-dados); font-weight: 600; color: var(--bordo); font-size: 1rem; white-space: nowrap; }
     .agendamento-item .cliente { font-family: var(--fonte-cartaz); font-size: 0.98rem; color: var(--tinta); }
     .agendamento-item .servico { color: var(--texto-suave); font-size: 0.82rem; margin-top: 3px; }
@@ -122,7 +123,11 @@
     .btn-deletar:hover { background: #f5d9d7; }
     .btn-editar { display: inline-flex; align-items: center; gap: 6px; background: #f5f0e4; border: 1px solid var(--latao); color: var(--latao-escuro); padding: 6px 12px; border-radius: var(--radius-peq); font-size: 0.72rem; font-weight: 700; transition: background .15s; }
     .btn-editar:hover { background: #ebe3cc; }
+    .btn-pagar { display: inline-flex; align-items: center; gap: 6px; background: var(--navalha); border: 1px solid var(--navalha); color: #fff; padding: 6px 12px; border-radius: var(--radius-peq); font-size: 0.72rem; font-weight: 700; transition: background .15s, transform .15s; }
+    .btn-pagar:hover { background: #24473d; transform: scale(1.03); }
+    .badge-pago { display: inline-flex; align-items: center; gap: 6px; background: #eaf2ee; border: 1px solid var(--navalha); color: var(--navalha); padding: 6px 12px; border-radius: var(--radius-peq); font-size: 0.72rem; font-weight: 700; }
     .status-badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: #f5efe0; color: var(--latao-escuro); border: 1px solid var(--latao); }
+    .status-badge.pago { background: #eaf2ee; color: var(--navalha); border-color: var(--navalha); }
     .loader-overlay { position: fixed; inset: 0; background: rgba(239,238,231,0.92); backdrop-filter: blur(6px); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 9000; }
     .loader-overlay.visible { display: flex; }
     .loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--linha); border-top-color: var(--bordo); animation: spin .8s linear infinite; }
@@ -184,6 +189,104 @@
     .edit-total-box strong { font-family: var(--fonte-dados); font-size: 1.25rem; color: var(--latao); font-weight: 600; }
     .edit-aviso { font-size: 0.78rem; color: var(--texto-suave); background: #faf6ec; border-left: 3px solid var(--latao); padding: 10px 14px; border-radius: var(--radius-peq); margin-bottom: 14px; line-height: 1.5; }
 
+    /* ================= MODAL PAGAMENTO ================= */
+    .pagamento-info {
+        background: var(--pedra);
+        border: 1px solid var(--linha);
+        border-radius: var(--radius-peq);
+        padding: 14px 16px;
+        margin-bottom: 18px;
+    }
+    .pagamento-info__linha {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        font-size: 0.88rem;
+        border-bottom: 1px solid var(--linha);
+    }
+    .pagamento-info__linha:last-child { border-bottom: none; }
+    .pagamento-info__linha span:first-child { color: var(--texto-suave); }
+    .pagamento-info__linha span:last-child { font-weight: 600; color: var(--tinta); text-align: right; }
+    .pagamento-info__valor {
+        font-family: var(--fonte-dados);
+        font-size: 1.3rem;
+        color: var(--bordo);
+        font-weight: 700;
+    }
+
+    .forma-pagamento-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+    .forma-pagamento-opcao {
+        border: 2px solid var(--linha);
+        border-radius: var(--radius-peq);
+        background: var(--pedra);
+        padding: 14px 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all .15s;
+        position: relative;
+    }
+    .forma-pagamento-opcao:hover { border-color: var(--latao); background: #faf8f3; }
+    .forma-pagamento-opcao.selecionado {
+        border-color: var(--bordo);
+        background: #fbf3ee;
+        box-shadow: 0 0 0 1px var(--bordo);
+    }
+    .forma-pagamento-opcao .icone {
+        font-size: 1.6rem;
+        display: block;
+        margin-bottom: 6px;
+    }
+    .forma-pagamento-opcao .nome {
+        font-family: var(--fonte-cartaz);
+        font-size: 0.82rem;
+        color: var(--tinta);
+        font-weight: 500;
+    }
+    .forma-pagamento-opcao .taxa {
+        font-family: var(--fonte-dados);
+        font-size: 0.65rem;
+        color: var(--texto-suave);
+        display: block;
+        margin-top: 4px;
+    }
+
+    .pagamento-resumo {
+        background: var(--tinta);
+        color: var(--pedra);
+        border-radius: var(--radius-peq);
+        padding: 14px 18px;
+        margin-bottom: 16px;
+        font-family: var(--fonte-cartaz);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-size: 0.82rem;
+    }
+    .pagamento-resumo__linha {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px 0;
+    }
+    .pagamento-resumo__linha span:first-child { color: #a39d8f; }
+    .pagamento-resumo__linha strong {
+        font-family: var(--fonte-dados);
+        color: var(--latao);
+    }
+    .pagamento-resumo__linha.total {
+        border-top: 1px solid #3a3843;
+        margin-top: 6px;
+        padding-top: 10px;
+        font-size: 0.92rem;
+    }
+    .pagamento-resumo__linha.total strong {
+        font-size: 1.3rem;
+        color: #fff;
+    }
+
     .mobile-header { display: none; position: fixed; top: 5px; left: 0; right: 0; height: 60px; background: var(--tinta); border-bottom: 1px solid rgba(185,144,47,0.25); z-index: 101; align-items: center; padding: 0 16px; gap: 16px; }
     .hamburger-btn { display: none; width: 40px; height: 40px; background: transparent; border: none; cursor: pointer; flex-direction: column; justify-content: center; align-items: center; gap: 5px; padding: 0; }
     .hamburger-line { width: 24px; height: 2px; background: var(--latao); transition: all 0.3s ease; }
@@ -215,6 +318,7 @@
         .time-badge { font-size: 0.65rem; padding: 6px 2px; }
         .time-status-grid { grid-template-columns: repeat(2, 1fr); }
         .modal { padding: 20px; max-width: 100%; }
+        .forma-pagamento-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 520px) {
         #app { padding: 80px 16px 40px; }
@@ -225,7 +329,7 @@
         .cal-title { font-size: 0.8rem; } .cal-day { min-height: 36px; font-size: 0.7rem; }
         .agendamento-item { margin-bottom: 10px; padding: 10px; }
         .agendamento-item .hora { font-size: 0.8rem; } .agendamento-item .cliente { font-size: 0.85rem; } .agendamento-item .servico { font-size: 0.75rem; }
-        .whatsapp-btn, .btn-deletar, .btn-editar { font-size: 0.65rem; padding: 5px 10px; }
+        .whatsapp-btn, .btn-deletar, .btn-editar, .btn-pagar { font-size: 0.65rem; padding: 5px 10px; }
         .time-status-grid { grid-template-columns: 1fr 1fr; }
         .status-badge { font-size: 0.6rem; padding: 4px 10px; }
         .toast { min-width: 200px; font-size: 0.7rem; padding: 10px 12px; }
@@ -381,6 +485,7 @@
     </div>
 </div>
 
+<!-- ================= MODAL EDITAR ATENDIMENTO ================= -->
 <div class="modal-overlay" id="modalEditar">
     <div class="modal">
         <button class="btn-fechar" id="btnFecharEditar">&times;</button>
@@ -404,6 +509,67 @@
         </div>
 
         <button class="btn-enviar" id="btnSalvarEdicao" onclick="salvarEdicao()">Salvar Alterações</button>
+    </div>
+</div>
+
+<!-- ================= MODAL CONFIRMAR PAGAMENTO ================= -->
+<div class="modal-overlay" id="modalPagamento">
+    <div class="modal">
+        <button class="btn-fechar" id="btnFecharPagamento">&times;</button>
+        <h2>Confirmar Pagamento</h2>
+        <div class="modal-sub">
+            <strong id="pagClienteNome">—</strong> · <span id="pagDataHora">—</span>
+        </div>
+
+        <!-- Info do corte -->
+        <div class="pagamento-info" id="pagInfoCorte">
+            <!-- Preenchido via JS -->
+        </div>
+
+        <!-- Forma de pagamento -->
+        <label style="font-family: var(--fonte-cartaz); font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--bordo); display: block; margin-bottom: 8px;">
+            Forma de Pagamento
+        </label>
+        <div class="forma-pagamento-grid" id="formaPagamentoGrid">
+            <div class="forma-pagamento-opcao" data-forma="Pix">
+                <span class="icone">⚡</span>
+                <span class="nome">Pix</span>
+                <span class="taxa">Sem taxa</span>
+            </div>
+            <div class="forma-pagamento-opcao" data-forma="Dinheiro">
+                <span class="icone">💵</span>
+                <span class="nome">Dinheiro</span>
+                <span class="taxa">Sem taxa</span>
+            </div>
+            <div class="forma-pagamento-opcao" data-forma="Cartão de Débito">
+                <span class="icone">💳</span>
+                <span class="nome">Cartão de Débito</span>
+                <span class="taxa">Taxa 0,89%</span>
+            </div>
+            <div class="forma-pagamento-opcao" data-forma="Cartão de Crédito">
+                <span class="icone">💳</span>
+                <span class="nome">Cartão de Crédito</span>
+                <span class="taxa">Taxa 3,09%</span>
+            </div>
+        </div>
+
+        <!-- Resumo do valor -->
+        <div class="pagamento-resumo" id="pagResumo">
+            <div class="pagamento-resumo__linha">
+                <span>Valor Bruto</span>
+                <strong id="resumoBruto">R$ 0,00</strong>
+            </div>
+            <div class="pagamento-resumo__linha" id="linhaTaxa" style="display:none;">
+                <span>Taxa</span>
+                <strong id="resumoTaxa">- R$ 0,00</strong>
+            </div>
+            <div class="pagamento-resumo__linha total">
+                <span>Valor no Caixa</span>
+                <strong id="resumoLiquido">R$ 0,00</strong>
+            </div>
+        </div>
+
+        <button class="btn-enviar" id="btnConfirmarPagamento">Confirmar Pagamento</button>
     </div>
 </div>
 
@@ -477,6 +643,8 @@
     const DELETAR_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/deletar-agendamento';
     const WEBHOOK_BARBEIRO = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/agendamento-do-barbeiro1';
     const CLIENTES_REGULARES_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/clientes-regulares';
+    // Webhook que vai receber o pagamento confirmado (criar no n8n depois)
+    const WEBHOOK_PAGAMENTO = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/confirmar-pagamento';
 
     const HORARIOS_PADRAO = ['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00'];
     const PRECOS_SERVICOS = {
@@ -484,9 +652,38 @@
         'Cabelo e Sobrancelhas': 85, 'Corte de Cabelo': 65, 'Hidratação Capilar': 40,
         'Sobrancelhas': 20, 'Barboterapia': 60, 'Limpeza de Pele': 50, 'Acabamento de Cabelo': 25
     };
+    const TAXAS_CARTAO = {
+        'Cartão de Crédito': 0.0309,
+        'Cartão de Débito': 0.0089
+    };
+
+    // Chave para guardar no localStorage quais agendamentos já foram pagos
+    const LS_KEY_PAGOS = 'ominus_pagos_igor';
 
     let STATE = { calMes: new Date().getMonth(), calAno: new Date().getFullYear(), diaSelecionado: null, agendamentosAtuais: [], modalHora: null, modalData: null, modalOcupado: false, clientesRegulares: [] };
     let editandoIndex = null;
+    let pagandoIndex = null;
+    let formaPagamentoSelecionada = null;
+
+    /* ================= CONTROLE DE PAGOS (localStorage) ================= */
+    function carregarPagos() {
+        try { return JSON.parse(localStorage.getItem(LS_KEY_PAGOS) || '{}'); } catch { return {}; }
+    }
+    function salvarPagos(obj) {
+        try { localStorage.setItem(LS_KEY_PAGOS, JSON.stringify(obj)); } catch {}
+    }
+    function chavePagamento(data, hora, barbeiro) {
+        return `${data}|${hora}|${barbeiro}`;
+    }
+    function marcarComoPago(data, hora, barbeiro) {
+        const pagos = carregarPagos();
+        pagos[chavePagamento(data, hora, barbeiro)] = true;
+        salvarPagos(pagos);
+    }
+    function estaPago(data, hora, barbeiro) {
+        const pagos = carregarPagos();
+        return !!pagos[chavePagamento(data, hora, barbeiro)];
+    }
 
     function showLoader(msg = 'CONSULTANDO AGENDA...') { document.getElementById('loader').classList.add('visible'); document.querySelector('.loader-text').textContent = msg; }
     function hideLoader() { document.getElementById('loader').classList.remove('visible'); }
@@ -503,6 +700,9 @@
         const parts = dataISO.split('-');
         if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
         return dataISO;
+    }
+    function formatMoeda(v) {
+        return 'R$ ' + Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
     }
 
     function extrairWhatsApp(ag) {
@@ -534,10 +734,6 @@
         return direto || 'Corte Tradicional';
     }
 
-    /* =============================================
-       EXTRAI NOME LIMPO DO CLIENTE
-       Prioriza "Corte - NOME (Barbeiro: ...)" e "Cliente: NOME"
-    ============================================= */
     function extrairNomeCliente(ag) {
         const textos = [
             ag['ag-nome'], ag.nome, ag.nome_cliente,
@@ -664,11 +860,6 @@
         } finally { hideLoader(); }
     }
 
-    /* =============================================
-       RENDER DETALHES DO DIA
-       Cada atendimento ocupa 1 HORA = 2 slots de 30min.
-       O horário seguinte é marcado como ocupado automaticamente.
-    ============================================= */
     function renderDetalhesDia(ocupados = [], agendamentos = []) {
         const statusGrid = document.getElementById('timeStatusGrid');
         const containerList = document.getElementById('dia-agendamentos');
@@ -677,11 +868,7 @@
 
         const horariosOcupados = new Set(ocupados);
 
-        // === PROPAGAR OCUPAÇÃO PARA O PRÓXIMO SLOT (30min depois) ===
-        // Cada atendimento dura 1h, então ocupa o slot atual + o próximo.
-        // Ex: 09:00 ocupado → 09:30 também fica ocupado
-        //     11:30 ocupado → 12:00 não existe na grade (almoço), então nada
-        //     19:00 ocupado → 19:30 não existe na grade, então nada
+        // Propaga ocupação para o próximo slot (30min depois)
         const ocupadosOriginais = Array.from(horariosOcupados);
         ocupadosOriginais.forEach(hora => {
             const partes = String(hora).split(':');
@@ -689,16 +876,11 @@
             const hh = parseInt(partes[0], 10);
             const mm = parseInt(partes[1], 10);
             if (isNaN(hh) || isNaN(mm)) return;
-
             let novoMin = mm + 30;
             let novaHora = hh;
             if (novoMin >= 60) { novoMin -= 60; novaHora += 1; }
-
             const proximoSlot = `${String(novaHora).padStart(2, '0')}:${String(novoMin).padStart(2, '0')}`;
-
-            if (HORARIOS_PADRAO.includes(proximoSlot)) {
-                horariosOcupados.add(proximoSlot);
-            }
+            if (HORARIOS_PADRAO.includes(proximoSlot)) horariosOcupados.add(proximoSlot);
         });
 
         HORARIOS_PADRAO.forEach(hora => {
@@ -725,9 +907,10 @@
                 const whatsappRaw = extrairWhatsApp(ag);
                 const whatsappLink = normalizarWhatsApp(whatsappRaw);
                 const preco = obterValorAgendamento(ag);
+                const pago = estaPago(STATE.diaSelecionado, hora, BARBEIRO_ID);
 
                 const el = document.createElement('div');
-                el.className = 'agendamento-item';
+                el.className = 'agendamento-item' + (pago ? ' pago' : '');
                 el.innerHTML = `
                     <div>
                         <div class="cliente">${nome}</div>
@@ -742,13 +925,17 @@
                                     WhatsApp
                                 </a>
                             ` : ''}
+                            ${pago
+                                ? `<span class="badge-pago">✓ Pago</span>`
+                                : `<button class="btn-pagar" onclick="abrirModalPagamento(${index})">💵 Pagamento</button>`
+                            }
                             <button class="btn-editar" onclick="abrirModalEditar(${index})">✏️ Editar</button>
                             <button class="btn-deletar" onclick="deletarAgendamento(${index})">🗑️ Cancelar</button>
                         </div>
                     </div>
                     <div style="text-align: right;">
                         <div class="hora">${hora} hs</div>
-                        <span class="status-badge">Confirmado</span>
+                        <span class="status-badge ${pago ? 'pago' : ''}">${pago ? 'Pago' : 'Confirmado'}</span>
                     </div>
                 `;
                 containerList.appendChild(el);
@@ -777,6 +964,161 @@
                 </div>`;
         }
     }
+
+    /* =============================================
+       MODAL DE PAGAMENTO
+    ============================================= */
+    function abrirModalPagamento(index) {
+        const ag = STATE.agendamentosAtuais[index];
+        if (!ag) return;
+        pagandoIndex = index;
+        formaPagamentoSelecionada = null;
+
+        const nome = extrairNomeCliente(ag);
+        const hora = ag['ag-hora'] || ag.hora || '--:--';
+        const servico = extrairServicoLimpo(ag);
+        const preco = obterValorAgendamento(ag);
+
+        document.getElementById('pagClienteNome').textContent = nome;
+        document.getElementById('pagDataHora').textContent = `${formatDataFormatada(STATE.diaSelecionado)} · ${hora}hs`;
+
+        // Info do corte
+        document.getElementById('pagInfoCorte').innerHTML = `
+            <div class="pagamento-info__linha"><span>Cliente</span><span>${nome}</span></div>
+            <div class="pagamento-info__linha"><span>Serviço</span><span>${servico}</span></div>
+            <div class="pagamento-info__linha"><span>Data</span><span>${formatDataFormatada(STATE.diaSelecionado)}</span></div>
+            <div class="pagamento-info__linha"><span>Horário</span><span>${hora} hs</span></div>
+            <div class="pagamento-info__linha"><span>Valor Bruto</span><span class="pagamento-info__valor">${formatMoeda(preco)}</span></div>
+        `;
+
+        // Reset das formas de pagamento
+        document.querySelectorAll('#formaPagamentoGrid .forma-pagamento-opcao').forEach(el => el.classList.remove('selecionado'));
+
+        // Reset do resumo
+        document.getElementById('resumoBruto').textContent = formatMoeda(preco);
+        document.getElementById('linhaTaxa').style.display = 'none';
+        document.getElementById('resumoTaxa').textContent = '- R$ 0,00';
+        document.getElementById('resumoLiquido').textContent = formatMoeda(preco);
+
+        // Desabilita o botão até escolher forma
+        const btn = document.getElementById('btnConfirmarPagamento');
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        btn.style.cursor = 'not-allowed';
+
+        document.getElementById('modalPagamento').classList.add('active');
+    }
+
+    function fecharModalPagamento() {
+        document.getElementById('modalPagamento').classList.remove('active');
+        pagandoIndex = null;
+        formaPagamentoSelecionada = null;
+    }
+
+    // Listener nas opções de forma de pagamento
+    document.addEventListener('click', (e) => {
+        const opcao = e.target.closest('#formaPagamentoGrid .forma-pagamento-opcao');
+        if (!opcao) return;
+
+        const forma = opcao.dataset.forma;
+        formaPagamentoSelecionada = forma;
+
+        // Marca visual
+        document.querySelectorAll('#formaPagamentoGrid .forma-pagamento-opcao').forEach(el => el.classList.remove('selecionado'));
+        opcao.classList.add('selecionado');
+
+        // Calcula valores
+        if (pagandoIndex === null) return;
+        const ag = STATE.agendamentosAtuais[pagandoIndex];
+        const precoBruto = obterValorAgendamento(ag);
+        const taxa = TAXAS_CARTAO[forma] || 0;
+        const valorTaxa = precoBruto * taxa;
+        const valorLiquido = precoBruto - valorTaxa;
+
+        document.getElementById('resumoBruto').textContent = formatMoeda(precoBruto);
+
+        if (taxa > 0) {
+            document.getElementById('linhaTaxa').style.display = 'flex';
+            document.getElementById('resumoTaxa').textContent = '- ' + formatMoeda(valorTaxa);
+        } else {
+            document.getElementById('linhaTaxa').style.display = 'none';
+        }
+
+        document.getElementById('resumoLiquido').textContent = formatMoeda(valorLiquido);
+
+        // Habilita o botão
+        const btn = document.getElementById('btnConfirmarPagamento');
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+    });
+
+    async function confirmarPagamento() {
+        if (pagandoIndex === null) return;
+        if (!formaPagamentoSelecionada) {
+            toast('Selecione a forma de pagamento.', 'error');
+            return;
+        }
+
+        const ag = STATE.agendamentosAtuais[pagandoIndex];
+        const nome = extrairNomeCliente(ag);
+        const hora = ag['ag-hora'] || ag.hora || '';
+        const servico = extrairServicoLimpo(ag);
+        const precoBruto = obterValorAgendamento(ag);
+
+        const taxa = TAXAS_CARTAO[formaPagamentoSelecionada] || 0;
+        const valorTaxa = precoBruto * taxa;
+        const valorLiquido = precoBruto - valorTaxa;
+
+        const payload = {
+            "acao": "confirmar_pagamento",
+            "ag-data": STATE.diaSelecionado,
+            "ag-hora": hora,
+            "ag-nome": nome,
+            "ag-servico": servico,
+            "ag-barbeiro": BARBEIRO_ID,
+            "ag-valor-bruto": precoBruto,
+            "ag-valor-taxa": Number(valorTaxa.toFixed(2)),
+            "ag-valor-liquido": Number(valorLiquido.toFixed(2)),
+            "ag-forma-pagamento": formaPagamentoSelecionada,
+            "ag-percentual-taxa": taxa
+        };
+
+        showLoader('CONFIRMANDO PAGAMENTO...');
+
+        try {
+            const response = await fetch(WEBHOOK_PAGAMENTO, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                marcarComoPago(STATE.diaSelecionado, hora, BARBEIRO_ID);
+                toast(`Pagamento confirmado! ${formaPagamentoSelecionada} - ${formatMoeda(valorLiquido)}`, 'success');
+                fecharModalPagamento();
+                await selecionarDia(STATE.diaSelecionado);
+            } else {
+                const texto = await response.text();
+                toast(`Erro ${response.status}: ${texto}`, 'error');
+            }
+        } catch (err) {
+            console.error('Erro ao confirmar pagamento:', err);
+            // Modo offline: marca localmente mesmo assim
+            marcarComoPago(STATE.diaSelecionado, hora, BARBEIRO_ID);
+            toast('Webhook offline — pagamento registrado apenas localmente.', 'info');
+            fecharModalPagamento();
+            await selecionarDia(STATE.diaSelecionado);
+        } finally {
+            hideLoader();
+        }
+    }
+
+    document.getElementById('btnFecharPagamento').addEventListener('click', fecharModalPagamento);
+    document.getElementById('modalPagamento').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) fecharModalPagamento();
+    });
+    document.getElementById('btnConfirmarPagamento').addEventListener('click', confirmarPagamento);
 
     /* =============================================
        EDITAR ATENDIMENTO
