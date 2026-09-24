@@ -3,41 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUNIZ STUDIO — Gestão</title>
+  <title>MUNIZ STUDIO — Painel do Barbeiro</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="image.png" />
-  
-  <!-- Manifest PWA -->
   <link rel="manifest" href="manifest.json" />
-  
-  <!-- iOS (iPhone/iPad) -->
   <link rel="apple-touch-icon" href="image.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="image.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Muniz" />
-  
-  <!-- Android/Chrome -->
-  <meta name="theme-color" content="#18171b" />
+  <meta name="theme-color" content="#1a2c50" />
   <meta name="mobile-web-app-capable" content="yes" />
 
 <style>
     :root {
-        --tinta: #18171b;
-        --tinta-suave: #2a2831;
-        --pedra: #efeee7;
+        /* ====== PALETA MUNIZ STUDIO (navy + gold) ====== */
+        --tinta: #1a2c50;
+        --tinta-suave: #253862;
+        --pedra: #f0e9db;
         --pedra-card: #ffffff;
-        --latao: #b9902f;
-        --latao-escuro: #8f6f21;
+        --latao: #c9a875;
+        --latao-escuro: #a88855;
         --bordo: #7a2331;
         --bordo-escuro: #591a24;
         --navalha: #2f5d50;
-        --texto: #201e1b;
+        --texto: #1a1a24;
         --texto-suave: #6b6459;
-        --linha: #ddd8cc;
+        --linha: #ddd4bf;
         --perigo: #a8332a;
+        --info: #3f6a8f;
         --whatsapp: #25D366;
 
         --fonte-cartaz: 'Oswald', sans-serif;
@@ -46,8 +41,8 @@
 
         --radius: 10px;
         --radius-peq: 6px;
-        --sombra: 0 8px 24px -12px rgba(24,23,27,0.25);
-        --sombra-forte: 0 20px 48px -18px rgba(24,23,27,0.35);
+        --sombra: 0 8px 24px -12px rgba(26,44,80,0.25);
+        --sombra-forte: 0 20px 48px -18px rgba(26,44,80,0.35);
 
         --faixa: repeating-linear-gradient(
             45deg,
@@ -84,7 +79,7 @@
     #login-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(24, 23, 27, 0.92);
+        background: rgba(26, 44, 80, 0.95);
         backdrop-filter: blur(8px);
         display: none;
         justify-content: center;
@@ -92,9 +87,7 @@
         z-index: 99999;
         padding: 20px;
     }
-    #login-overlay.active {
-        display: flex;
-    }
+    #login-overlay.active { display: flex; }
     .login-box {
         background: var(--pedra-card);
         border-radius: var(--radius);
@@ -104,6 +97,7 @@
         box-shadow: var(--sombra-forte);
         text-align: center;
         animation: modalEntrar 0.4s ease;
+        border-top: 5px solid var(--latao);
     }
     .login-box h1 {
         font-family: var(--fonte-cartaz);
@@ -146,7 +140,7 @@
     .login-box .btn-entrar {
         width: 100%;
         padding: 14px;
-        background: var(--bordo);
+        background: var(--tinta);
         color: #fff;
         border: none;
         border-radius: var(--radius-peq);
@@ -157,64 +151,68 @@
         font-weight: 600;
         transition: background 0.15s;
     }
-    .login-box .btn-entrar:hover {
-        background: var(--bordo-escuro);
-    }
+    .login-box .btn-entrar:hover { background: var(--latao-escuro); }
     .login-box .erro {
         color: var(--perigo);
         font-size: 0.85rem;
         margin-top: 12px;
         display: none;
     }
-    .login-box .erro.visible {
-        display: block;
-    }
+    .login-box .erro.visible { display: block; }
 
     /* ================= SIDEBAR ================= */
     #sidebar {
         position: fixed; left: 0; top: 5px; bottom: 0;
-        width: 72px; background: var(--tinta); border-right: 1px solid rgba(185,144,47,0.25);
+        width: 72px; background: var(--tinta);
+        border-right: 1px solid rgba(201,168,117,0.25);
         display: flex; flex-direction: column; align-items: center; padding: 22px 0;
         z-index: 100; transition: width .3s ease; overflow: hidden;
     }
     #sidebar:hover { width: 220px; }
     .sidebar-logo {
-        font-family: var(--fonte-cartaz); font-size: 1.05rem; font-weight: 600; letter-spacing: 0.1em;
-        text-transform: uppercase; color: var(--pedra); white-space: nowrap; overflow: hidden;
-        width: 100%; text-align: center; padding: 0 16px; margin-bottom: 18px;
+        font-family: var(--fonte-cartaz); font-size: 1.05rem; font-weight: 600;
+        letter-spacing: 0.1em; text-transform: uppercase; color: var(--pedra);
+        white-space: nowrap; overflow: hidden; width: 100%; text-align: center;
+        padding: 0 16px; margin-bottom: 18px;
     }
     .sidebar-logo span:last-child { color: var(--latao); opacity: 0; transition: opacity .2s; }
     #sidebar:hover .sidebar-logo span:last-child { opacity: 1; }
     .sidebar-logo-icon { min-width: 40px; display: inline-block; }
 
     .sidebar-perfil {
-        display: flex; align-items: center; gap: 12px; width: 100%; padding: 0 16px 18px;
-        margin-bottom: 8px; border-bottom: 1px solid rgba(185,144,47,0.2); white-space: nowrap; overflow: hidden;
+        display: flex; align-items: center; gap: 12px; width: 100%;
+        padding: 0 16px 18px; margin-bottom: 8px;
+        border-bottom: 1px solid rgba(201,168,117,0.2);
+        white-space: nowrap; overflow: hidden;
     }
     .sidebar-perfil__foto {
-        width: 40px; height: 40px; min-width: 40px; border-radius: 50%; object-fit: cover;
-        border: 2px solid var(--latao); background: var(--tinta-suave);
+        width: 40px; height: 40px; min-width: 40px; border-radius: 50%;
+        object-fit: cover; border: 2px solid var(--latao); background: var(--tinta-suave);
     }
-    .sidebar-perfil__nome { font-family: var(--fonte-cartaz); font-size: 0.85rem; color: var(--pedra); opacity: 0; transition: opacity .2s; }
+    .sidebar-perfil__nome {
+        font-family: var(--fonte-cartaz); font-size: 0.85rem;
+        color: var(--pedra); opacity: 0; transition: opacity .2s;
+    }
     #sidebar:hover .sidebar-perfil__nome { opacity: 1; }
 
     .nav-item {
-        width: 100%; display: flex; align-items: center; gap: 14px; padding: 13px 16px;
-        transition: background .15s, border-color .15s; border-left: 3px solid transparent; white-space: nowrap;
+        width: 100%; display: flex; align-items: center; gap: 14px;
+        padding: 13px 16px; transition: background .15s, border-color .15s;
+        border-left: 3px solid transparent; white-space: nowrap;
     }
-    .nav-item:hover { background: rgba(185,144,47,0.1); border-left-color: var(--latao-escuro); }
-    .nav-item.active { background: rgba(185,144,47,0.16); border-left-color: var(--latao); }
+    .nav-item:hover { background: rgba(201,168,117,0.1); border-left-color: var(--latao-escuro); }
+    .nav-item.active { background: rgba(201,168,117,0.16); border-left-color: var(--latao); }
     .nav-item.active .nav-icon, .nav-item.active .nav-label { color: var(--latao); }
-    .nav-icon { min-width: 40px; text-align: center; color: #a39d8f; font-size: 1.05rem; }
-    .nav-label { font-size: 0.82rem; font-weight: 500; color: #a39d8f; opacity: 0; transition: opacity .2s; }
+    .nav-icon { min-width: 40px; text-align: center; color: #8896b0; font-size: 1.05rem; }
+    .nav-label { font-size: 0.82rem; font-weight: 500; color: #8896b0; opacity: 0; transition: opacity .2s; }
     #sidebar:hover .nav-label { opacity: 1; }
 
     /* ================= APP ================= */
     #app { margin-left: 72px; min-height: 100vh; padding: 36px 40px 60px; max-width: 1100px; }
 
     .page-header {
-        padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px;
-        position: relative;
+        padding: 0 0 24px; border-bottom: 2px solid var(--linha);
+        margin-bottom: 28px; position: relative;
     }
     .page-title { font-family: var(--fonte-cartaz); font-size: 1.9rem; text-transform: uppercase; letter-spacing: 0.02em; color: var(--tinta); margin-bottom: 4px; }
     .page-subtitle { color: var(--texto-suave); font-size: 0.88rem; }
@@ -226,7 +224,7 @@
     .card--faixa::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--faixa); background-size: 48px 48px; }
     .card-title {
         font-family: var(--fonte-cartaz); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
-        color: var(--bordo); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+        color: var(--tinta); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
     }
     .card-title::after { content: ""; flex: 1; height: 1px; background: var(--linha); }
 
@@ -234,7 +232,7 @@
 
     /* MÉTRICAS */
     .metric-card { text-align: center; }
-    .metric-value { font-family: var(--fonte-dados); font-size: 2.2rem; font-weight: 600; color: var(--bordo); line-height: 1; }
+    .metric-value { font-family: var(--fonte-dados); font-size: 2.2rem; font-weight: 600; color: var(--latao-escuro); line-height: 1; }
     .metric-label { font-family: var(--fonte-cartaz); font-size: 0.7rem; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 8px; }
 
     /* CALENDÁRIO */
@@ -244,7 +242,7 @@
     .cal-btn:hover { color: var(--pedra); }
 
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-    .cal-header { font-size: 0.66rem; font-weight: 700; color: var(--bordo); text-transform: uppercase; letter-spacing: 0.03em; padding: 6px 0; }
+    .cal-header { font-size: 0.66rem; font-weight: 700; color: var(--tinta); text-transform: uppercase; letter-spacing: 0.03em; padding: 6px 0; }
     .cal-day {
         aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
         border-radius: var(--radius-peq); font-size: 0.88rem; font-family: var(--fonte-dados);
@@ -254,12 +252,12 @@
     .cal-day:hover:not(.empty) { border-color: var(--latao); }
     .cal-day.today { border-color: var(--latao); color: var(--latao-escuro); font-weight: 600; }
     .cal-day.empty { background: transparent; cursor: default; }
-    .cal-day.selected { background: var(--bordo); color: #fff; font-weight: 600; border-color: var(--bordo); }
+    .cal-day.selected { background: var(--tinta); color: #fff; font-weight: 600; border-color: var(--tinta); }
 
     .divider { height: 1px; background: var(--linha); margin: 20px 0; }
 
     /* HORÁRIOS */
-    .section-label { font-family: var(--fonte-cartaz); font-size: 0.75rem; font-weight: 600; color: var(--bordo); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; display: block; }
+    .section-label { font-family: var(--fonte-cartaz); font-size: 0.75rem; font-weight: 600; color: var(--tinta); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; display: block; }
     .time-status-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
     .time-badge {
         padding: 8px 4px; border-radius: var(--radius-peq); text-align: center; font-size: 0.72rem; font-family: var(--fonte-dados); font-weight: 600;
@@ -279,7 +277,7 @@
         transition: border-color .15s, box-shadow .15s;
     }
     .agendamento-item:hover { border-color: var(--latao); box-shadow: var(--sombra); }
-    .agendamento-item .hora { font-family: var(--fonte-dados); font-weight: 600; color: var(--bordo); font-size: 1rem; white-space: nowrap; }
+    .agendamento-item .hora { font-family: var(--fonte-dados); font-weight: 600; color: var(--tinta); font-size: 1rem; white-space: nowrap; }
     .agendamento-item .cliente { font-family: var(--fonte-cartaz); font-size: 0.98rem; color: var(--tinta); }
     .agendamento-item .servico { color: var(--texto-suave); font-size: 0.82rem; margin-top: 3px; }
     .agendamento-item .preco { color: var(--latao-escuro); font-family: var(--fonte-dados); font-size: 0.78rem; margin-top: 3px; font-weight: 600; }
@@ -313,39 +311,40 @@
 
     .btn-editar {
         display: inline-flex; align-items: center; gap: 6px;
-        background: #f5f0e4; border: 1px solid var(--latao);
+        background: #faf4e6; border: 1px solid var(--latao);
         color: var(--latao-escuro); padding: 6px 12px;
         border-radius: var(--radius-peq); font-size: 0.72rem;
         font-weight: 700; transition: background .15s;
     }
-    .btn-editar:hover { background: #ebe3cc; }
+    .btn-editar:hover { background: #f0e6cc; }
 
     .status-badge {
         display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.68rem; font-weight: 700;
-        text-transform: uppercase; letter-spacing: 0.05em; background: #f5efe0; color: var(--latao-escuro); border: 1px solid var(--latao);
+        text-transform: uppercase; letter-spacing: 0.05em; background: #faf4e6; color: var(--latao-escuro); border: 1px solid var(--latao);
     }
 
     /* LOADER E TOAST */
     .loader-overlay {
-        position: fixed; inset: 0; background: rgba(239,238,231,0.92); backdrop-filter: blur(6px);
+        position: fixed; inset: 0; background: rgba(240,233,219,0.92); backdrop-filter: blur(6px);
         display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 9000;
     }
     .loader-overlay.visible { display: flex; }
-    .loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--linha); border-top-color: var(--bordo); animation: spin .8s linear infinite; }
+    .loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--linha); border-top-color: var(--tinta); animation: spin .8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .loader-text { margin-top: 18px; font-family: var(--fonte-cartaz); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bordo); }
+    .loader-text { margin-top: 18px; font-family: var(--fonte-cartaz); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta); }
 
     #toast-container { position: fixed; bottom: 28px; right: 28px; z-index: 9998; display: flex; flex-direction: column; gap: 10px; }
     .toast { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); min-width: 300px; box-shadow: var(--sombra-forte); font-size: 0.88rem; color: var(--texto); }
     .toast.success { border-color: var(--navalha); }
     .toast.error { border-color: var(--perigo); }
+    .toast.info { border-color: var(--latao); }
 
     /* ================= MODAL ================= */
     .modal-overlay {
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.5);
+        background: rgba(26, 44, 80, 0.5);
         backdrop-filter: blur(4px);
         z-index: 1000;
         justify-content: center;
@@ -384,14 +383,8 @@
         border-bottom: 1px solid var(--linha);
         padding-bottom: 14px;
     }
-    .modal .modal-sub strong {
-        color: var(--tinta);
-    }
-    .modal .opcoes {
-        display: flex;
-        gap: 12px;
-        margin-bottom: 20px;
-    }
+    .modal .modal-sub strong { color: var(--tinta); }
+    .modal .opcoes { display: flex; gap: 12px; margin-bottom: 20px; }
     .modal .opcoes button {
         flex: 1;
         padding: 14px 8px;
@@ -406,17 +399,15 @@
         transition: all .15s;
         color: var(--texto);
     }
-    .modal .opcoes button:hover { border-color: var(--latao); background: #f5f0e4; }
-    .modal .opcoes button.primario { border-color: var(--bordo); color: var(--bordo); background: #f8ecec; }
-    .modal .opcoes button.primario:hover { background: #f0dddc; border-color: var(--bordo-escuro); }
+    .modal .opcoes button:hover { border-color: var(--latao); background: #faf4e6; }
+    .modal .opcoes button.primario { border-color: var(--tinta); color: var(--tinta); background: #e9edf5; }
+    .modal .opcoes button.primario:hover { background: #dbe3ef; border-color: var(--tinta-suave); }
     .modal .opcoes button.perigo { border-color: var(--perigo); color: var(--perigo); background: #fde8e6; }
     .modal .opcoes button.perigo:hover { background: #fad5d2; }
     .modal .opcoes button.secundario { border-color: var(--navalha); color: var(--navalha); background: #eaf2ee; }
     .modal .opcoes button.secundario:hover { background: #d4e3dd; }
 
-    .modal .form-group {
-        margin-bottom: 14px;
-    }
+    .modal .form-group { margin-bottom: 14px; }
     .modal .form-group label {
         display: block;
         font-size: 0.72rem;
@@ -445,7 +436,7 @@
     .modal .btn-enviar {
         width: 100%;
         padding: 14px;
-        background: var(--bordo);
+        background: var(--tinta);
         color: #fff;
         border: none;
         border-radius: var(--radius-peq);
@@ -457,7 +448,7 @@
         transition: background .15s;
         margin-top: 6px;
     }
-    .modal .btn-enviar:hover { background: var(--bordo-escuro); }
+    .modal .btn-enviar:hover { background: var(--latao-escuro); }
     .modal .btn-fechar {
         position: absolute;
         top: 16px;
@@ -497,78 +488,35 @@
         background: var(--pedra);
         transform: translateX(4px);
     }
-    .cliente-item .cliente-nome {
-        font-weight: 600;
-        font-size: 0.95rem;
-        color: var(--tinta);
-    }
-    .cliente-item .cliente-info {
-        font-size: 0.8rem;
-        color: var(--texto-suave);
-        margin-top: 2px;
-    }
+    .cliente-item .cliente-nome { font-weight: 600; font-size: 0.95rem; color: var(--tinta); }
+    .cliente-item .cliente-info { font-size: 0.8rem; color: var(--texto-suave); margin-top: 2px; }
     .cliente-item .cliente-badge {
-        background: var(--latao);
-        color: #fff;
-        border-radius: 20px;
-        padding: 4px 12px;
-        font-size: 0.65rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        white-space: nowrap;
+        background: var(--latao); color: #fff; border-radius: 20px;
+        padding: 4px 12px; font-size: 0.65rem; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
     }
-    .cliente-item .cliente-actions {
-        display: flex;
-        gap: 6px;
-        align-items: center;
-    }
+    .cliente-item .cliente-actions { display: flex; gap: 6px; align-items: center; }
 
-    .busca-cliente {
-        margin-bottom: 12px;
-    }
+    .busca-cliente { margin-bottom: 12px; }
     .busca-cliente input {
-        width: 100%;
-        padding: 10px 12px;
-        border: 1px solid var(--linha);
-        border-radius: var(--radius-peq);
-        font-family: var(--fonte-corpo);
-        font-size: 0.9rem;
-        background: var(--pedra);
+        width: 100%; padding: 10px 12px;
+        border: 1px solid var(--linha); border-radius: var(--radius-peq);
+        font-family: var(--fonte-corpo); font-size: 0.9rem; background: var(--pedra);
     }
-    .busca-cliente input:focus {
-        outline: none;
-        border-color: var(--latao);
-    }
+    .busca-cliente input:focus { outline: none; border-color: var(--latao); }
 
     .btn-voltar {
-        background: none;
-        border: none;
-        color: var(--texto-suave);
-        font-size: 0.8rem;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 0;
-        margin-bottom: 12px;
-        cursor: pointer;
-        transition: color .15s;
+        background: none; border: none; color: var(--texto-suave);
+        font-size: 0.8rem; display: flex; align-items: center; gap: 6px;
+        padding: 4px 0; margin-bottom: 12px; cursor: pointer; transition: color .15s;
     }
     .btn-voltar:hover { color: var(--tinta); }
 
     .btn-recargar {
-        display: inline-block;
-        background: var(--latao);
-        color: #fff;
-        border: none;
-        padding: 6px 14px;
-        border-radius: var(--radius-peq);
-        font-size: 0.7rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: background .15s;
-        margin-bottom: 12px;
+        display: inline-block; background: var(--latao); color: #fff;
+        border: none; padding: 6px 14px; border-radius: var(--radius-peq);
+        font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+        cursor: pointer; transition: background .15s; margin-bottom: 12px;
     }
     .btn-recargar:hover { background: var(--latao-escuro); }
 
@@ -584,7 +532,6 @@
         border-radius: var(--radius-peq);
         background: var(--pedra);
     }
-
     .edit-servico-item {
         display: flex;
         align-items: center;
@@ -596,41 +543,20 @@
         transition: all 0.15s;
         background: var(--pedra-card);
     }
-
-    .edit-servico-item:hover {
-        border-color: var(--latao);
-        background: #faf8f3;
-    }
-
+    .edit-servico-item:hover { border-color: var(--latao); background: #faf8f3; }
     .edit-servico-item input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        accent-color: var(--bordo);
-        cursor: pointer;
-        margin: 0;
-        flex-shrink: 0;
+        width: 18px; height: 18px; accent-color: var(--tinta);
+        cursor: pointer; margin: 0; flex-shrink: 0;
     }
-
     .edit-servico-item .nome {
-        flex: 1;
-        font-family: var(--fonte-cartaz);
-        font-size: 0.92rem;
-        color: var(--tinta);
-        font-weight: 500;
+        flex: 1; font-family: var(--fonte-cartaz);
+        font-size: 0.92rem; color: var(--tinta); font-weight: 500;
     }
-
     .edit-servico-item .preco {
-        font-family: var(--fonte-dados);
-        font-size: 0.8rem;
-        color: var(--latao-escuro);
-        font-weight: 600;
-        white-space: nowrap;
+        font-family: var(--fonte-dados); font-size: 0.8rem;
+        color: var(--latao-escuro); font-weight: 600; white-space: nowrap;
     }
-
-    .edit-servico-item.checked {
-        border-color: var(--bordo);
-        background: #fbf3ee;
-    }
+    .edit-servico-item.checked { border-color: var(--tinta); background: #eef1f6; }
 
     .edit-total-box {
         display: flex;
@@ -646,18 +572,16 @@
         letter-spacing: 0.04em;
         font-size: 0.88rem;
     }
-
     .edit-total-box strong {
         font-family: var(--fonte-dados);
         font-size: 1.25rem;
         color: var(--latao);
         font-weight: 600;
     }
-
     .edit-aviso {
         font-size: 0.78rem;
         color: var(--texto-suave);
-        background: #faf6ec;
+        background: #faf4e6;
         border-left: 3px solid var(--latao);
         padding: 10px 14px;
         border-radius: var(--radius-peq);
@@ -669,12 +593,10 @@
     .mobile-header {
         display: none;
         position: fixed;
-        top: 5px;
-        left: 0;
-        right: 0;
+        top: 5px; left: 0; right: 0;
         height: 60px;
         background: var(--tinta);
-        border-bottom: 1px solid rgba(185,144,47,0.25);
+        border-bottom: 1px solid rgba(201,168,117,0.25);
         z-index: 101;
         align-items: center;
         padding: 0 16px;
@@ -682,32 +604,19 @@
     }
     .hamburger-btn {
         display: none;
-        width: 40px;
-        height: 40px;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
-        padding: 0;
+        width: 40px; height: 40px;
+        background: transparent; border: none; cursor: pointer;
+        flex-direction: column; justify-content: center; align-items: center;
+        gap: 5px; padding: 0;
     }
     .hamburger-line {
-        width: 24px;
-        height: 2px;
+        width: 24px; height: 2px;
         background: var(--latao);
         transition: all 0.3s ease;
     }
-    .hamburger-btn.active .hamburger-line:nth-child(1) {
-        transform: rotate(45deg) translate(8px, 8px);
-    }
-    .hamburger-btn.active .hamburger-line:nth-child(2) {
-        opacity: 0;
-    }
-    .hamburger-btn.active .hamburger-line:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -7px);
-    }
+    .hamburger-btn.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+    .hamburger-btn.active .hamburger-line:nth-child(2) { opacity: 0; }
+    .hamburger-btn.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
     .mobile-logo {
         flex: 1;
         font-family: var(--fonte-cartaz);
@@ -718,20 +627,16 @@
         color: var(--pedra);
         white-space: nowrap;
     }
-    .mobile-logo-text {
-        color: var(--latao);
-    }
+    .mobile-logo-text { color: var(--latao); }
     .sidebar-overlay {
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(24, 23, 27, 0.5);
+        background: rgba(26, 44, 80, 0.5);
         z-index: 99;
         backdrop-filter: blur(4px);
     }
-    .sidebar-overlay.active {
-        display: block;
-    }
+    .sidebar-overlay.active { display: block; }
 
     @media (max-width: 880px) {
         .mobile-header { display: flex; }
@@ -755,10 +660,7 @@
         .sidebar-logo span:last-child { opacity: 1; }
         .sidebar-perfil__nome { opacity: 1; }
         .nav-label { opacity: 1; }
-        #app {
-            margin-left: 0;
-            padding-top: 80px;
-        }
+        #app { margin-left: 0; padding-top: 80px; }
         .grid-2 { grid-template-columns: 1fr; }
         .metric-card { padding: 16px; }
         #toast-container { bottom: 16px; right: 16px; }
@@ -817,7 +719,7 @@
 <div id="login-overlay" class="active">
     <div class="login-box">
         <div class="login-icon">🔐</div>
-        <h1>Ominus Tech</h1>
+        <h1>Muniz Studio</h1>
         <div class="sub">Painel do Barbeiro — Anderson</div>
         <input type="password" id="senha-input" placeholder="Digite a senha" autocomplete="off">
         <button class="btn-entrar" id="btn-login">Entrar</button>
@@ -834,7 +736,7 @@
     <span class="hamburger-line"></span>
     <span class="hamburger-line"></span>
   </button>
-  <div class="mobile-logo">Om<span class="mobile-logo-text">inus</span></div>
+  <div class="mobile-logo">Mun<span class="mobile-logo-text">iz</span></div>
 </div>
 
 <!-- SIDEBAR OVERLAY -->
@@ -848,7 +750,7 @@
 <div id="toast-container"></div>
 
 <nav id="sidebar">
-    <div class="sidebar-logo"><span class="sidebar-logo-icon">Om</span><span>inus</span></div>
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">Mun</span><span>iz</span></div>
     <div class="sidebar-perfil">
         <img src="anderson.png" alt="Anderson" class="sidebar-perfil__foto" onerror="this.style.display='none'">
         <span class="sidebar-perfil__nome">Anderson</span>
@@ -935,9 +837,7 @@
                 <input type="text" id="buscaCliente" placeholder="Buscar cliente...">
             </div>
             <button class="btn-recargar" id="btnRecarregarClientes">🔄 Recarregar</button>
-            <div id="listaClientesContainer">
-                <!-- Itens renderizados dinamicamente -->
-            </div>
+            <div id="listaClientesContainer"></div>
         </div>
 
         <div id="modalFormAgendamento" style="display:none;">
@@ -1164,15 +1064,11 @@
       return dataISO;
     }
 
-    /* =============================================
-       EXTRAI WHATSAPP — ACEITA CAMPO DIRETO OU TEXTO
-    ============================================= */
     function extrairWhatsApp(ag) {
       const direto = ag['ag-whatsapp'] || ag.whatsapp || ag['numero'] || ag['telefone'] || ag['celular'] || '';
       if (direto && /\d{8,}/.test(String(direto).replace(/\D/g, ''))) {
         return String(direto).trim();
       }
-
       const textos = Object.values(ag).filter(Boolean).map(String);
       for (const texto of textos) {
         const m = texto.match(/whats?app\s*:?\s*([\d\s()\-+.]{8,})/i);
@@ -1188,9 +1084,6 @@
       return '';
     }
 
-    /* =============================================
-       EXTRAI SERVIÇO LIMPO
-    ============================================= */
     function extrairServicoLimpo(ag) {
       const direto = ag['ag-servico'] || ag.servico || '';
       if (direto && direto.length < 100 && !/whats?app\s*:|barbeiro\s*:|valor\s*:|cliente\s*:/i.test(direto)) {
@@ -1204,39 +1097,28 @@
       return direto || 'Corte Tradicional';
     }
 
-    /* =============================================
-       EXTRAI NOME LIMPO DO CLIENTE
-       Prioriza "Corte - NOME (Barbeiro: ...)" e "Cliente: NOME"
-    ============================================= */
     function extrairNomeCliente(ag) {
-      // Reúne todos os textos possíveis
       const textos = [
         ag['ag-nome'], ag.nome, ag.nome_cliente,
         ag.summary, ag.title, ag.description, ag['ag-descricao']
       ].filter(Boolean).map(String);
 
-      // 1. Prioridade: extrair de "Corte - NOME (Barbeiro: ...)"
       for (const t of textos) {
         const m = t.match(/corte\s*-\s*([^(]+?)(?:\s*\(|$)/i);
         if (m && m[1].trim().length > 1 && m[1].trim().length < 60) {
           return m[1].trim();
         }
       }
-
-      // 2. Depois: "Cliente: NOME"
       for (const t of textos) {
         const m = t.match(/cliente\s*:?\s*([A-ZÀ-Ú][^\n|]+?)(?:\s+(?:servi[çc]o|whats?app|barbeiro|valor)\s*:|$)/i);
         if (m && m[1].trim().length > 1 && m[1].trim().length < 60) {
           return m[1].trim();
         }
       }
-
-      // 3. Só usa o campo direto se ele estiver LIMPO (sem prefixos de summary)
       const direto = (ag['ag-nome'] || ag.nome || ag.nome_cliente || '').trim();
       if (direto && direto.length < 60 && !/corte\s*-|cliente\s*:|whats?app|servi[çc]o\s*:|barbeiro\s*:/i.test(direto)) {
         return direto;
       }
-
       return direto || 'Cliente Agendado';
     }
 
@@ -1281,7 +1163,6 @@
       return 0;
     }
 
-    // ================= FILTRO DE AGENDAMENTOS DO ANDERSON =================
     function agendamentoPertenceAoAnderson(ag) {
       const camposBarbeiro = [
         ag['ag-barbeiro'], ag.barbeiro, ag.barber, ag['barber-id'],
@@ -1504,9 +1385,7 @@
       }
     }
 
-    /* =============================================
-       EDITAR ATENDIMENTO
-    ============================================= */
+    // ================= EDITAR ATENDIMENTO =================
     function abrirModalEditar(index) {
         const ag = STATE.agendamentosAtuais[index];
         if (!ag) return;
@@ -1519,7 +1398,6 @@
         document.getElementById('editClienteNome').textContent = nome;
         document.getElementById('editDataHora').textContent = `${formatDataFormatada(STATE.diaSelecionado)} · ${hora}hs`;
 
-        // Detectar serviços já marcados (separados por " + " ou ",")
         const servicosAtuais = servicoAtual.split(/\s*(?:\+|,| e )\s*/i).map(s => s.trim()).filter(Boolean);
 
         const container = document.getElementById('listaEditServicos');
@@ -1581,7 +1459,6 @@
         const servicoAnterior = extrairServicoLimpo(ag);
         const precoAnterior = obterValorAgendamento(ag);
 
-        // Se nada mudou, não envia
         if (servicosTexto === servicoAnterior && novoPreco === precoAnterior) {
             toast('Nenhuma alteração feita.', 'info');
             fecharModalEditar();
@@ -1858,7 +1735,6 @@
       await enviarParaWebhook(payload);
     });
 
-    // ================= ENVIO PARA WEBHOOK =================
     async function enviarParaWebhook(payload) {
       showLoader('ENVIANDO...');
       try {

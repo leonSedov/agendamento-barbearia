@@ -3,40 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUNIZ STUDIO — Gestão</title>
+  <title>MUNIZ STUDIO — Clientes</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="image.png" />
-  
-  <!-- Manifest PWA -->
   <link rel="manifest" href="manifest.json" />
-  
-  <!-- iOS (iPhone/iPad) -->
   <link rel="apple-touch-icon" href="image.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="image.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Muniz" />
-  
-  <!-- Android/Chrome -->
-  <meta name="theme-color" content="#18171b" />
-  <meta name="mobile-web-app-capable" content="yes" />  
-  
+  <meta name="theme-color" content="#1a2c50" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
   <style>
     :root {
-        --tinta: #18171b;
-        --tinta-suave: #2a2831;
-        --pedra: #efeee7;
+        /* ====== PALETA MUNIZ STUDIO (navy + gold) ====== */
+        --tinta: #1a2c50;
+        --tinta-suave: #253862;
+        --pedra: #f0e9db;
         --pedra-card: #ffffff;
-        --latao: #b9902f;
-        --latao-escuro: #8f6f21;
+        --latao: #c9a875;
+        --latao-escuro: #a88855;
         --bordo: #7a2331;
         --bordo-escuro: #591a24;
         --navalha: #2f5d50;
-        --texto: #201e1b;
+        --texto: #1a1a24;
         --texto-suave: #6b6459;
-        --linha: #ddd8cc;
+        --linha: #ddd4bf;
         --perigo: #a8332a;
         --info: #3f6a8f;
         --whatsapp: #25D366;
@@ -47,8 +41,8 @@
 
         --radius: 10px;
         --radius-peq: 6px;
-        --sombra: 0 8px 24px -12px rgba(24,23,27,0.25);
-        --sombra-forte: 0 20px 48px -18px rgba(24,23,27,0.35);
+        --sombra: 0 8px 24px -12px rgba(26,44,80,0.25);
+        --sombra-forte: 0 20px 48px -18px rgba(26,44,80,0.35);
 
         --faixa: repeating-linear-gradient(
             45deg,
@@ -84,7 +78,7 @@
     /* ================= SIDEBAR ================= */
     #sidebar {
         position: fixed; left: 0; top: 5px; bottom: 0;
-        width: 72px; background: var(--tinta); border-right: 1px solid rgba(185,144,47,0.25);
+        width: 72px; background: var(--tinta); border-right: 1px solid rgba(201,168,117,0.25);
         display: flex; flex-direction: column; align-items: center; padding: 22px 0;
         z-index: 100; transition: width .3s ease; overflow: hidden;
     }
@@ -102,11 +96,11 @@
         width: 100%; display: flex; align-items: center; gap: 14px; padding: 13px 16px;
         transition: background .15s, border-color .15s; border-left: 3px solid transparent; white-space: nowrap;
     }
-    .nav-item:hover { background: rgba(185,144,47,0.1); border-left-color: var(--latao-escuro); }
-    .nav-item.active { background: rgba(185,144,47,0.16); border-left-color: var(--latao); }
+    .nav-item:hover { background: rgba(201,168,117,0.1); border-left-color: var(--latao-escuro); }
+    .nav-item.active { background: rgba(201,168,117,0.16); border-left-color: var(--latao); }
     .nav-item.active .nav-icon, .nav-item.active .nav-label { color: var(--latao); }
-    .nav-icon { min-width: 40px; text-align: center; color: #a39d8f; font-size: 1.05rem; }
-    .nav-label { font-size: 0.82rem; font-weight: 500; color: #a39d8f; opacity: 0; transition: opacity .2s; }
+    .nav-icon { min-width: 40px; text-align: center; color: #8896b0; font-size: 1.05rem; }
+    .nav-label { font-size: 0.82rem; font-weight: 500; color: #8896b0; opacity: 0; transition: opacity .2s; }
     #sidebar:hover .nav-label { opacity: 1; }
 
     /* ================= APP ================= */
@@ -117,7 +111,7 @@
     }
     .page-header::after {
         content: '◈'; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
-        font-size: 64px; color: rgba(185,144,47,0.1); pointer-events: none;
+        font-size: 64px; color: rgba(201,168,117,0.18); pointer-events: none;
     }
     .page-title { font-family: var(--fonte-cartaz); font-size: 1.9rem; text-transform: uppercase; letter-spacing: 0.02em; color: var(--tinta); margin-bottom: 4px; }
     .page-subtitle { color: var(--texto-suave); font-size: 0.88rem; }
@@ -130,7 +124,7 @@
     .card:hover { border-color: var(--latao); }
     .card-title {
         font-family: var(--fonte-cartaz); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
-        color: var(--bordo); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+        color: var(--tinta); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
     }
     .card-title::after { content: ""; flex: 1; height: 1px; background: var(--linha); }
 
@@ -143,7 +137,7 @@
     .stat-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--latao), transparent); }
     .stat-card:hover { transform: translateY(-2px); border-color: var(--latao); }
     .stat-label { font-family: var(--fonte-cartaz); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--texto-suave); margin-bottom: 10px; }
-    .stat-value { font-family: var(--fonte-dados); font-size: 1.55rem; font-weight: 600; color: var(--bordo); line-height: 1; margin-bottom: 6px; }
+    .stat-value { font-family: var(--fonte-dados); font-size: 1.55rem; font-weight: 600; color: var(--latao-escuro); line-height: 1; margin-bottom: 6px; }
     .stat-change { font-size: 0.76rem; color: var(--texto-suave); }
     .stat-change.up { color: var(--navalha); }
     .stat-change.down { color: var(--bordo); }
@@ -152,16 +146,16 @@
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
     thead tr { border-bottom: 2px solid var(--linha); }
-    th { text-align: left; padding: 11px 14px; font-family: var(--fonte-cartaz); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--bordo); }
+    th { text-align: left; padding: 11px 14px; font-family: var(--fonte-cartaz); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--tinta); }
     td { padding: 13px 14px; border-bottom: 1px solid var(--linha); color: var(--texto); }
     tbody tr { transition: background .15s; }
-    tbody tr:hover { background: #f7f3e9; }
+    tbody tr:hover { background: #faf6ec; }
 
     .badge {
         display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
     }
     .badge-success { background: #eaf2ee; color: var(--navalha); border: 1px solid var(--navalha); }
-    .badge-warning { background: #f5efe0; color: var(--latao-escuro); border: 1px solid var(--latao); }
+    .badge-warning { background: #faf4e6; color: var(--latao-escuro); border: 1px solid var(--latao); }
     .badge-danger { background: #f8ecec; color: var(--bordo); border: 1px solid var(--bordo); }
     .badge-info { background: #eaf1f6; color: var(--info); border: 1px solid var(--info); }
 
@@ -172,20 +166,20 @@
         letter-spacing: 0.04em; text-transform: uppercase; transition: background .15s, transform .12s, box-shadow .15s; border: none;
     }
     .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--bordo); color: #fff; box-shadow: var(--sombra); }
-    .btn-primary:hover { background: var(--bordo-escuro); }
-    .btn-outline { background: transparent; color: var(--bordo); border: 2px solid var(--linha); }
-    .btn-outline:hover { border-color: var(--bordo); background: #fbf3ee; }
+    .btn-primary { background: var(--tinta); color: #fff; box-shadow: var(--sombra); }
+    .btn-primary:hover { background: var(--tinta-suave); }
+    .btn-outline { background: transparent; color: var(--tinta); border: 2px solid var(--linha); }
+    .btn-outline:hover { border-color: var(--latao); background: #f7f2e6; }
 
     /* LOADER / TOAST */
     .loader-overlay {
-        position: fixed; inset: 0; background: rgba(239,238,231,0.92); backdrop-filter: blur(6px);
+        position: fixed; inset: 0; background: rgba(240,233,219,0.92); backdrop-filter: blur(6px);
         display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 9000;
     }
     .loader-overlay.visible { display: flex; }
-    .loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--linha); border-top-color: var(--bordo); animation: spin .8s linear infinite; }
+    .loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--linha); border-top-color: var(--tinta); animation: spin .8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .loader-text { margin-top: 18px; font-family: var(--fonte-cartaz); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bordo); }
+    .loader-text { margin-top: 18px; font-family: var(--fonte-cartaz); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta); }
 
     #toast-container { position: fixed; bottom: 28px; right: 28px; z-index: 9998; display: flex; flex-direction: column; gap: 10px; }
     .toast {
@@ -196,7 +190,7 @@
     .toast.success { border-color: var(--navalha); }
     .toast.error { border-color: var(--perigo); }
     .toast.info { border-color: var(--latao); }
-    .toast-icon { font-size: 1.1rem; color: var(--bordo); }
+    .toast-icon { font-size: 1.1rem; color: var(--tinta); }
     .toast-msg { flex: 1; font-size: 0.85rem; line-height: 1.5; }
 
     /* ================= HEADER MOBILE ================= */
@@ -208,7 +202,7 @@
         right: 0;
         height: 60px;
         background: var(--tinta);
-        border-bottom: 1px solid rgba(185,144,47,0.25);
+        border-bottom: 1px solid rgba(201,168,117,0.25);
         z-index: 101;
         align-items: center;
         padding: 0 16px;
@@ -267,35 +261,13 @@
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(24, 23, 27, 0.5);
+        background: rgba(26, 44, 80, 0.5);
         z-index: 99;
         backdrop-filter: blur(4px);
     }
 
     .sidebar-overlay.active {
         display: block;
-    }
-
-    /* ================= SIDEBAR RESPONSIVE ================= */
-    #sidebar {
-        position: fixed;
-        left: 0;
-        top: 5px;
-        bottom: 0;
-        width: 72px;
-        background: var(--tinta);
-        border-right: 1px solid rgba(185,144,47,0.25);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 22px 0;
-        z-index: 100;
-        transition: width .3s ease;
-        overflow: hidden;
-    }
-
-    #sidebar:hover {
-        width: 220px;
     }
 
     /* ================= MOBILE RESPONSIVE ================= */
@@ -460,7 +432,7 @@
       <span class="hamburger-line"></span>
       <span class="hamburger-line"></span>
     </button>
-    <div class="mobile-logo">Om<span class="mobile-logo-text">inus</span></div>
+    <div class="mobile-logo">Mun<span class="mobile-logo-text">iz</span></div>
   </div>
 
   <!-- SIDEBAR OVERLAY -->
@@ -477,7 +449,7 @@
 
   <!-- SIDEBAR -->
   <nav id="sidebar">
-    <div class="sidebar-logo"><span class="sidebar-logo-icon">Om</span><span>inus</span></div>
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">Mun</span><span>iz</span></div>
 
     <!-- Clientes (ativo nesta página) -->
     <a href="clientes.html" class="nav-item active">
@@ -596,7 +568,6 @@
         let data = await response.json();
         let lista = [];
 
-        // Extrai array de várias estruturas possíveis
         if (Array.isArray(data)) {
           lista = data;
         } else if (data && typeof data === 'object') {
@@ -651,7 +622,6 @@
     function renderizarTabela() {
       const tbody = document.getElementById('table-body');
 
-      // Aplica filtro
       let dados = clientes;
       if (filtro.trim()) {
         const termo = filtro.trim().toLowerCase();
@@ -661,7 +631,6 @@
         );
       }
 
-      // Ordena por visitas (decrescente)
       dados.sort((a, b) => b.visitas - a.visitas);
 
       if (dados.length === 0) {
@@ -674,7 +643,6 @@
       dados.forEach(cliente => {
         const tr = document.createElement('tr');
 
-        // Badge de status
         let badgeClass = 'badge-info';
         let badgeText = 'Novo';
         if (cliente.visitas >= 5) {
@@ -685,7 +653,6 @@
           badgeText = 'Frequente';
         }
 
-        // Link do WhatsApp
         let wppLink = '—';
         if (cliente.whatsapp) {
           const cleanNumber = cliente.whatsapp.replace(/\D/g, '');
@@ -699,7 +666,7 @@
         tr.innerHTML = `
           <td><strong>${cliente.nome}</strong></td>
           <td>${wppLink}</td>
-          <td style="text-align:center; font-family:var(--fonte-dados); font-weight:600; color:var(--bordo);">${cliente.visitas}</td>
+          <td style="text-align:center; font-family:var(--fonte-dados); font-weight:600; color:var(--latao-escuro);">${cliente.visitas}</td>
           <td style="text-align:center;"><span class="badge ${badgeClass}">${badgeText}</span></td>
         `;
         tbody.appendChild(tr);
@@ -717,16 +684,13 @@
 
     // ================= EVENTOS =================
     document.addEventListener('DOMContentLoaded', () => {
-      // Carrega clientes automaticamente
       carregarClientes();
 
-      // Busca em tempo real
       document.getElementById('searchInput').addEventListener('input', function() {
         filtro = this.value;
         renderizarTabela();
       });
 
-      // Menu hambúrguer (mesmo do index)
       const hamburger = document.getElementById('hamburger-btn');
       const overlay = document.getElementById('sidebar-overlay');
       const sidebar = document.getElementById('sidebar');
@@ -748,12 +712,10 @@
       hamburger.addEventListener('click', toggleMenu);
       overlay.addEventListener('click', closeMenu);
 
-      // Fecha o menu ao clicar em qualquer nav-item
       document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', closeMenu);
       });
 
-      // Fecha o menu ao redimensionar para desktop
       window.addEventListener('resize', () => {
         if (window.innerWidth > 880) {
           closeMenu();

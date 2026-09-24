@@ -3,40 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUNIZ STUDIO — Gestão</title>
+  <title>MUNIZ STUDIO — Financeiro</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="image.png" />
-  
-  <!-- Manifest PWA -->
   <link rel="manifest" href="manifest.json" />
-  
-  <!-- iOS (iPhone/iPad) -->
   <link rel="apple-touch-icon" href="image.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="image.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Muniz" />
-  
-  <!-- Android/Chrome -->
-  <meta name="theme-color" content="#18171b" />
+  <meta name="theme-color" content="#1a2c50" />
   <meta name="mobile-web-app-capable" content="yes" />
+
  <style>
     :root {
-        --tinta: #18171b;
-        --tinta-suave: #2a2831;
-        --pedra: #efeee7;
+        /* ====== PALETA MUNIZ STUDIO (navy + gold) ====== */
+        --tinta: #1a2c50;
+        --tinta-suave: #253862;
+        --pedra: #f0e9db;
         --pedra-card: #ffffff;
-        --latao: #b9902f;
-        --latao-escuro: #8f6f21;
+        --latao: #c9a875;
+        --latao-escuro: #a88855;
         --bordo: #7a2331;
         --bordo-escuro: #591a24;
         --navalha: #2f5d50;
-        --texto: #201e1b;
+        --texto: #1a1a24;
         --texto-suave: #6b6459;
-        --linha: #ddd8cc;
+        --linha: #ddd4bf;
         --perigo: #a8332a;
+        --info: #3f6a8f;
         --whatsapp: #25D366;
 
         --fonte-cartaz: 'Oswald', sans-serif;
@@ -45,8 +41,8 @@
 
         --radius: 10px;
         --radius-peq: 6px;
-        --sombra: 0 8px 24px -12px rgba(24,23,27,0.25);
-        --sombra-forte: 0 20px 48px -18px rgba(24,23,27,0.35);
+        --sombra: 0 8px 24px -12px rgba(26,44,80,0.25);
+        --sombra-forte: 0 20px 48px -18px rgba(26,44,80,0.35);
 
         --faixa: repeating-linear-gradient(
             45deg,
@@ -93,7 +89,7 @@
     input:focus, select:focus { outline: none; border-color: var(--latao); }
     label {
         display: block; font-family: var(--fonte-cartaz); font-size: 0.72rem; font-weight: 600;
-        letter-spacing: 0.06em; text-transform: uppercase; color: var(--bordo); margin-bottom: 7px;
+        letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta); margin-bottom: 7px;
     }
     .form-group { margin-bottom: 16px; }
 
@@ -106,7 +102,7 @@
         right: 0;
         height: 60px;
         background: var(--tinta);
-        border-bottom: 1px solid rgba(185,144,47,0.25);
+        border-bottom: 1px solid rgba(201,168,117,0.25);
         z-index: 101;
         align-items: center;
         padding: 0 16px;
@@ -165,7 +161,7 @@
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(24, 23, 27, 0.5);
+        background: rgba(26, 44, 80, 0.5);
         z-index: 99;
         backdrop-filter: blur(4px);
     }
@@ -182,7 +178,7 @@
         bottom: 0;
         width: 72px;
         background: var(--tinta);
-        border-right: 1px solid rgba(185,144,47,0.25);
+        border-right: 1px solid rgba(201,168,117,0.25);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -238,12 +234,12 @@
     }
 
     .nav-item:hover {
-        background: rgba(185,144,47,0.1);
+        background: rgba(201,168,117,0.1);
         border-left-color: var(--latao-escuro);
     }
 
     .nav-item.active {
-        background: rgba(185,144,47,0.16);
+        background: rgba(201,168,117,0.16);
         border-left-color: var(--latao);
     }
 
@@ -255,14 +251,14 @@
     .nav-icon {
         min-width: 40px;
         text-align: center;
-        color: #a39d8f;
+        color: #8896b0;
         font-size: 1.05rem;
     }
 
     .nav-label {
         font-size: 0.82rem;
         font-weight: 500;
-        color: #a39d8f;
+        color: #8896b0;
         opacity: 0;
         transition: opacity .2s;
     }
@@ -383,7 +379,7 @@
         font-size: 0.85rem;
         font-weight: 600;
         letter-spacing: 0.08em;
-        color: var(--bordo);
+        color: var(--tinta);
         text-transform: uppercase;
         margin-bottom: 18px;
         display: flex;
@@ -455,7 +451,7 @@
         line-height: 1.5;
     }
     .preview-taxa.visible { display: block; }
-    .preview-taxa strong { color: var(--bordo); }
+    .preview-taxa strong { color: var(--tinta); }
 
     /* TABELA */
     .table-wrap {
@@ -473,7 +469,7 @@
         padding: 11px 12px;
         font-family: var(--fonte-cartaz);
         font-size: 0.68rem;
-        color: var(--bordo);
+        color: var(--tinta);
         text-transform: uppercase;
         letter-spacing: 0.04em;
         border-bottom: 2px solid var(--linha);
@@ -510,7 +506,7 @@
     .loader-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(239, 238, 231, 0.92);
+        background: rgba(240, 233, 219, 0.92);
         backdrop-filter: blur(6px);
         display: none;
         align-items: center;
@@ -528,7 +524,7 @@
         height: 56px;
         border-radius: 50%;
         border: 3px solid var(--linha);
-        border-top-color: var(--bordo);
+        border-top-color: var(--tinta);
         animation: spin .8s linear infinite;
     }
 
@@ -544,7 +540,7 @@
         font-size: 0.8rem;
         letter-spacing: 0.1em;
         text-transform: uppercase;
-        color: var(--bordo);
+        color: var(--tinta);
     }
 
     #toast-container {
@@ -727,7 +723,7 @@
     <span class="hamburger-line"></span>
     <span class="hamburger-line"></span>
   </button>
-  <div class="mobile-logo">Om<span class="mobile-logo-text">inus</span></div>
+  <div class="mobile-logo">Mun<span class="mobile-logo-text">iz</span></div>
 </div>
 
 <!-- SIDEBAR OVERLAY -->
@@ -742,18 +738,16 @@
 
   <!-- SIDEBAR -->
   <nav id="sidebar">
-    <div class="sidebar-logo"><span class="sidebar-logo-icon">Om</span><span>inus</span></div>
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">Mun</span><span>iz</span></div>
 
     <a href="clientes-barbeiro.html" class="nav-item">
       <span class="nav-icon">◈</span>
       <span class="nav-label">Clientes</span>
     </a>
-    <a href="financeiro.html"  class="nav-item active">
+    <a href="financeiro.html" class="nav-item active">
       <span class="nav-icon">◎</span>
       <span class="nav-label">Financeiro</span>
     </a>
-
-
   </nav>
 
   <main id="app">
@@ -888,12 +882,10 @@
     hamburgerBtn.addEventListener('click', toggleMenu);
     overlay.addEventListener('click', closeMenu);
 
-    // Fecha o menu ao clicar em qualquer link do sidebar
     document.querySelectorAll('.nav-item').forEach(item => {
       item.addEventListener('click', closeMenu);
     });
 
-    // Fecha o menu ao redimensionar para desktop
     window.addEventListener('resize', () => {
       if (window.innerWidth > 880) {
         closeMenu();
@@ -902,19 +894,12 @@
 
     /* =============================================
        WEBHOOK N8N CONFIG
-       (URLs e método de fetch inalterados - não mexer)
     ============================================= */
     const API_CONFIG = {
       REGISTRAR_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-registrar',
       OBTER_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter'
     };
 
-    /* =============================================
-       TAXAS DE CARTÃO
-       Crédito: 3,09%  |  Débito: 0,89%
-       Aplicadas apenas em ENTRADAS via cartão.
-       O valor líquido (após taxa) é o que vai pro caixa.
-    ============================================= */
     const TAXAS_CARTAO = {
       'Cartão de Crédito': 0.0309,
       'Cartão de Débito': 0.0089
@@ -942,7 +927,7 @@
     }
 
     /* =============================================
-       PREVIEW DE TAXA (mostra em tempo real)
+       PREVIEW DE TAXA
     ============================================= */
     function atualizarPreviewTaxa() {
       const valor = parseFloat(document.getElementById('ent-valor').value) || 0;
@@ -969,10 +954,6 @@
 
     /* =============================================
        PARSING DA RESPOSTA DA DATA TABLE (n8n)
-       A Data Table do n8n retorna as linhas com as
-       chaves em maiúscula: Descricao, Valor, Tipo, Data.
-       Como Categoria e FormaPagamento ainda não existem
-       como colunas na tabela, tratamos como opcionais.
     ============================================= */
     function normalizarLinha(row) {
       return {
@@ -996,7 +977,7 @@
     }
 
     /* =============================================
-       CARREGAR CAIXA DO DIA AO ABRIR A PÁGINA
+       CARREGAR CAIXA DO DIA
     ============================================= */
     async function carregarCaixaDoDia() {
       showLoader('CARREGANDO CAIXA...');
@@ -1028,7 +1009,6 @@
       }
     }
 
-    // Registrar Entrada ou Saída
     async function registrarMovimentacao(event, tipo) {
       event.preventDefault();
 
@@ -1051,11 +1031,6 @@
         return;
       }
 
-      /* =============================================
-         APLICAÇÃO DA TAXA DE CARTÃO (apenas entradas)
-         Crédito: 3,09%  |  Débito: 0,89%
-         O valor enviado ao webhook é o LÍQUIDO.
-      ============================================= */
       let valorBruto = valor;
       let valorTaxa = 0;
       let valorFinal = valor;
@@ -1069,7 +1044,7 @@
       }
 
       const payload = {
-        tipo, // 'entrada' ou 'saida'
+        tipo,
         categoria,
         descricao,
         valor: parseFloat(valorFinal.toFixed(2)),
@@ -1077,7 +1052,6 @@
         data_hora: new Date().toISOString()
       };
 
-      // Campos extras de rastreio da taxa (opcional — n8n pode ignorar)
       if (valorTaxa > 0) {
         payload.valor_bruto = parseFloat(valorBruto.toFixed(2));
         payload.taxa_cartao = parseFloat(valorTaxa.toFixed(2));
@@ -1123,7 +1097,6 @@
       }
     }
 
-    // Recalcular totais e atualizar tabela
     function atualizarTela() {
       let totalEntradas = 0;
       let totalSaidas = 0;
@@ -1167,7 +1140,6 @@
       document.getElementById('kpi-pix-dinheiro').textContent = formatMoeda(pixDinheiro);
     }
 
-    // Busca o extrato do dia assim que a página carrega
     document.addEventListener('DOMContentLoaded', carregarCaixaDoDia);
   </script>
 </body>

@@ -3,39 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUNIZ STUDIO — Gestão</title>
+  <title>MUNIZ STUDIO — Agendamento</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="image.png" />
-  
-  <!-- Manifest PWA -->
   <link rel="manifest" href="manifest.json" />
-  
-  <!-- iOS (iPhone/iPad) -->
   <link rel="apple-touch-icon" href="image.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="image.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Muniz" />
-  
-  <!-- Android/Chrome -->
-  <meta name="theme-color" content="#18171b" />
+  <meta name="theme-color" content="#1a2c50" />
   <meta name="mobile-web-app-capable" content="yes" />
 <style>
     :root {
-        --tinta: #18171b;
-        --tinta-suave: #2a2831;
-        --pedra: #efeee7;
+        /* ====== PALETA MUNIZ STUDIO (navy + gold) ====== */
+        --tinta: #1a2c50;
+        --tinta-suave: #253862;
+        --pedra: #f0e9db;
         --pedra-card: #ffffff;
-        --latao: #b9902f;
-        --latao-escuro: #8f6f21;
+        --latao: #c9a875;
+        --latao-escuro: #a88855;
         --bordo: #7a2331;
         --bordo-escuro: #591a24;
         --navalha: #2f5d50;
-        --texto: #201e1b;
+        --texto: #1a1a24;
         --texto-suave: #6b6459;
-        --linha: #ddd8cc;
+        --linha: #ddd4bf;
         --perigo: #a8332a;
 
         --fonte-cartaz: 'Oswald', sans-serif;
@@ -44,8 +38,8 @@
 
         --radius: 10px;
         --radius-peq: 6px;
-        --sombra: 0 8px 24px -12px rgba(24,23,27,0.25);
-        --sombra-forte: 0 20px 48px -18px rgba(24,23,27,0.35);
+        --sombra: 0 8px 24px -12px rgba(26,44,80,0.25);
+        --sombra-forte: 0 20px 48px -18px rgba(26,44,80,0.35);
 
         --faixa: repeating-linear-gradient(
             45deg,
@@ -92,10 +86,10 @@
     }
     .carrossel-ponto.ativo { background: var(--latao); }
     .carrossel-seta {
-        position: absolute; top: 50%; transform: translateY(-50%); background: rgba(24,23,27,0.6); color: var(--pedra);
+        position: absolute; top: 50%; transform: translateY(-50%); background: rgba(26,44,80,0.6); color: var(--pedra);
         border: none; font-size: 24px; padding: 10px 15px; cursor: pointer; transition: background 0.3s; z-index: 10;
     }
-    .carrossel-seta:hover { background: rgba(24,23,27,0.8); }
+    .carrossel-seta:hover { background: rgba(26,44,80,0.85); }
     .carrossel-seta.esq { left: 15px; }
     .carrossel-seta.dir { right: 15px; }
 
@@ -114,7 +108,7 @@
         background-blend-mode: soft-light;
         position: relative;
     }
-    .capa::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(24,23,27,0.55), rgba(24,23,27,0.85)); }
+    .capa::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(26,44,80,0.55), rgba(26,44,80,0.85)); }
 
     .perfil-cabecalho { max-width: 1080px; margin: 0 auto; padding: 0 24px; position: relative; }
     .perfil-selo {
@@ -129,11 +123,11 @@
     .perfil-info__acoes { display: flex; gap: 10px; flex-wrap: wrap; }
 
     .btn-cta {
-        display: inline-block; background: var(--bordo); color: #fff; font-family: var(--fonte-cartaz);
+        display: inline-block; background: var(--tinta); color: #fff; font-family: var(--fonte-cartaz);
         text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.85rem; padding: 12px 24px;
         border-radius: var(--radius-peq); border: none; cursor: pointer; transition: background .15s, transform .12s;
     }
-    .btn-cta:hover { background: var(--bordo-escuro); }
+    .btn-cta:hover { background: var(--tinta-suave); }
     .btn-cta:active { transform: scale(0.98); }
     .btn-cta--fantasma { background: transparent; border: 2px solid var(--linha); color: var(--texto-suave); }
     .btn-cta--fantasma:hover { border-color: var(--texto-suave); }
@@ -172,7 +166,7 @@
         cursor: pointer; border-bottom: 3px solid transparent; transition: color .15s, border-color .15s;
     }
     .aba:hover { color: var(--texto); }
-    .aba.ativa { color: var(--bordo); border-color: var(--bordo); }
+    .aba.ativa { color: var(--tinta); border-color: var(--tinta); }
 
     .painel-aba { display: none; }
     .painel-aba.ativa { display: block; animation: fadeIn .3s ease; }
@@ -187,16 +181,16 @@
     .servico-linha:hover { border-color: var(--latao); box-shadow: var(--sombra); }
     .servico-linha__nome { font-family: var(--fonte-cartaz); font-size: 1.02rem; color: var(--tinta); text-transform: none; letter-spacing: 0; }
     .servico-linha__meta { font-size: 0.8rem; color: var(--texto-suave); margin-top: 3px; }
-    .servico-linha__preco { font-family: var(--fonte-dados); color: var(--bordo); font-weight: 600; margin-right: 6px; white-space: nowrap; }
+    .servico-linha__preco { font-family: var(--fonte-dados); color: var(--latao-escuro); font-weight: 600; margin-right: 6px; white-space: nowrap; }
     .servico-linha__acao { display: flex; align-items: center; gap: 14px; }
     .btn-agendar-linha {
         background: var(--tinta); color: var(--pedra); border: none; padding: 9px 18px; border-radius: var(--radius-peq);
         font-family: var(--fonte-cartaz); text-transform: uppercase; letter-spacing: 0.03em; font-size: 0.78rem; cursor: pointer; transition: background .15s;
     }
-    .btn-agendar-linha:hover { background: var(--bordo); }
+    .btn-agendar-linha:hover { background: var(--tinta-suave); }
 
     .secao-titulo { font-family: var(--fonte-cartaz); text-transform: uppercase; letter-spacing: 0.03em; color: var(--tinta); font-size: 1.15rem; margin: 0 0 16px; }
-    .categoria-titulo { font-family: var(--fonte-cartaz); text-transform: uppercase; letter-spacing: 0.04em; color: var(--bordo); font-size: 0.85rem; margin: 22px 0 10px; }
+    .categoria-titulo { font-family: var(--fonte-cartaz); text-transform: uppercase; letter-spacing: 0.04em; color: var(--tinta); font-size: 0.85rem; margin: 22px 0 10px; }
     .categoria-titulo:first-of-type { margin-top: 0; }
 
     /* ---------- cartões de opção (profissional) ---------- */
@@ -206,7 +200,7 @@
         padding: 14px 12px; text-align: center; cursor: pointer; transition: border-color .15s, transform .15s, box-shadow .15s;
     }
     .cartao-opcao:hover { border-color: var(--latao); transform: translateY(-2px); box-shadow: var(--sombra); }
-    .cartao-opcao.selecionado { border-color: var(--bordo); background: #fbf3ee; box-shadow: var(--sombra); }
+    .cartao-opcao.selecionado { border-color: var(--tinta); background: #eef1f6; box-shadow: var(--sombra); }
     .cartao-opcao__foto { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; margin: 0 auto 10px; display: block; }
     .cartao-opcao__nome { font-family: var(--fonte-cartaz); font-size: 0.95rem; text-transform: none; letter-spacing: 0; color: var(--tinta); }
 
@@ -223,7 +217,7 @@
 
     .info-linha { display: flex; gap: 10px; font-size: 0.86rem; color: var(--texto); padding: 8px 0; border-bottom: 1px solid var(--linha); }
     .info-linha:last-child { border-bottom: none; }
-    .info-linha__icone { color: var(--latao); flex-shrink: 0; }
+    .info-linha__icone { color: var(--latao-escuro); flex-shrink: 0; }
     .lista-horarios { list-style: none; margin: 0; padding: 0; font-size: 0.86rem; }
     .lista-horarios li { display: flex; justify-content: space-between; padding: 5px 0; color: var(--texto); }
     .lista-horarios li span:first-child { color: var(--texto-suave); }
@@ -234,7 +228,7 @@
     /* ================= PAINEL DE AGENDAMENTO (wizard) ================= */
     #secao-agendamento { display: none; }
     .agendamento-voltar { display: inline-flex; align-items: center; gap: 6px; color: var(--texto-suave); font-size: 0.85rem; margin-bottom: 18px; cursor: pointer; background: none; border: none; font-family: inherit; }
-    .agendamento-voltar:hover { color: var(--bordo); }
+    .agendamento-voltar:hover { color: var(--tinta); }
 
     .wizard-caixa { background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); padding: 26px; box-shadow: var(--sombra); position: relative; overflow: hidden; }
     .wizard-caixa::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: var(--faixa); background-size: 56px 56px; }
@@ -246,7 +240,7 @@
     .wizard__legenda span { flex: 1; text-align: center; }
     .wizard__legenda span:first-child { text-align: left; }
     .wizard__legenda span:last-child { text-align: right; }
-    .wizard__legenda span.atual { color: var(--bordo); font-weight: 700; }
+    .wizard__legenda span.atual { color: var(--tinta); font-weight: 700; }
 
     .step { display: none; }
     .step.active { display: block; animation: fadeIn 0.35s ease; }
@@ -254,10 +248,10 @@
     .step__titulo { font-family: var(--fonte-cartaz); color: var(--tinta); text-transform: uppercase; letter-spacing: 0.02em; font-size: 1.15rem; margin: 0 0 4px; }
     .step__subtitulo { color: var(--texto-suave); font-size: 0.85rem; margin: 0 0 18px; }
 
-    label { display: block; margin-bottom: 12px; font-family: var(--fonte-cartaz); font-weight: 500; color: var(--bordo); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    label { display: block; margin-bottom: 12px; font-family: var(--fonte-cartaz); font-weight: 500; color: var(--tinta); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
     input, select { width: 100%; padding: 12px 14px; background: var(--pedra); border: 2px solid var(--linha); border-radius: var(--radius-peq); color: var(--texto); margin-bottom: 18px; font-family: var(--fonte-corpo); font-size: 0.95rem; transition: border-color .15s; }
     input:focus, select:focus { outline: none; border-color: var(--latao); }
-    input::placeholder { color: #a39d8f; }
+    input::placeholder { color: #a89e8f; }
 
     .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; background: var(--tinta); padding: 10px 14px; border-radius: var(--radius-peq); }
     .calendar-header span { font-family: var(--fonte-dados); color: var(--pedra); font-size: 0.9rem; text-transform: capitalize; }
@@ -265,34 +259,34 @@
     .calendar-header button:hover { color: var(--pedra); }
 
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-    .weekday { color: var(--bordo); font-size: 0.68rem; font-weight: 700; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.03em; }
+    .weekday { color: var(--tinta); font-size: 0.68rem; font-weight: 700; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.03em; }
     .day { padding: 12px 0; border-radius: var(--radius-peq); cursor: pointer; transition: all .15s; font-size: 0.9rem; font-family: var(--fonte-dados); background: var(--pedra); border: 2px solid transparent; color: var(--texto); }
     .day:hover:not(.empty) { border-color: var(--latao); }
-    .day.selected { background: var(--bordo); color: #fff; font-weight: 600; border-color: var(--bordo); }
+    .day.selected { background: var(--tinta); color: #fff; font-weight: 600; border-color: var(--tinta); }
     .day.today { border-color: var(--latao); color: var(--latao-escuro); font-weight: 600; }
     .day.empty { background: transparent; cursor: default; }
 
     .time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
     .time-slot { padding: 12px; background: var(--pedra); border: 2px solid var(--linha); border-radius: var(--radius-peq); text-align: center; cursor: pointer; font-size: 0.85rem; font-family: var(--fonte-dados); transition: all .15s; color: var(--texto); }
     .time-slot:hover:not(.ocupado) { border-color: var(--latao); }
-    .time-slot.selected { background: var(--bordo); color: #fff; border-color: var(--bordo); font-weight: 600; }
-    .time-slot.ocupado { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; border-color: var(--linha); color: var(--texto-suave); pointer-events: none; background: #e6e3d9; }
+    .time-slot.selected { background: var(--tinta); color: #fff; border-color: var(--tinta); font-weight: 600; }
+    .time-slot.ocupado { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; border-color: var(--linha); color: var(--texto-suave); pointer-events: none; background: #e6e0d2; }
 
     .resumo-caixa { background: var(--tinta); color: var(--pedra); border-radius: var(--radius); padding: 20px; margin-bottom: 18px; }
-    .resumo-caixa__linha { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #3a3843; font-size: 0.9rem; gap: 12px; }
+    .resumo-caixa__linha { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(201,168,117,0.25); font-size: 0.9rem; gap: 12px; }
     .resumo-caixa__linha:last-child { border-bottom: none; }
-    .resumo-caixa__linha span:first-child { color: #a39d8f; }
+    .resumo-caixa__linha span:first-child { color: #8896b0; }
     .resumo-caixa__linha span:last-child { text-align: right; font-family: var(--fonte-dados); }
 
-    .btn { width: 100%; padding: 15px; background: var(--bordo); border: none; border-radius: var(--radius-peq); color: #fff; font-family: var(--fonte-cartaz); font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 8px; transition: background .15s, transform .12s; font-size: 0.92rem; }
-    .btn:hover:not(:disabled) { background: var(--bordo-escuro); }
+    .btn { width: 100%; padding: 15px; background: var(--tinta); border: none; border-radius: var(--radius-peq); color: #fff; font-family: var(--fonte-cartaz); font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 8px; transition: background .15s, transform .12s; font-size: 0.92rem; }
+    .btn:hover:not(:disabled) { background: var(--tinta-suave); }
     .btn:active:not(:disabled) { transform: scale(0.98); }
     .btn:disabled { background: #cfc9bb; color: #8a8577; cursor: not-allowed; }
     .btn-outline { background: transparent; border: 2px solid var(--linha); color: var(--texto-suave); margin-top: 8px; font-size: 0.78rem; padding: 10px; text-transform: none; letter-spacing: 0.02em; font-family: var(--fonte-corpo); font-weight: 600; }
     .btn-outline:hover { border-color: var(--texto-suave); background: transparent; }
 
     .events-list-container { margin-top: 20px; }
-    .selected-date-title { font-family: var(--fonte-cartaz); color: var(--bordo); font-size: 1.05rem; margin-bottom: 14px; text-align: center; text-transform: uppercase; }
+    .selected-date-title { font-family: var(--fonte-cartaz); color: var(--tinta); font-size: 1.05rem; margin-bottom: 14px; text-align: center; text-transform: uppercase; }
 
     #step-sucesso .selo-sucesso { width: 64px; height: 64px; margin: 0 auto 18px; border-radius: 50%; background: var(--navalha); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.8rem; }
     #step-sucesso h2 { font-family: var(--fonte-cartaz); color: var(--tinta); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 8px; text-align:center; }
@@ -303,7 +297,7 @@
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.5);
+        background: rgba(26,44,80,0.55);
         backdrop-filter: blur(4px);
         z-index: 1000;
         justify-content: center;
@@ -358,8 +352,8 @@
     .modal .btn-fechar:hover { color: var(--tinta); }
     .modal .form-group { margin-bottom: 14px; }
     .modal .form-group label { display: block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--texto-suave); margin-bottom: 4px; }
-    .modal .btn-enviar { width: 100%; padding: 14px; background: var(--bordo); color: #fff; border: none; border-radius: var(--radius-peq); font-family: var(--fonte-cartaz); font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; transition: background .15s; margin-top: 6px; cursor: pointer; }
-    .modal .btn-enviar:hover { background: var(--bordo-escuro); }
+    .modal .btn-enviar { width: 100%; padding: 14px; background: var(--tinta); color: #fff; border: none; border-radius: var(--radius-peq); font-family: var(--fonte-cartaz); font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; transition: background .15s; margin-top: 6px; cursor: pointer; }
+    .modal .btn-enviar:hover { background: var(--tinta-suave); }
 
     /* ================= MEUS AGENDAMENTOS — LISTA ================= */
     .meus-agend-lista { display: flex; flex-direction: column; gap: 12px; }
@@ -389,7 +383,7 @@
     .meus-agend-item__data {
         font-family: var(--fonte-dados);
         font-weight: 600;
-        color: var(--bordo);
+        color: var(--tinta);
         font-size: 0.95rem;
     }
     .meus-agend-item__hora {
@@ -423,11 +417,11 @@
         transition: all .15s;
     }
     .btn-mini--remarcar {
-        background: #f5f0e4;
+        background: #faf4e6;
         border: 1px solid var(--latao);
         color: var(--latao-escuro);
     }
-    .btn-mini--remarcar:hover { background: #ebe3cc; }
+    .btn-mini--remarcar:hover { background: #f0e6cc; }
     .btn-mini--desmarcar {
         background: #fbeceb;
         border: 1px solid var(--perigo);
@@ -446,7 +440,7 @@
     }
     .meus-agend-vazio .icone {
         font-size: 2rem;
-        color: var(--latao);
+        color: var(--latao-escuro);
         margin-bottom: 8px;
     }
 
@@ -464,7 +458,7 @@
         margin-bottom: 6px;
     }
     .meus-agend-tag.passado {
-        background: #f5efe0;
+        background: #faf4e6;
         color: var(--latao-escuro);
         border-color: var(--latao);
     }
@@ -472,7 +466,7 @@
     .aviso-filtro {
         font-size: 0.8rem;
         color: var(--texto-suave);
-        background: #faf6ec;
+        background: #faf4e6;
         border-left: 3px solid var(--latao);
         padding: 10px 14px;
         border-radius: var(--radius-peq);
@@ -481,7 +475,7 @@
     }
 
     /* ================= RODAPÉ ================= */
-    footer { background: var(--tinta); color: #a39d8f; padding: 26px 24px; text-align: center; font-size: 0.82rem; }
+    footer { background: var(--tinta); color: #8896b0; padding: 26px 24px; text-align: center; font-size: 0.82rem; }
     footer strong { color: var(--pedra); }
 </style>
 </head>
@@ -491,7 +485,7 @@
 
 <header class="navbar">
     <div class="navbar__conteudo">
-        <div class="navbar__marca">Ominus<span>Tech</span></div>
+        <div class="navbar__marca">Mun<span>iz</span></div>
     </div>
 </header>
 
@@ -767,9 +761,9 @@
 
             <!-- ---------- ABA: SOBRE ---------- -->
             <section class="painel-aba" data-painel="sobre">
-                <h2 class="secao-titulo">Sobre a Ominus Tech</h2>
+                <h2 class="secao-titulo">Sobre a Muniz Studio</h2>
                 <p class="sobre-texto">
-                    Bem-vindo à Ominus Tech, barbearia localizada no Dão Silveira Mall, em Lagoa Seca,
+                    Bem-vindo à Muniz Studio, barbearia localizada no Dão Silveira Mall, em Lagoa Seca,
                     Natal - RN. Edite este texto com a história, o diferencial e o estilo de atendimento
                     da barbearia.
                 </p>
@@ -791,7 +785,7 @@
                     <span>(84) 98831-2098</span>
                 </div>
                 <div class="info-linha">
-                    <a href="https://maps.google.com/maps?daddr=Avenida+Prudente+de+Morais,+2700,+Dão+Silveira+Mall,+Loja+4,+Lagoa+Seca,+Natal,+RN+-+59022-305" target="_blank" rel="noopener" style="color: var(--bordo); font-weight:600;">Ver no mapa →</a>
+                    <a href="https://maps.google.com/maps?daddr=Avenida+Prudente+de+Morais,+2700,+Dão+Silveira+Mall,+Loja+4,+Lagoa+Seca,+Natal,+RN+-+59022-305" target="_blank" rel="noopener" style="color: var(--tinta); font-weight:600;">Ver no mapa →</a>
                 </div>
             </div>
 
@@ -825,8 +819,8 @@
 </main>
 
 <footer>
-    <strong>Ominus Tech</strong> — Agendamento online<br>
-    © <span id="ano-atual"></span> Ominus Tech. Todos os direitos reservados.
+    <strong>Muniz Studio</strong> — Agendamento online<br>
+    © <span id="ano-atual"></span> Muniz Studio. Todos os direitos reservados.
 </footer>
 
 <!-- ================= MODAL: MEUS AGENDAMENTOS ================= -->
@@ -899,7 +893,6 @@ function salvarMeusAgendamentos(lista) {
 
 function adicionarMeuAgendamento(ag) {
     const lista = carregarMeusAgendamentos();
-    // Evita duplicar (mesma data + hora + whatsapp + barbeiro)
     const chaveNova = `${ag.whatsapp}|${ag.data}|${ag.hora}|${ag.barbeiro}`;
     const existe = lista.some(item => `${item.whatsapp}|${item.data}|${item.hora}|${item.barbeiro}` === chaveNova);
     if (existe) return;
@@ -929,7 +922,6 @@ function atualizarBadgeMeus() {
     const lista = carregarMeusAgendamentos();
     const badge = document.getElementById('badge-count-meus');
     if (!badge) return;
-    // Só mostra agendamentos futuros
     const hojeStr = new Date().toISOString().slice(0, 10);
     const futuros = lista.filter(a => a.data >= hojeStr);
     if (futuros.length > 0) {
@@ -953,10 +945,8 @@ function abrirModalMeusAgendamentos() {
     document.getElementById('meusAgendLista').style.display = 'none';
     document.getElementById('meusAgendSub').textContent = 'Digite seu WhatsApp para ver seus agendamentos';
 
-    // Se já tem número salvo no localStorage de alguma reserva, pré-preenche
     const lista = carregarMeusAgendamentos();
     if (lista.length > 0 && !document.getElementById('meusAgendWhats').value) {
-        // Pega o whatsapp do agendamento mais recente
         const ultimo = lista[lista.length - 1];
         document.getElementById('meusAgendWhats').value = ultimo.whatsapp || '';
     }
@@ -986,7 +976,6 @@ function filtraMeusAgendamentos() {
     }
 
     const lista = carregarMeusAgendamentos();
-    // Filtra por WhatsApp normalizado OU pelo valor cru (tolerância)
     const filtrados = lista.filter(a => {
         const aNorm = normalizarTelefone(a.whatsapp);
         const aRaw = String(a.whatsapp || '').replace(/\D/g, '');
@@ -994,7 +983,6 @@ function filtraMeusAgendamentos() {
         return aNorm === telNorm || aRaw === telDig || aRaw.endsWith(telDig) || telDig.endsWith(aRaw);
     });
 
-    // Ordena por data + hora (mais próximo primeiro)
     filtrados.sort((a, b) => {
         const ka = `${a.data} ${a.hora}`;
         const kb = `${b.data} ${b.hora}`;
@@ -1061,7 +1049,6 @@ function renderizarListaMeus(lista) {
 async function desmarcarMeuAgendamento(idx, data, hora, barbeiro, servico) {
     if (!confirm(`Tem certeza que deseja desmarcar o agendamento das ${hora} do dia ${formatarDataBR(data)}?`)) return;
 
-    // Desabilita botões visualmente
     const whatsEl = document.getElementById('meusAgendWhats');
     const telNorm = normalizarTelefone(whatsEl.value);
 
@@ -1078,20 +1065,17 @@ async function desmarcarMeuAgendamento(idx, data, hora, barbeiro, servico) {
         });
 
         if (resp.ok) {
-            // Remove do local storage pelo whatsapp + data + hora + barbeiro
             const lista = carregarMeusAgendamentos();
             const alvo = lista.find(a => a.data === data && a.hora === hora && a.barbeiro === barbeiro);
             if (alvo) {
                 removerMeuAgendamento(alvo.whatsapp, data, hora, barbeiro);
             } else {
-                // fallback: remove por data/hora/barbeiro
                 const novaLista = lista.filter(a => !(a.data === data && a.hora === hora && a.barbeiro === barbeiro));
                 salvarMeusAgendamentos(novaLista);
                 atualizarBadgeMeus();
             }
 
             alert('✅ Agendamento desmarcado com sucesso!');
-            // Recarrega a lista no modal
             filtraMeusAgendamentos();
         } else {
             alert('Não foi possível desmarcar o agendamento. Tente novamente.');
@@ -1114,9 +1098,8 @@ function remarcarMeuAgendamento(idx) {
     const ag = lista[idx];
     if (!ag) return;
 
-    if (!confirm(`Você vai desmarcar o agendamento atual (${ag.hora} do dia ${formatDataBR(ag.data)}) para escolher outro horário. Continuar?`)) return;
+    if (!confirm(`Você vai desmarcar o agendamento atual (${ag.hora} do dia ${formatarDataBR(ag.data)}) para escolher outro horário. Continuar?`)) return;
 
-    // Desmarca o antigo (sem confirmação dupla)
     desmarcarParaRemarcar(ag);
 }
 
@@ -1137,7 +1120,6 @@ async function desmarcarParaRemarcar(ag) {
             removerMeuAgendamento(ag.whatsapp, ag.data, ag.hora, ag.barbeiro);
             fecharModalMeusAgendamentos();
 
-            // Abre o wizard já com o serviço e profissional pré-selecionados
             document.getElementById('servico').value = ag.servico;
             document.getElementById('barbeiro').value = ag.barbeiro;
             document.getElementById('nome').value = ag.nome || '';
@@ -1146,7 +1128,6 @@ async function desmarcarParaRemarcar(ag) {
             document.getElementById('secao-servicos').style.display = 'none';
             document.getElementById('secao-agendamento').style.display = 'block';
 
-            // Marca o cartão do barbeiro como selecionado visualmente
             document.querySelectorAll('#lista-barbeiros .cartao-opcao').forEach((card) => {
                 const nomeCard = card.querySelector('.cartao-opcao__nome').textContent.trim().toLowerCase();
                 const alvo = (ag.barbeiro === 'Igor') ? 'igor muniz' : (ag.barbeiro === 'Anderson' ? 'anderson' : '');
@@ -1155,7 +1136,6 @@ async function desmarcarParaRemarcar(ag) {
                 }
             });
 
-            // Vai direto pro passo de escolher data
             nextStep(1);
         } else {
             alert('Não foi possível remarcar. Tente novamente.');
@@ -1210,7 +1190,7 @@ function atualizarSlide() {
 inicializarCarrossel();
 
 /* ---------------------------------------------------------------
- * Abaixo: SOMENTE navegação/visual
+ * Navegação / visual
  * ------------------------------------------------------------- */
 function mostrarAba(nome) {
     document.querySelectorAll('.aba').forEach((el) => el.classList.toggle('ativa', el.dataset.aba === nome));
@@ -1231,7 +1211,7 @@ function voltarServicos() {
 }
 
 /* ---------------------------------------------------------------
- * Equipe da Ominus Tech — Barbeiros cadastrados
+ * Equipe da Muniz Studio — Barbeiros cadastrados
  * ------------------------------------------------------------- */
 const BARBEIROS = [
     { id: 'Anderson', nome: 'Anderson', foto: 'anderson.png' },
@@ -1474,9 +1454,6 @@ async function enviarAgendamento() {
         }
 
         if (response.ok) {
-            // ============================================
-            // SALVA LOCALMENTE PARA O CLIENTE PODER DESMARCAR DEPOIS
-            // ============================================
             adicionarMeuAgendamento({
                 nome: nome,
                 whatsapp: zap,
