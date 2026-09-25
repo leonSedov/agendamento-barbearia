@@ -564,6 +564,28 @@
       setTimeout(() => el.remove(), duration);
     }
 
+    // ================= NORMALIZAÇÃO DE WHATSAPP (DDI 55) =================
+    // Adiciona o 55 do Brasil na frente do número, sem duplicar caso já venha com 55.
+    function normalizarWhatsApp(numero) {
+      if (!numero) return '';
+      let clean = String(numero).replace(/\D/g, '');
+
+      // Remove zero inicial (0 + DDD + número → DDD + número)
+      if (clean.startsWith('0')) clean = clean.substring(1);
+
+      // Corrige 5555 duplicado (ex: 555584... → 5584...)
+      while (clean.startsWith('5555')) clean = clean.substring(2);
+
+      // Já tem DDI 55 (12 ou 13 dígitos começando com 55)? Devolve direto.
+      if (clean.length >= 12 && clean.startsWith('55')) return clean;
+
+      // 10 ou 11 dígitos = DDD + número → adiciona 55 na frente
+      if (clean.length === 10 || clean.length === 11) return '55' + clean;
+
+      // Fallback (números curtos ou muito longos): devolve como veio
+      return clean;
+    }
+
     // ================= CARREGAR CLIENTES =================
     async function carregarClientes() {
       const tbody = document.getElementById('table-body');
@@ -668,11 +690,12 @@
           badgeText = 'Frequente';
         }
 
+        // Link do WhatsApp com DDI 55
         let wppLink = '—';
         if (cliente.whatsapp) {
-          const cleanNumber = cliente.whatsapp.replace(/\D/g, '');
-          if (cleanNumber.length >= 10) {
-            wppLink = `<a href="https://wa.me/${cleanNumber}" target="_blank" style="color:var(--whatsapp); font-weight:600; text-decoration:none;">${cliente.whatsapp}</a>`;
+          const numeroCompleto = normalizarWhatsApp(cliente.whatsapp);
+          if (numeroCompleto.length >= 12) {
+            wppLink = `<a href="https://wa.me/${numeroCompleto}" target="_blank" rel="noopener" style="color:var(--whatsapp); font-weight:600; text-decoration:none;">${cliente.whatsapp}</a>`;
           } else {
             wppLink = cliente.whatsapp;
           }
