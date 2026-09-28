@@ -18,7 +18,6 @@
 
  <style>
     :root {
-        /* ====== PALETA MUNIZ STUDIO (navy + gold) ====== */
         --tinta: #1a2c50;
         --tinta-suave: #253862;
         --pedra: #f0e9db;
@@ -93,6 +92,163 @@
     }
     .form-group { margin-bottom: 16px; }
 
+    /* ================= UPLOAD DE COMPROVANTE ================= */
+    .upload-area {
+        position: relative;
+        border: 2px dashed var(--linha);
+        border-radius: var(--radius-peq);
+        background: var(--pedra);
+        padding: 18px 14px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color .15s, background .15s;
+    }
+    .upload-area:hover { border-color: var(--latao); background: #faf6ec; }
+    .upload-area input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border: none;
+    }
+    .upload-area .upload-icon { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+    .upload-area .upload-text {
+        font-size: 0.78rem;
+        color: var(--texto-suave);
+        font-family: var(--fonte-corpo);
+    }
+    .upload-area .upload-text strong { color: var(--tinta); }
+
+    .upload-preview {
+        display: none;
+        margin-top: 10px;
+        position: relative;
+        border: 1px solid var(--linha);
+        border-radius: var(--radius-peq);
+        overflow: hidden;
+        background: #000;
+        max-height: 220px;
+    }
+    .upload-preview.visible { display: block; }
+    .upload-preview img {
+        width: 100%;
+        height: auto;
+        max-height: 220px;
+        object-fit: contain;
+        display: block;
+    }
+    .upload-preview .btn-remover {
+        position: absolute;
+        top: 8px; right: 8px;
+        width: 30px; height: 30px;
+        border-radius: 50%;
+        background: rgba(168, 51, 42, 0.9);
+        color: #fff;
+        border: none;
+        font-size: 1.1rem;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background .15s, transform .15s;
+    }
+    .upload-preview .btn-remover:hover {
+        background: var(--perigo);
+        transform: scale(1.1);
+    }
+
+    /* ================= MODAL VISUALIZAR COMPROVANTE ================= */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(26, 44, 80, 0.75);
+        backdrop-filter: blur(4px);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-comprovante {
+        background: var(--pedra-card);
+        border-radius: var(--radius);
+        max-width: 620px;
+        width: 100%;
+        max-height: 92vh;
+        overflow-y: auto;
+        padding: 24px 28px;
+        box-shadow: var(--sombra-forte);
+        position: relative;
+        animation: modalEntrar .25s ease;
+    }
+    @keyframes modalEntrar {
+        from { opacity: 0; transform: translateY(-20px) scale(0.96); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal-comprovante h2 {
+        font-family: var(--fonte-cartaz);
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--tinta);
+        margin-bottom: 6px;
+    }
+    .modal-comprovante .info {
+        color: var(--texto-suave);
+        font-size: 0.84rem;
+        border-bottom: 1px solid var(--linha);
+        padding-bottom: 14px;
+        margin-bottom: 18px;
+        line-height: 1.6;
+    }
+    .modal-comprovante .info strong { color: var(--tinta); }
+    .modal-comprovante img {
+        width: 100%;
+        height: auto;
+        border-radius: var(--radius-peq);
+        border: 1px solid var(--linha);
+        background: #000;
+    }
+    .modal-comprovante .btn-fechar {
+        position: absolute;
+        top: 14px; right: 18px;
+        background: none;
+        border: none;
+        font-size: 1.6rem;
+        line-height: 1;
+        color: var(--texto-suave);
+        padding: 0 6px;
+        cursor: pointer;
+        transition: color .15s;
+    }
+    .modal-comprovante .btn-fechar:hover { color: var(--tinta); }
+
+    /* Botão "Ver" no extrato */
+    .btn-ver-comprovante {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        background: #eaf1f6;
+        color: var(--info);
+        border: 1px solid var(--info);
+        font-family: var(--fonte-cartaz);
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        transition: background .15s, transform .15s;
+    }
+    .btn-ver-comprovante:hover { background: #d8e6f0; transform: scale(1.03); }
+    .sem-comprovante { color: var(--texto-suave); font-size: 0.78rem; }
+
     /* ================= HEADER MOBILE ================= */
     .mobile-header {
         display: none;
@@ -133,11 +289,7 @@
     .hamburger-btn.active .hamburger-line:nth-child(1) {
         transform: rotate(45deg) translate(8px, 8px);
     }
-
-    .hamburger-btn.active .hamburger-line:nth-child(2) {
-        opacity: 0;
-    }
-
+    .hamburger-btn.active .hamburger-line:nth-child(2) { opacity: 0; }
     .hamburger-btn.active .hamburger-line:nth-child(3) {
         transform: rotate(-45deg) translate(7px, -7px);
     }
@@ -152,10 +304,7 @@
         color: var(--pedra);
         white-space: nowrap;
     }
-
-    .mobile-logo-text {
-        color: var(--latao);
-    }
+    .mobile-logo-text { color: var(--latao); }
 
     .sidebar-overlay {
         display: none;
@@ -165,10 +314,7 @@
         z-index: 99;
         backdrop-filter: blur(4px);
     }
-
-    .sidebar-overlay.active {
-        display: block;
-    }
+    .sidebar-overlay.active { display: block; }
 
     /* ================= SIDEBAR ================= */
     #sidebar {
@@ -188,9 +334,7 @@
         overflow: hidden;
     }
 
-    #sidebar:hover {
-        width: 220px;
-    }
+    #sidebar:hover { width: 220px; }
 
     .sidebar-logo {
         font-family: var(--fonte-cartaz);
@@ -206,21 +350,13 @@
         padding: 0 16px;
         margin-bottom: 18px;
     }
-
     .sidebar-logo span:last-child {
         color: var(--latao);
         opacity: 0;
         transition: opacity .2s;
     }
-
-    #sidebar:hover .sidebar-logo span:last-child {
-        opacity: 1;
-    }
-
-    .sidebar-logo-icon {
-        min-width: 40px;
-        display: inline-block;
-    }
+    #sidebar:hover .sidebar-logo span:last-child { opacity: 1; }
+    .sidebar-logo-icon { min-width: 40px; display: inline-block; }
 
     .nav-item {
         width: 100%;
@@ -232,55 +368,18 @@
         border-left: 3px solid transparent;
         white-space: nowrap;
     }
-
-    .nav-item:hover {
-        background: rgba(201,168,117,0.1);
-        border-left-color: var(--latao-escuro);
-    }
-
-    .nav-item.active {
-        background: rgba(201,168,117,0.16);
-        border-left-color: var(--latao);
-    }
-
+    .nav-item:hover { background: rgba(201,168,117,0.1); border-left-color: var(--latao-escuro); }
+    .nav-item.active { background: rgba(201,168,117,0.16); border-left-color: var(--latao); }
     .nav-item.active .nav-icon,
-    .nav-item.active .nav-label {
-        color: var(--latao);
-    }
-
-    .nav-icon {
-        min-width: 40px;
-        text-align: center;
-        color: #8896b0;
-        font-size: 1.05rem;
-    }
-
-    .nav-label {
-        font-size: 0.82rem;
-        font-weight: 500;
-        color: #8896b0;
-        opacity: 0;
-        transition: opacity .2s;
-    }
-
-    #sidebar:hover .nav-label {
-        opacity: 1;
-    }
+    .nav-item.active .nav-label { color: var(--latao); }
+    .nav-icon { min-width: 40px; text-align: center; color: #8896b0; font-size: 1.05rem; }
+    .nav-label { font-size: 0.82rem; font-weight: 500; color: #8896b0; opacity: 0; transition: opacity .2s; }
+    #sidebar:hover .nav-label { opacity: 1; }
 
     /* ================= APP ================= */
-    #app {
-        margin-left: 72px;
-        min-height: 100vh;
-        padding: 36px 40px 60px;
-        max-width: 1180px;
-    }
+    #app { margin-left: 72px; min-height: 100vh; padding: 36px 40px 60px; max-width: 1180px; }
 
-    .page-header {
-        padding: 0 0 24px;
-        border-bottom: 2px solid var(--linha);
-        margin-bottom: 28px;
-    }
-
+    .page-header { padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px; }
     .page-title {
         font-family: var(--fonte-cartaz);
         font-size: 1.9rem;
@@ -289,11 +388,7 @@
         color: var(--tinta);
         margin-bottom: 4px;
     }
-
-    .page-subtitle {
-        color: var(--texto-suave);
-        font-size: 0.88rem;
-    }
+    .page-subtitle { color: var(--texto-suave); font-size: 0.88rem; }
 
     /* KPIS */
     .kpi-grid {
@@ -302,7 +397,6 @@
         gap: 18px;
         margin-bottom: 30px;
     }
-
     .kpi-card {
         background: var(--pedra-card);
         border: 1px solid var(--linha);
@@ -310,7 +404,6 @@
         padding: 20px;
         box-shadow: var(--sombra);
     }
-
     .kpi-title {
         font-family: var(--fonte-cartaz);
         font-size: 0.7rem;
@@ -318,7 +411,6 @@
         color: var(--texto-suave);
         letter-spacing: 0.06em;
     }
-
     .kpi-value {
         font-family: var(--fonte-dados);
         font-size: 1.5rem;
@@ -326,7 +418,6 @@
         margin-top: 8px;
         color: var(--texto);
     }
-
     .kpi-value.green { color: var(--navalha); }
     .kpi-value.red { color: var(--bordo); }
     .kpi-value.gold { color: var(--latao-escuro); }
@@ -338,10 +429,7 @@
         gap: 22px;
         margin-bottom: 30px;
     }
-
-    @media (max-width: 900px) {
-        .grid-2 { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
 
     .card {
         background: var(--pedra-card);
@@ -352,7 +440,6 @@
         position: relative;
         overflow: hidden;
     }
-
     .card::before {
         content: "";
         position: absolute;
@@ -361,7 +448,6 @@
         background: var(--faixa);
         background-size: 48px 48px;
     }
-
     .card-title {
         font-family: var(--fonte-cartaz);
         font-size: 0.85rem;
@@ -374,13 +460,7 @@
         align-items: center;
         gap: 10px;
     }
-
-    .card-title::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: var(--linha);
-    }
+    .card-title::after { content: ""; flex: 1; height: 1px; background: var(--linha); }
 
     /* BOTÕES */
     .btn {
@@ -398,15 +478,11 @@
         transition: background .15s, transform .12s;
         border: none;
     }
-
     .btn:active { transform: scale(0.98); }
-
     .btn-success { background: var(--navalha); color: #fff; }
     .btn-success:hover { background: #24473d; }
-
     .btn-danger { background: var(--bordo); color: #fff; }
     .btn-danger:hover { background: var(--bordo-escuro); }
-
     .btn-full { width: 100%; }
 
     /* PREVIEW DE TAXA CARTÃO */
@@ -470,13 +546,7 @@
 
     /* TABELA */
     .table-wrap { overflow-x: auto; }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.85rem;
-    }
-
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
     th {
         text-align: left;
         padding: 11px 12px;
@@ -487,13 +557,11 @@
         letter-spacing: 0.04em;
         border-bottom: 2px solid var(--linha);
     }
-
     td {
         padding: 11px 12px;
         border-bottom: 1px solid var(--linha);
         color: var(--texto);
     }
-
     .badge {
         display: inline-block;
         padding: 4px 10px;
@@ -502,13 +570,11 @@
         font-weight: 700;
         text-transform: uppercase;
     }
-
     .badge-entrada {
         background: #eaf2ee;
         color: var(--navalha);
         border: 1px solid var(--navalha);
     }
-
     .badge-saida {
         background: #f8ecec;
         color: var(--bordo);
@@ -527,9 +593,7 @@
         flex-direction: column;
         z-index: 9000;
     }
-
     .loader-overlay.visible { display: flex; }
-
     .loader-ring {
         width: 56px;
         height: 56px;
@@ -538,9 +602,7 @@
         border-top-color: var(--tinta);
         animation: spin .8s linear infinite;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
-
     .loader-text {
         margin-top: 18px;
         font-family: var(--fonte-cartaz);
@@ -559,7 +621,6 @@
         flex-direction: column;
         gap: 10px;
     }
-
     .toast {
         padding: 14px 18px;
         background: var(--pedra-card);
@@ -570,7 +631,6 @@
         min-width: 280px;
         box-shadow: var(--sombra-forte);
     }
-
     .toast.success { border-color: var(--navalha); }
     .toast.error { border-color: var(--perigo); }
     .toast.info { border-color: var(--latao); }
@@ -582,9 +642,7 @@
 
         #sidebar {
             position: fixed;
-            left: 0;
-            top: 65px;
-            bottom: 0;
+            left: 0; top: 65px; bottom: 0;
             width: 280px;
             height: auto;
             max-height: calc(100vh - 65px);
@@ -594,19 +652,12 @@
             transition: transform 0.3s ease;
             z-index: 102;
         }
-
         #sidebar.active { transform: translateX(0); }
         #sidebar:hover { width: 280px; }
-
         .sidebar-logo span:last-child { opacity: 1; }
         .nav-label { opacity: 1; }
 
-        #app {
-            margin-left: 0;
-            padding-top: 80px;
-            padding: 80px 16px 40px;
-        }
-
+        #app { margin-left: 0; padding: 80px 16px 40px; }
         .kpi-grid { grid-template-columns: 1fr 1fr; }
         .grid-2 { grid-template-columns: 1fr; }
 
@@ -618,6 +669,8 @@
 
         #toast-container { bottom: 16px; right: 16px; }
         .toast { min-width: 250px; font-size: 0.75rem; padding: 12px 16px; }
+
+        .modal-comprovante { padding: 18px; }
     }
 
     @media (max-width: 520px) {
@@ -703,7 +756,7 @@
         <div class="card-title">Registrar Venda / Entrada</div>
 
         <div class="aviso-data">
-          💡 <strong>Esqueceu de registrar ontem?</strong> Basta alterar o campo "Data do Recebimento" para o dia correto.
+          💡 <strong>Esqueceu de registrar ontem?</strong> Altere a "Data do Recebimento" para o dia correto.
         </div>
 
         <form onsubmit="registrarMovimentacao(event, 'entrada')">
@@ -739,6 +792,20 @@
             <label>Data do Recebimento</label>
             <input type="date" id="ent-data" required />
           </div>
+
+          <div class="form-group">
+            <label>Anexar Comprovante (opcional)</label>
+            <div class="upload-area">
+              <input type="file" id="ent-comprovante" accept="image/*" capture="environment">
+              <span class="upload-icon">📎</span>
+              <div class="upload-text"><strong>Clique para anexar</strong> uma foto do comprovante</div>
+            </div>
+            <div class="upload-preview" id="ent-preview">
+              <img id="ent-preview-img" alt="Comprovante">
+              <button type="button" class="btn-remover" onclick="removerComprovante('ent')" title="Remover">&times;</button>
+            </div>
+          </div>
+
           <button type="submit" class="btn btn-success btn-full">Confirmar Entrada / Recebimento</button>
         </form>
       </div>
@@ -772,6 +839,20 @@
             <label>Data da Saída</label>
             <input type="date" id="sai-data" required />
           </div>
+
+          <div class="form-group">
+            <label>Anexar Comprovante (opcional)</label>
+            <div class="upload-area">
+              <input type="file" id="sai-comprovante" accept="image/*" capture="environment">
+              <span class="upload-icon">📎</span>
+              <div class="upload-text"><strong>Clique para anexar</strong> uma foto do comprovante</div>
+            </div>
+            <div class="upload-preview" id="sai-preview">
+              <img id="sai-preview-img" alt="Comprovante">
+              <button type="button" class="btn-remover" onclick="removerComprovante('sai')" title="Remover">&times;</button>
+            </div>
+          </div>
+
           <button type="submit" class="btn btn-danger btn-full">Confirmar Saída / Sangria</button>
         </form>
       </div>
@@ -780,7 +861,6 @@
     <div class="card">
       <div class="card-title">Extrato / Lançamentos</div>
 
-      <!-- Filtro de dia -->
       <div class="filtro-extrato">
         <div class="form-group campo">
           <label>Ver lançamentos do dia</label>
@@ -800,17 +880,28 @@
               <th>Descrição</th>
               <th>Forma Pgto</th>
               <th>Valor</th>
+              <th style="text-align:center;">Comprovante</th>
             </tr>
           </thead>
           <tbody id="caixa-table">
             <tr>
-              <td colspan="5" style="text-align:center; color:var(--texto-suave); padding:24px;">Carregando movimentações...</td>
+              <td colspan="6" style="text-align:center; color:var(--texto-suave); padding:24px;">Carregando movimentações...</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
   </main>
+
+  <!-- ================= MODAL VISUALIZAR COMPROVANTE ================= -->
+  <div class="modal-overlay" id="modalComprovante">
+    <div class="modal-comprovante">
+      <button class="btn-fechar" onclick="fecharModalComprovante()">&times;</button>
+      <h2>Comprovante de Pagamento</h2>
+      <div class="info" id="modalComprovanteInfo">—</div>
+      <img id="modalComprovanteImg" alt="Comprovante" src="">
+    </div>
+  </div>
 
   <script>
     // ================= MENU HAMBÚRGUER =================
@@ -856,8 +947,12 @@
       'Cartão de Débito': 0.0089
     };
 
-    let movimentacoes = [];      // todas as movimentações
-    let filtroAtual = 'hoje';    // 'hoje' | 'ontem' | 'todos' | 'data'
+    let movimentacoes = [];
+    let filtroAtual = 'hoje';
+
+    // Guarda o base64 da imagem anexada nos formulários
+    let comprovanteEntrada = null;
+    let comprovanteSaida = null;
 
     function showLoader(msg = 'PROCESSANDO...') {
       document.getElementById('loader').classList.add('visible');
@@ -883,8 +978,6 @@
       const pad = n => String(n).padStart(2, '0');
       return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
     }
-
-    // Preenche os campos de data dos formulários com o dia de hoje
     function preencherDatasAtuais() {
       const hoje = paraInputDate(new Date());
       const entData = document.getElementById('ent-data');
@@ -892,8 +985,6 @@
       if (entData) entData.value = hoje;
       if (saiData) saiData.value = hoje;
     }
-
-    // Extrai YYYY-MM-DD de uma data ISO
     function diaDeISO(iso) {
       if (!iso) return null;
       const d = new Date(iso);
@@ -901,7 +992,130 @@
       return paraInputDate(d);
     }
 
-    // ================= PREVIEW DE TAXA =================
+    /* =============================================
+       COMPRESSÃO E PRÉ-VISUALIZAÇÃO DE IMAGEM
+    ============================================= */
+    function comprimirImagem(file, maxWidth = 800, quality = 0.7) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let { width, height } = img;
+            if (width > maxWidth) {
+              height = Math.round(height * maxWidth / width);
+              width = maxWidth;
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            const base64 = canvas.toDataURL('image/jpeg', quality);
+            resolve(base64);
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function aoSelecionarComprovante(prefixo, inputEl) {
+      const file = inputEl.files && inputEl.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        toast('Selecione um arquivo de imagem.', 'error');
+        inputEl.value = '';
+        return;
+      }
+
+      // Limite de 10 MB antes da compressão
+      if (file.size > 10 * 1024 * 1024) {
+        toast('Imagem muito grande (máx. 10MB).', 'error');
+        inputEl.value = '';
+        return;
+      }
+
+      showLoader('PROCESSANDO IMAGEM...');
+      try {
+        const base64 = await comprimirImagem(file);
+        if (prefixo === 'ent') comprovanteEntrada = base64;
+        else comprovanteSaida = base64;
+
+        const preview = document.getElementById(`${prefixo}-preview`);
+        const previewImg = document.getElementById(`${prefixo}-preview-img`);
+        previewImg.src = base64;
+        preview.classList.add('visible');
+
+        const tamanhoKB = Math.round(base64.length * 3 / 4 / 1024);
+        toast(`Comprovante anexado (~${tamanhoKB} KB).`, 'success');
+      } catch (err) {
+        console.error('Erro ao processar imagem:', err);
+        toast('Erro ao processar a imagem.', 'error');
+      } finally {
+        hideLoader();
+      }
+    }
+
+    function removerComprovante(prefixo) {
+      if (prefixo === 'ent') comprovanteEntrada = null;
+      else comprovanteSaida = null;
+
+      const preview = document.getElementById(`${prefixo}-preview`);
+      const previewImg = document.getElementById(`${prefixo}-preview-img`);
+      const input = document.getElementById(`${prefixo}-comprovante`);
+      preview.classList.remove('visible');
+      previewImg.src = '';
+      input.value = '';
+    }
+
+    // Liga os inputs de arquivo
+    document.getElementById('ent-comprovante').addEventListener('change', function() {
+      aoSelecionarComprovante('ent', this);
+    });
+    document.getElementById('sai-comprovante').addEventListener('change', function() {
+      aoSelecionarComprovante('sai', this);
+    });
+
+    /* =============================================
+       MODAL COMPROVANTE
+    ============================================= */
+    function abrirModalComprovante(index) {
+      const filtro = aplicarFiltroExtrato();
+      let lista;
+      if (filtro.tipo === 'todos') lista = movimentacoes.slice();
+      else lista = movimentacoes.filter(m => diaDeISO(m.data_hora) === filtro.valor);
+      lista.sort((a, b) => new Date(b.data_hora) - new Date(a.data_hora));
+
+      const m = lista[index];
+      if (!m || !m.comprovante) return;
+
+      const dataObj = new Date(m.data_hora);
+      const dia = isNaN(dataObj) ? '—' : dataObj.toLocaleDateString('pt-BR');
+
+      document.getElementById('modalComprovanteInfo').innerHTML =
+        `<strong>${m.descricao}</strong> — ${formatMoeda(m.valor)}<br>` +
+        `${dia} · ${m.forma_pagamento} · ${m.tipo.toUpperCase()}`;
+      document.getElementById('modalComprovanteImg').src = m.comprovante;
+      document.getElementById('modalComprovante').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModalComprovante() {
+      document.getElementById('modalComprovante').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('modalComprovante').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) fecharModalComprovante();
+    });
+
+    /* =============================================
+       PREVIEW DE TAXA
+    ============================================= */
     function atualizarPreviewTaxa() {
       const valor = parseFloat(document.getElementById('ent-valor').value) || 0;
       const forma = document.getElementById('ent-forma').value;
@@ -926,7 +1140,14 @@
     document.getElementById('ent-forma').addEventListener('change', atualizarPreviewTaxa);
 
     /* =============================================
-       PARSING DA RESPOSTA DA DATA TABLE (n8n)
+       PARSING DA RESPOSTA
+       Aceita os nomes de campo:
+         - Data       (coluna do banco)
+         - Descricao
+         - Tipo
+         - Valor
+         - FormaPagamento
+         - Comprovante / comprovante / imagem
     ============================================= */
     function normalizarLinha(row) {
       return {
@@ -935,12 +1156,13 @@
         descricao: row.Descricao ?? row.descricao ?? '',
         valor: parseFloat(row.Valor ?? row.valor ?? 0) || 0,
         forma_pagamento: row.FormaPagamento ?? row.forma_pagamento ?? '—',
-        data_hora: row.Data ?? row.data_hora ?? null
+        data_hora: row.Data ?? row.data_hora ?? null,
+        comprovante: row.Comprovante ?? row.comprovante ?? row.imagem ?? row.Imagem ?? null
       };
     }
 
     /* =============================================
-       FILTRO DE DIAS NO EXTRATO
+       FILTRO DO EXTRATO
     ============================================= */
     function aplicarFiltroExtrato() {
       const hojeStr = paraInputDate(new Date());
@@ -970,11 +1192,15 @@
       const tbody = document.getElementById('caixa-table');
 
       if (!lista.length) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--texto-suave); padding:24px;">Nenhuma movimentação neste período.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--texto-suave); padding:24px;">Nenhuma movimentação neste período.</td></tr>`;
       } else {
-        tbody.innerHTML = lista.map(m => {
+        tbody.innerHTML = lista.map((m, i) => {
           const dataObj = new Date(m.data_hora);
           const dia = isNaN(dataObj) ? '—' : dataObj.toLocaleDateString('pt-BR');
+
+          const comprovanteCell = m.comprovante
+            ? `<button type="button" class="btn-ver-comprovante" onclick="abrirModalComprovante(${i})">📎 Ver</button>`
+            : `<span class="sem-comprovante">—</span>`;
 
           return `
             <tr>
@@ -985,12 +1211,13 @@
               <td style="color: ${m.tipo === 'entrada' ? 'var(--navalha)' : 'var(--bordo)'}; font-weight: 600;">
                 ${m.tipo === 'entrada' ? '+' : '-'} ${formatMoeda(m.valor)}
               </td>
+              <td style="text-align:center;">${comprovanteCell}</td>
             </tr>
           `;
         }).join('');
       }
 
-      // KPIs do período filtrado
+      // KPIs
       let totalEntradas = 0, totalSaidas = 0, pixDinheiro = 0;
       lista.forEach(m => {
         if (m.tipo === 'entrada') {
@@ -1036,7 +1263,7 @@
     });
 
     /* =============================================
-       CARREGAR CAIXA (todas as movimentações)
+       CARREGAR CAIXA
     ============================================= */
     async function carregarCaixa() {
       showLoader('CARREGANDO CAIXA...');
@@ -1067,12 +1294,12 @@
     }
 
     /* =============================================
-       REGISTRAR ENTRADA / SAÍDA (só data, sem hora)
+       REGISTRAR ENTRADA / SAÍDA
     ============================================= */
     async function registrarMovimentacao(event, tipo) {
       event.preventDefault();
 
-      let descricao, valor, forma, categoria, dataInput;
+      let descricao, valor, forma, categoria, dataInput, comprovante;
 
       if (tipo === 'entrada') {
         categoria = document.getElementById('ent-categoria').value;
@@ -1080,12 +1307,14 @@
         valor = parseFloat(document.getElementById('ent-valor').value);
         forma = document.getElementById('ent-forma').value;
         dataInput = document.getElementById('ent-data').value;
+        comprovante = comprovanteEntrada;
       } else {
         categoria = 'Sangria / Despesa';
         descricao = document.getElementById('sai-descricao').value.trim();
         valor = parseFloat(document.getElementById('sai-valor').value);
         forma = document.getElementById('sai-forma').value;
         dataInput = document.getElementById('sai-data').value;
+        comprovante = comprovanteSaida;
       }
 
       if (!descricao || isNaN(valor) || valor <= 0) {
@@ -1098,8 +1327,6 @@
         return;
       }
 
-      // Se for hoje → usa o horário atual (preserva hora real).
-      // Se for outro dia → usa 12:00 (meio-dia) para evitar problema de fuso virar o dia.
       const hoje = paraInputDate(new Date());
       let dataObj;
       if (dataInput === hoje) {
@@ -1114,7 +1341,6 @@
       }
       const dataISO = dataObj.toISOString();
 
-      // Cálculo de taxa (apenas entrada)
       let valorBruto = valor;
       let valorTaxa = 0;
       let valorFinal = valor;
@@ -1133,7 +1359,8 @@
         descricao,
         valor: parseFloat(valorFinal.toFixed(2)),
         forma_pagamento: forma,
-        data_hora: dataISO
+        data_hora: dataISO,
+        comprovante: comprovante || ''
       };
 
       if (valorTaxa > 0) {
@@ -1171,6 +1398,8 @@
         event.target.reset();
         preencherDatasAtuais();
         atualizarPreviewTaxa();
+        removerComprovante('ent');
+        removerComprovante('sai');
       } catch (err) {
         console.warn('Servidor offline. Registrando localmente.', err);
         movimentacoes.unshift(payload);
@@ -1179,6 +1408,8 @@
         event.target.reset();
         preencherDatasAtuais();
         atualizarPreviewTaxa();
+        removerComprovante('ent');
+        removerComprovante('sai');
       } finally {
         hideLoader();
       }
@@ -1188,12 +1419,8 @@
        INICIALIZAÇÃO
     ============================================= */
     document.addEventListener('DOMContentLoaded', () => {
-      // Preenche os campos de data com hoje
       preencherDatasAtuais();
-
-      // Campo de filtro começa com hoje
       document.getElementById('filtro-dia').value = paraInputDate(new Date());
-
       carregarCaixa();
     });
   </script>
