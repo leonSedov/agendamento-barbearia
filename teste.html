@@ -228,7 +228,6 @@
     }
     .modal-comprovante .btn-fechar:hover { color: var(--tinta); }
 
-    /* Botão "Ver" no extrato */
     .btn-ver-comprovante {
         display: inline-flex;
         align-items: center;
@@ -796,9 +795,9 @@
           <div class="form-group">
             <label>Anexar Comprovante (opcional)</label>
             <div class="upload-area">
-              <input type="file" id="ent-comprovante" accept="image/*" capture="environment">
+              <input type="file" id="ent-comprovante" accept="image/*">
               <span class="upload-icon">📎</span>
-              <div class="upload-text"><strong>Clique para anexar</strong> uma foto do comprovante</div>
+              <div class="upload-text"><strong>Clique para escolher</strong> uma foto do comprovante</div>
             </div>
             <div class="upload-preview" id="ent-preview">
               <img id="ent-preview-img" alt="Comprovante">
@@ -843,9 +842,9 @@
           <div class="form-group">
             <label>Anexar Comprovante (opcional)</label>
             <div class="upload-area">
-              <input type="file" id="sai-comprovante" accept="image/*" capture="environment">
+              <input type="file" id="sai-comprovante" accept="image/*">
               <span class="upload-icon">📎</span>
-              <div class="upload-text"><strong>Clique para anexar</strong> uma foto do comprovante</div>
+              <div class="upload-text"><strong>Clique para escolher</strong> uma foto do comprovante</div>
             </div>
             <div class="upload-preview" id="sai-preview">
               <img id="sai-preview-img" alt="Comprovante">
@@ -950,7 +949,6 @@
     let movimentacoes = [];
     let filtroAtual = 'hoje';
 
-    // Guarda o base64 da imagem anexada nos formulários
     let comprovanteEntrada = null;
     let comprovanteSaida = null;
 
@@ -1032,7 +1030,6 @@
         return;
       }
 
-      // Limite de 10 MB antes da compressão
       if (file.size > 10 * 1024 * 1024) {
         toast('Imagem muito grande (máx. 10MB).', 'error');
         inputEl.value = '';
@@ -1072,7 +1069,6 @@
       input.value = '';
     }
 
-    // Liga os inputs de arquivo
     document.getElementById('ent-comprovante').addEventListener('change', function() {
       aoSelecionarComprovante('ent', this);
     });
@@ -1141,13 +1137,6 @@
 
     /* =============================================
        PARSING DA RESPOSTA
-       Aceita os nomes de campo:
-         - Data       (coluna do banco)
-         - Descricao
-         - Tipo
-         - Valor
-         - FormaPagamento
-         - Comprovante / comprovante / imagem
     ============================================= */
     function normalizarLinha(row) {
       return {
@@ -1217,7 +1206,6 @@
         }).join('');
       }
 
-      // KPIs
       let totalEntradas = 0, totalSaidas = 0, pixDinheiro = 0;
       lista.forEach(m => {
         if (m.tipo === 'entrada') {
