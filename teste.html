@@ -92,7 +92,6 @@
     }
     .form-group { margin-bottom: 16px; }
 
-    /* ================= UPLOAD DE COMPROVANTE ================= */
     .upload-area {
         position: relative;
         border: 2px dashed var(--linha);
@@ -161,7 +160,6 @@
         transform: scale(1.1);
     }
 
-    /* ================= MODAL VISUALIZAR COMPROVANTE ================= */
     .modal-overlay {
         display: none;
         position: fixed;
@@ -248,7 +246,34 @@
     .btn-ver-comprovante:hover { background: #d8e6f0; transform: scale(1.03); }
     .sem-comprovante { color: var(--texto-suave); font-size: 0.78rem; }
 
-    /* ================= HEADER MOBILE ================= */
+    .btn-deletar-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        background: #fbeceb;
+        color: var(--perigo);
+        border: 1px solid var(--perigo);
+        font-family: var(--fonte-cartaz);
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        transition: background .15s, transform .15s;
+    }
+    .btn-deletar-item:hover { background: #f5d9d7; transform: scale(1.03); }
+    .btn-deletar-item:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .acoes-cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
     .mobile-header {
         display: none;
         position: fixed;
@@ -315,7 +340,6 @@
     }
     .sidebar-overlay.active { display: block; }
 
-    /* ================= SIDEBAR ================= */
     #sidebar {
         position: fixed;
         left: 0;
@@ -375,7 +399,6 @@
     .nav-label { font-size: 0.82rem; font-weight: 500; color: #8896b0; opacity: 0; transition: opacity .2s; }
     #sidebar:hover .nav-label { opacity: 1; }
 
-    /* ================= APP ================= */
     #app { margin-left: 72px; min-height: 100vh; padding: 36px 40px 60px; max-width: 1180px; }
 
     .page-header { padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px; }
@@ -389,7 +412,6 @@
     }
     .page-subtitle { color: var(--texto-suave); font-size: 0.88rem; }
 
-    /* KPIS */
     .kpi-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -421,7 +443,6 @@
     .kpi-value.red { color: var(--bordo); }
     .kpi-value.gold { color: var(--latao-escuro); }
 
-    /* GRIDS E CARDS */
     .grid-2 {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -461,7 +482,6 @@
     }
     .card-title::after { content: ""; flex: 1; height: 1px; background: var(--linha); }
 
-    /* BOTÕES */
     .btn {
         display: inline-flex;
         align-items: center;
@@ -484,7 +504,6 @@
     .btn-danger:hover { background: var(--bordo-escuro); }
     .btn-full { width: 100%; }
 
-    /* PREVIEW DE TAXA CARTÃO */
     .preview-taxa {
         display: none;
         margin-top: 10px;
@@ -500,7 +519,6 @@
     .preview-taxa.visible { display: block; }
     .preview-taxa strong { color: var(--tinta); }
 
-    /* AVISO DATA RETROATIVA */
     .aviso-data {
         font-size: 0.76rem;
         color: var(--texto-suave);
@@ -512,7 +530,6 @@
         line-height: 1.5;
     }
 
-    /* FILTRO DO EXTRATO */
     .filtro-extrato {
         display: flex;
         gap: 12px;
@@ -543,7 +560,6 @@
         background: #faf6ec;
     }
 
-    /* TABELA */
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
     th {
@@ -580,7 +596,6 @@
         border: 1px solid var(--bordo);
     }
 
-    /* LOADER & TOAST */
     .loader-overlay {
         position: fixed;
         inset: 0;
@@ -634,7 +649,6 @@
     .toast.error { border-color: var(--perigo); }
     .toast.info { border-color: var(--latao); }
 
-    /* ================= MOBILE RESPONSIVE ================= */
     @media (max-width: 880px) {
         .mobile-header { display: flex; }
         .hamburger-btn { display: flex; }
@@ -691,7 +705,6 @@
 
 <div class="faixa-topo" aria-hidden="true"></div>
 
-<!-- MOBILE HEADER -->
 <div class="mobile-header">
   <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">
     <span class="hamburger-line"></span>
@@ -701,7 +714,6 @@
   <div class="mobile-logo">Mun<span class="mobile-logo-text">iz</span></div>
 </div>
 
-<!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
   <div class="loader-overlay" id="loader">
@@ -711,7 +723,6 @@
 
   <div id="toast-container"></div>
 
-  <!-- SIDEBAR -->
   <nav id="sidebar">
     <div class="sidebar-logo"><span class="sidebar-logo-icon">Mun</span><span>iz</span></div>
 
@@ -879,7 +890,7 @@
               <th>Descrição</th>
               <th>Forma Pgto</th>
               <th>Valor</th>
-              <th style="text-align:center;">Comprovante</th>
+              <th style="text-align:center;">Ações</th>
             </tr>
           </thead>
           <tbody id="caixa-table">
@@ -892,7 +903,6 @@
     </div>
   </main>
 
-  <!-- ================= MODAL VISUALIZAR COMPROVANTE ================= -->
   <div class="modal-overlay" id="modalComprovante">
     <div class="modal-comprovante">
       <button class="btn-fechar" onclick="fecharModalComprovante()">&times;</button>
@@ -938,7 +948,8 @@
     ============================================= */
     const API_CONFIG = {
       REGISTRAR_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-registrar',
-      OBTER_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter'
+      OBTER_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter',
+      DELETAR_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-deletar'
     };
 
     const TAXAS_CARTAO = {
@@ -1110,6 +1121,79 @@
     });
 
     /* =============================================
+       EXCLUIR LANÇAMENTO — chama o webhook n8n
+    ============================================= */
+    async function deletarMovimentacao(index) {
+      const filtro = aplicarFiltroExtrato();
+      let lista;
+      if (filtro.tipo === 'todos') lista = movimentacoes.slice();
+      else lista = movimentacoes.filter(m => diaDeISO(m.data_hora) === filtro.valor);
+      lista.sort((a, b) => new Date(b.data_hora) - new Date(a.data_hora));
+
+      const alvo = lista[index];
+      if (!alvo) return;
+
+      const dataObj = new Date(alvo.data_hora);
+      const dia = isNaN(dataObj) ? '—' : dataObj.toLocaleDateString('pt-BR');
+
+      const confirma = confirm(
+        `Excluir este lançamento?\n\n` +
+        `📅 ${dia}\n` +
+        `📝 ${alvo.descricao}\n` +
+        `💰 ${formatMoeda(alvo.valor)}\n` +
+        `🏷️ ${alvo.tipo.toUpperCase()} · ${alvo.forma_pagamento}\n\n` +
+        `Essa ação não pode ser desfeita.`
+      );
+      if (!confirma) return;
+
+      // Payload que será enviado ao n8n
+      const payload = {
+        id: alvo.id || null,
+        descricao: alvo.descricao,
+        valor: alvo.valor,
+        data_hora: alvo.data_hora,
+        tipo: alvo.tipo
+      };
+
+      console.log('🗑️ Enviando para o webhook:', API_CONFIG.DELETAR_CAIXA);
+      console.log('📦 Payload:', payload);
+
+      showLoader('EXCLUINDO LANÇAMENTO...');
+
+      try {
+        const resp = await fetch(API_CONFIG.DELETAR_CAIXA, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        console.log('📬 Resposta HTTP:', resp.status, resp.statusText);
+
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+
+        const resultado = await resp.json();
+        console.log('📬 Body da resposta:', resultado);
+
+        if (resultado.success === false) {
+          throw new Error(resultado.message || 'Lançamento não encontrado no servidor');
+        }
+
+        // Remove só depois que o servidor confirmou
+        const idx = movimentacoes.indexOf(alvo);
+        if (idx >= 0) movimentacoes.splice(idx, 1);
+
+        renderizarExtrato();
+        toast(`Lançamento de ${formatMoeda(alvo.valor)} excluído!`, 'success');
+
+      } catch (err) {
+        console.error('❌ Erro ao excluir:', err);
+        toast('Erro ao excluir: ' + err.message, 'error');
+      } finally {
+        hideLoader();
+      }
+    }
+
+    /* =============================================
        PREVIEW DE TAXA
     ============================================= */
     function atualizarPreviewTaxa() {
@@ -1140,6 +1224,7 @@
     ============================================= */
     function normalizarLinha(row) {
       return {
+        id: row.id ?? row.ID ?? null,
         tipo: String(row.Tipo ?? row.tipo ?? '').toLowerCase(),
         categoria: row.Categoria ?? row.categoria ?? '—',
         descricao: row.Descricao ?? row.descricao ?? '',
@@ -1187,9 +1272,9 @@
           const dataObj = new Date(m.data_hora);
           const dia = isNaN(dataObj) ? '—' : dataObj.toLocaleDateString('pt-BR');
 
-          const comprovanteCell = m.comprovante
+          const verBtn = m.comprovante
             ? `<button type="button" class="btn-ver-comprovante" onclick="abrirModalComprovante(${i})">📎 Ver</button>`
-            : `<span class="sem-comprovante">—</span>`;
+            : '';
 
           return `
             <tr>
@@ -1200,7 +1285,12 @@
               <td style="color: ${m.tipo === 'entrada' ? 'var(--navalha)' : 'var(--bordo)'}; font-weight: 600;">
                 ${m.tipo === 'entrada' ? '+' : '-'} ${formatMoeda(m.valor)}
               </td>
-              <td style="text-align:center;">${comprovanteCell}</td>
+              <td>
+                <div class="acoes-cell">
+                  ${verBtn}
+                  <button type="button" class="btn-deletar-item" onclick="deletarMovimentacao(${i})" title="Excluir lançamento">🗑️ Excluir</button>
+                </div>
+              </td>
             </tr>
           `;
         }).join('');
@@ -1269,6 +1359,11 @@
         movimentacoes = linhas
           .map(item => normalizarLinha(item.json ?? item))
           .filter(m => m.data_hora);
+
+        console.log('📊 Movimentações carregadas:', movimentacoes.length);
+        if (movimentacoes.length > 0) {
+          console.log('📄 Primeira movimentação (para ver se tem id):', movimentacoes[0]);
+        }
 
         renderizarExtrato();
       } catch (err) {
