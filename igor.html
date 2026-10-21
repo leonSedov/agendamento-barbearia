@@ -18,7 +18,6 @@
 
 <style>
     :root {
-        /* ====== PALETA MUNIZ STUDIO (navy + gold) ====== */
         --tinta: #1a2c50; --tinta-suave: #253862; --pedra: #f0e9db; --pedra-card: #ffffff;
         --latao: #c9a875; --latao-escuro: #a88855; --bordo: #7a2331; --bordo-escuro: #591a24;
         --navalha: #2f5d50; --texto: #1a1a24; --texto-suave: #6b6459; --linha: #ddd4bf;
@@ -28,9 +27,7 @@
         --radius: 10px; --radius-peq: 6px;
         --sombra: 0 8px 24px -12px rgba(26,44,80,0.25);
         --sombra-forte: 0 20px 48px -18px rgba(26,44,80,0.35);
-        --faixa: repeating-linear-gradient(45deg,
-            #c8102e 0px, #c8102e 14px, var(--pedra-card) 14px, var(--pedra-card) 28px,
-            #1e40af 28px, #1e40af 42px, var(--pedra-card) 42px, var(--pedra-card) 56px);
+        --faixa: repeating-linear-gradient(45deg, #c8102e 0px, #c8102e 14px, var(--pedra-card) 14px, var(--pedra-card) 28px, #1e40af 28px, #1e40af 42px, var(--pedra-card) 42px, var(--pedra-card) 56px);
     }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; } }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -103,9 +100,21 @@
     .time-badge.busy { border-color: var(--bordo); color: var(--bordo); background: #f8ecec; }
     .time-badge.free { border-color: var(--navalha); color: var(--navalha); background: #eaf2ee; }
     .time-badge.indisponivel { border-color: var(--perigo); color: var(--perigo); background: #fde8e6; }
-    .agendamento-item { border: 1px solid var(--linha); border-radius: var(--radius); padding: 15px 16px; margin-bottom: 12px; background: var(--pedra-card); display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: border-color .15s, box-shadow .15s; }
+    
+    /* CSS DO CARD VERDE REFORÇADO */
+    .agendamento-item { border: 1px solid var(--linha); border-radius: var(--radius); padding: 15px 16px; margin-bottom: 12px; background: var(--pedra-card); display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: border-color .15s, box-shadow .15s, background .15s; }
     .agendamento-item:hover { border-color: var(--latao); box-shadow: var(--sombra); }
-    .agendamento-item.pago { border-color: var(--navalha); background: #f4faf7; }
+    .agendamento-item.pago {
+        border-color: var(--navalha);
+        background: #d4eedb;
+        border-left: 5px solid var(--navalha);
+        box-shadow: 0 2px 8px -4px rgba(47, 93, 80, 0.35);
+    }
+    .agendamento-item.pago:hover {
+        border-color: var(--navalha);
+        background: #c4e7cf;
+    }
+
     .agendamento-item .hora { font-family: var(--fonte-dados); font-weight: 600; color: var(--latao-escuro); font-size: 1rem; white-space: nowrap; }
     .agendamento-item .cliente { font-family: var(--fonte-cartaz); font-size: 0.98rem; color: var(--tinta); }
     .agendamento-item .servico { color: var(--texto-suave); font-size: 0.82rem; margin-top: 3px; }
@@ -185,103 +194,25 @@
     .edit-total-box strong { font-family: var(--fonte-dados); font-size: 1.25rem; color: var(--latao); font-weight: 600; }
     .edit-aviso { font-size: 0.78rem; color: var(--texto-suave); background: #faf4e6; border-left: 3px solid var(--latao); padding: 10px 14px; border-radius: var(--radius-peq); margin-bottom: 14px; line-height: 1.5; }
 
-    /* ================= MODAL PAGAMENTO ================= */
-    .pagamento-info {
-        background: var(--pedra);
-        border: 1px solid var(--linha);
-        border-radius: var(--radius-peq);
-        padding: 14px 16px;
-        margin-bottom: 18px;
-    }
-    .pagamento-info__linha {
-        display: flex;
-        justify-content: space-between;
-        padding: 6px 0;
-        font-size: 0.88rem;
-        border-bottom: 1px solid var(--linha);
-    }
+    .pagamento-info { background: var(--pedra); border: 1px solid var(--linha); border-radius: var(--radius-peq); padding: 14px 16px; margin-bottom: 18px; }
+    .pagamento-info__linha { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.88rem; border-bottom: 1px solid var(--linha); }
     .pagamento-info__linha:last-child { border-bottom: none; }
     .pagamento-info__linha span:first-child { color: var(--texto-suave); }
     .pagamento-info__linha span:last-child { font-weight: 600; color: var(--tinta); text-align: right; }
-    .pagamento-info__valor {
-        font-family: var(--fonte-dados);
-        font-size: 1.3rem;
-        color: var(--latao-escuro);
-        font-weight: 700;
-    }
-
-    .forma-pagamento-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-bottom: 16px;
-    }
-    .forma-pagamento-opcao {
-        border: 2px solid var(--linha);
-        border-radius: var(--radius-peq);
-        background: var(--pedra);
-        padding: 14px 12px;
-        text-align: center;
-        cursor: pointer;
-        transition: all .15s;
-        position: relative;
-    }
+    .pagamento-info__valor { font-family: var(--fonte-dados); font-size: 1.3rem; color: var(--latao-escuro); font-weight: 700; }
+    .forma-pagamento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .forma-pagamento-opcao { border: 2px solid var(--linha); border-radius: var(--radius-peq); background: var(--pedra); padding: 14px 12px; text-align: center; cursor: pointer; transition: all .15s; position: relative; }
     .forma-pagamento-opcao:hover { border-color: var(--latao); background: #faf8f3; }
-    .forma-pagamento-opcao.selecionado {
-        border-color: var(--tinta);
-        background: #eef1f6;
-        box-shadow: 0 0 0 1px var(--tinta);
-    }
-    .forma-pagamento-opcao .icone {
-        font-size: 1.6rem;
-        display: block;
-        margin-bottom: 6px;
-    }
-    .forma-pagamento-opcao .nome {
-        font-family: var(--fonte-cartaz);
-        font-size: 0.82rem;
-        color: var(--tinta);
-        font-weight: 500;
-    }
-    .forma-pagamento-opcao .taxa {
-        font-family: var(--fonte-dados);
-        font-size: 0.65rem;
-        color: var(--texto-suave);
-        display: block;
-        margin-top: 4px;
-    }
-
-    .pagamento-resumo {
-        background: var(--tinta);
-        color: var(--pedra);
-        border-radius: var(--radius-peq);
-        padding: 14px 18px;
-        margin-bottom: 16px;
-        font-family: var(--fonte-cartaz);
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        font-size: 0.82rem;
-    }
-    .pagamento-resumo__linha {
-        display: flex;
-        justify-content: space-between;
-        padding: 4px 0;
-    }
+    .forma-pagamento-opcao.selecionado { border-color: var(--tinta); background: #eef1f6; box-shadow: 0 0 0 1px var(--tinta); }
+    .forma-pagamento-opcao .icone { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+    .forma-pagamento-opcao .nome { font-family: var(--fonte-cartaz); font-size: 0.82rem; color: var(--tinta); font-weight: 500; }
+    .forma-pagamento-opcao .taxa { font-family: var(--fonte-dados); font-size: 0.65rem; color: var(--texto-suave); display: block; margin-top: 4px; }
+    .pagamento-resumo { background: var(--tinta); color: var(--pedra); border-radius: var(--radius-peq); padding: 14px 18px; margin-bottom: 16px; font-family: var(--fonte-cartaz); text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.82rem; }
+    .pagamento-resumo__linha { display: flex; justify-content: space-between; padding: 4px 0; }
     .pagamento-resumo__linha span:first-child { color: #8896b0; }
-    .pagamento-resumo__linha strong {
-        font-family: var(--fonte-dados);
-        color: var(--latao);
-    }
-    .pagamento-resumo__linha.total {
-        border-top: 1px solid rgba(201,168,117,0.3);
-        margin-top: 6px;
-        padding-top: 10px;
-        font-size: 0.92rem;
-    }
-    .pagamento-resumo__linha.total strong {
-        font-size: 1.3rem;
-        color: #fff;
-    }
+    .pagamento-resumo__linha strong { font-family: var(--fonte-dados); color: var(--latao); }
+    .pagamento-resumo__linha.total { border-top: 1px solid rgba(201,168,117,0.3); margin-top: 6px; padding-top: 10px; font-size: 0.92rem; }
+    .pagamento-resumo__linha.total strong { font-size: 1.3rem; color: #fff; }
 
     .mobile-header { display: none; position: fixed; top: 5px; left: 0; right: 0; height: 60px; background: var(--tinta); border-bottom: 1px solid rgba(201,168,117,0.25); z-index: 101; align-items: center; padding: 0 16px; gap: 16px; }
     .hamburger-btn { display: none; width: 40px; height: 40px; background: transparent; border: none; cursor: pointer; flex-direction: column; justify-content: center; align-items: center; gap: 5px; padding: 0; }
@@ -481,7 +412,6 @@
     </div>
 </div>
 
-<!-- ================= MODAL EDITAR ATENDIMENTO ================= -->
 <div class="modal-overlay" id="modalEditar">
     <div class="modal">
         <button class="btn-fechar" id="btnFecharEditar">&times;</button>
@@ -489,26 +419,21 @@
         <div class="modal-sub">
             <strong id="editClienteNome">—</strong> · <span id="editDataHora">—</span>
         </div>
-
         <div class="edit-aviso">
             💡 Marque ou desmarque os serviços que este cliente vai fazer. O valor total será atualizado automaticamente.
         </div>
-
         <div class="form-group">
             <label>Serviços contratados</label>
             <div class="lista-edit-servicos" id="listaEditServicos"></div>
         </div>
-
         <div class="edit-total-box">
             <span>Total do Atendimento</span>
             <strong id="editTotal">R$ 0,00</strong>
         </div>
-
         <button class="btn-enviar" id="btnSalvarEdicao" onclick="salvarEdicao()">Salvar Alterações</button>
     </div>
 </div>
 
-<!-- ================= MODAL CONFIRMAR PAGAMENTO ================= -->
 <div class="modal-overlay" id="modalPagamento">
     <div class="modal">
         <button class="btn-fechar" id="btnFecharPagamento">&times;</button>
@@ -516,50 +441,29 @@
         <div class="modal-sub">
             <strong id="pagClienteNome">—</strong> · <span id="pagDataHora">—</span>
         </div>
-
         <div class="pagamento-info" id="pagInfoCorte"></div>
-
         <label style="font-family: var(--fonte-cartaz); font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--tinta); display: block; margin-bottom: 8px;">
             Forma de Pagamento
         </label>
         <div class="forma-pagamento-grid" id="formaPagamentoGrid">
             <div class="forma-pagamento-opcao" data-forma="Pix">
-                <span class="icone">⚡</span>
-                <span class="nome">Pix</span>
-                <span class="taxa">Sem taxa</span>
+                <span class="icone">⚡</span><span class="nome">Pix</span><span class="taxa">Sem taxa</span>
             </div>
             <div class="forma-pagamento-opcao" data-forma="Dinheiro">
-                <span class="icone">💵</span>
-                <span class="nome">Dinheiro</span>
-                <span class="taxa">Sem taxa</span>
+                <span class="icone">💵</span><span class="nome">Dinheiro</span><span class="taxa">Sem taxa</span>
             </div>
             <div class="forma-pagamento-opcao" data-forma="Cartão de Débito">
-                <span class="icone">💳</span>
-                <span class="nome">Cartão de Débito</span>
-                <span class="taxa">Taxa 0,89%</span>
+                <span class="icone">💳</span><span class="nome">Cartão de Débito</span><span class="taxa">Taxa 0,89%</span>
             </div>
             <div class="forma-pagamento-opcao" data-forma="Cartão de Crédito">
-                <span class="icone">💳</span>
-                <span class="nome">Cartão de Crédito</span>
-                <span class="taxa">Taxa 3,09%</span>
+                <span class="icone">💳</span><span class="nome">Cartão de Crédito</span><span class="taxa">Taxa 3,09%</span>
             </div>
         </div>
-
         <div class="pagamento-resumo" id="pagResumo">
-            <div class="pagamento-resumo__linha">
-                <span>Valor Bruto</span>
-                <strong id="resumoBruto">R$ 0,00</strong>
-            </div>
-            <div class="pagamento-resumo__linha" id="linhaTaxa" style="display:none;">
-                <span>Taxa</span>
-                <strong id="resumoTaxa">- R$ 0,00</strong>
-            </div>
-            <div class="pagamento-resumo__linha total">
-                <span>Valor no Caixa</span>
-                <strong id="resumoLiquido">R$ 0,00</strong>
-            </div>
+            <div class="pagamento-resumo__linha"><span>Valor Bruto</span><strong id="resumoBruto">R$ 0,00</strong></div>
+            <div class="pagamento-resumo__linha" id="linhaTaxa" style="display:none;"><span>Taxa</span><strong id="resumoTaxa">- R$ 0,00</strong></div>
+            <div class="pagamento-resumo__linha total"><span>Valor no Caixa</span><strong id="resumoLiquido">R$ 0,00</strong></div>
         </div>
-
         <button class="btn-enviar" id="btnConfirmarPagamento">Confirmar Pagamento</button>
     </div>
 </div>
@@ -635,6 +539,7 @@
     const WEBHOOK_BARBEIRO = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/agendamento-do-barbeiro1';
     const CLIENTES_REGULARES_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/clientes-regulares';
     const WEBHOOK_PAGAMENTO = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/confirmar-pagamento';
+    const CAIXA_OBTER_URL   = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter';
 
     const HORARIOS_PADRAO = ['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00'];
     const PRECOS_SERVICOS = {
@@ -647,31 +552,71 @@
         'Cartão de Débito': 0.0089
     };
 
-    const LS_KEY_PAGOS = 'ominus_pagos_igor';
-
     let STATE = { calMes: new Date().getMonth(), calAno: new Date().getFullYear(), diaSelecionado: null, agendamentosAtuais: [], modalHora: null, modalData: null, modalOcupado: false, clientesRegulares: [] };
     let editandoIndex = null;
     let pagandoIndex = null;
     let formaPagamentoSelecionada = null;
 
-    /* ================= CONTROLE DE PAGOS (localStorage) ================= */
-    function carregarPagos() {
-        try { return JSON.parse(localStorage.getItem(LS_KEY_PAGOS) || '{}'); } catch { return {}; }
+    /* =============================================
+       PAGOS (Busca no financeiro como fallback)
+    ============================================= */
+    let pagosPorDia = {};
+
+    async function carregarPagamentosDoDia(dataStr) {
+        const pagos = new Set();
+        try {
+            const resp = await fetch(CAIXA_OBTER_URL);
+            if (resp.ok) {
+                const dataRaw = await resp.json();
+                const data = Array.isArray(dataRaw) ? dataRaw[0] : dataRaw;
+                const linhas = Array.isArray(data) ? data : (data?.data || []);
+                linhas.forEach(row => {
+                    const entry = row.json || row;
+                    const tipo = String(entry.Tipo || '').toLowerCase().trim();
+                    if (tipo !== 'entrada') return;
+
+                    const raw = String(entry.Data || '');
+                    const dataEntry = raw.substring(0, 10);
+                    if (dataEntry !== dataStr) return;
+
+                    const descricao = String(entry.Descricao || '');
+                    const nome = descricao.split('—')[0].trim().toLowerCase();
+                    if (nome) pagos.add(nome);
+                });
+            }
+        } catch (e) { 
+            console.error('Erro CORS ou rede ao buscar financeiro:', e);
+        }
+        pagosPorDia[dataStr] = pagos;
+        return pagos;
     }
-    function salvarPagos(obj) {
-        try { localStorage.setItem(LS_KEY_PAGOS, JSON.stringify(obj)); } catch {}
-    }
-    function chavePagamento(data, hora, barbeiro) {
-        return `${data}|${hora}|${barbeiro}`;
-    }
-    function marcarComoPago(data, hora, barbeiro) {
-        const pagos = carregarPagos();
-        pagos[chavePagamento(data, hora, barbeiro)] = true;
-        salvarPagos(pagos);
-    }
-    function estaPago(data, hora, barbeiro) {
-        const pagos = carregarPagos();
-        return !!pagos[chavePagamento(data, hora, barbeiro)];
+
+    // VERIFICA O STATUS DE FORMA BLINDADA: Pela API direta (ag.pago), Tags [PAGO] ou financeiro
+    function estaPago(ag, nomeCliente) {
+        if (!ag) return false;
+
+        // 1. O n8n já avisou que tá pago? (Booleano ou String "true")
+        if (ag.pago === true || String(ag.pago).toLowerCase() === 'true') return true;
+
+        // 2. Tem a tag [PAGO] em algum lugar do JSON?
+        const stringDoAgendamento = JSON.stringify(ag).toLowerCase();
+        if (stringDoAgendamento.includes('[pago]')) return true;
+
+        // 3. O status é pago?
+        const status = String(ag.status || ag['ag-status'] || ag['payment-status'] || ag['ag-pagamento'] || '').toLowerCase().trim();
+        if (status === 'pago' || status === 'paid' || status.includes('pago')) return true;
+
+        // 4. Fallback pro financeiro
+        const setPagos = pagosPorDia[STATE.diaSelecionado];
+        if (!setPagos || setPagos.size === 0) return false;
+        
+        const nomeLimpo = String(nomeCliente || '').toLowerCase().trim();
+        for (const pago of setPagos) {
+            if (pago.includes(nomeLimpo) || nomeLimpo.includes(pago)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function showLoader(msg = 'CONSULTANDO AGENDA...') { document.getElementById('loader').classList.add('visible'); document.querySelector('.loader-text').textContent = msg; }
@@ -686,8 +631,8 @@
     }
     function formatDataFormatada(dataISO) {
         if (!dataISO) return '—';
-        const parts = dataISO.split('-');
-        if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        const partes = dataISO.split('-');
+        if (partes.length === 3) return `${partes[2]}/${partes[1]}/${partes[0]}`;
         return dataISO;
     }
     function formatMoeda(v) {
@@ -717,7 +662,7 @@
         if (direto && direto.length < 100 && !/whats?app\s*:|barbeiro\s*:|valor\s*:|cliente\s*:/i.test(direto)) return direto;
         const textos = [ag['ag-servico'], ag.servico, ag.summary, ag.description, ag['ag-descricao'], ag.title].filter(Boolean).map(String);
         for (const texto of textos) {
-            const m = texto.match(/servi[çc]o\s*:?\s*([^|]+?)(?:\s+(?:whats?app|barbeiro|valor|cliente)\s*:|$)/i);
+            const m = texto.match(/servi[çc]o\s*:?\s*([^|\n]+?)(?:\s+(?:whats?app|barbeiro|valor|cliente)\s*:|$)/i);
             if (m && m[1].trim().length > 0 && m[1].trim().length < 100) return m[1].trim();
         }
         return direto || 'Corte Tradicional';
@@ -735,19 +680,16 @@
                 return m[1].trim();
             }
         }
-
         for (const t of textos) {
             const m = t.match(/cliente\s*:?\s*([A-ZÀ-Ú][^\n|]+?)(?:\s+(?:servi[çc]o|whats?app|barbeiro|valor)\s*:|$)/i);
             if (m && m[1].trim().length > 1 && m[1].trim().length < 60) {
                 return m[1].trim();
             }
         }
-
         const direto = (ag['ag-nome'] || ag.nome || ag.nome_cliente || '').trim();
         if (direto && direto.length < 60 && !/corte\s*-|cliente\s*:|whats?app|servi[çc]o\s*:|barbeiro\s*:/i.test(direto)) {
             return direto;
         }
-
         return direto || 'Cliente Agendado';
     }
 
@@ -834,11 +776,19 @@
                 body: JSON.stringify({ "ag-data": dataStr, "ag-barbeiro": BARBEIRO_ID })
             });
             if (!response.ok) throw new Error(`Status ${response.status}`);
-            const dados = await response.json();
+            const dadosRaw = await response.json();
+            
+            // CORREÇÃO: O n8n retorna um array [{ agendamentos: [...], ocupados: [...] }]
+            const dados = Array.isArray(dadosRaw) ? dadosRaw[0] : dadosRaw;
+            
             const todosAgendamentos = Array.isArray(dados.agendamentos) ? dados.agendamentos : [];
             const agendamentosFiltrados = todosAgendamentos.filter(agendamentoPertenceAoIgor);
             const horariosOcupados = agendamentosFiltrados.map(ag => ag['ag-hora'] || ag.hora).filter(Boolean);
             STATE.agendamentosAtuais = agendamentosFiltrados;
+
+            delete pagosPorDia[dataStr];
+            await carregarPagamentosDoDia(dataStr);
+
             renderDetalhesDia(horariosOcupados, agendamentosFiltrados);
             toast('Agenda do dia atualizada!', 'success');
         } catch (err) {
@@ -895,7 +845,8 @@
                 const whatsappRaw = extrairWhatsApp(ag);
                 const whatsappLink = normalizarWhatsApp(whatsappRaw);
                 const preco = obterValorAgendamento(ag);
-                const pago = estaPago(STATE.diaSelecionado, hora, BARBEIRO_ID);
+                
+                const pago = estaPago(ag, nome);
 
                 const el = document.createElement('div');
                 el.className = 'agendamento-item' + (pago ? ' pago' : '');
@@ -959,10 +910,17 @@
     function abrirModalPagamento(index) {
         const ag = STATE.agendamentosAtuais[index];
         if (!ag) return;
+
+        // 🔒 Bloqueia se o agendamento já estiver pago por segurança
+        const nome = extrairNomeCliente(ag);
+        if (estaPago(ag, nome)) {
+            toast('Este atendimento já está pago.', 'info');
+            return;
+        }
+
         pagandoIndex = index;
         formaPagamentoSelecionada = null;
 
-        const nome = extrairNomeCliente(ag);
         const hora = ag['ag-hora'] || ag.hora || '--:--';
         const servico = extrairServicoLimpo(ag);
         const preco = obterValorAgendamento(ag);
@@ -1074,9 +1032,10 @@
             });
 
             if (response.ok) {
-                marcarComoPago(STATE.diaSelecionado, hora, BARBEIRO_ID);
                 toast(`Pagamento confirmado! ${formaPagamentoSelecionada} - ${formatMoeda(valorLiquido)}`, 'success');
                 fecharModalPagamento();
+                // Espera 2 segundos para o Google Calendar e o N8N atualizarem o status no evento
+                await new Promise(r => setTimeout(r, 2000));
                 await selecionarDia(STATE.diaSelecionado);
             } else {
                 const texto = await response.text();
@@ -1084,10 +1043,7 @@
             }
         } catch (err) {
             console.error('Erro ao confirmar pagamento:', err);
-            marcarComoPago(STATE.diaSelecionado, hora, BARBEIRO_ID);
-            toast('Webhook offline — pagamento registrado apenas localmente.', 'info');
-            fecharModalPagamento();
-            await selecionarDia(STATE.diaSelecionado);
+            toast('Erro de conexão. O pagamento NÃO foi registrado. Tente novamente.', 'error');
         } finally {
             hideLoader();
         }
@@ -1285,7 +1241,8 @@
         try {
             const response = await fetch(CLIENTES_REGULARES_URL, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            let data = await response.json();
+            let dataRaw = await response.json();
+            let data = Array.isArray(dataRaw) ? dataRaw[0] : dataRaw;
             let lista = [];
             if (Array.isArray(data)) lista = data;
             else if (data && typeof data === 'object') {

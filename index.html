@@ -15,22 +15,22 @@
   <meta name="apple-mobile-web-app-title" content="Muniz" />
   <meta name="theme-color" content="#1a2c50" />
   <meta name="mobile-web-app-capable" content="yes" />
- 
+
  <style>
     :root {
         /* ====== PALETA MUNIZ STUDIO (navy + gold) ====== */
-        --tinta: #1a2c50;              /* Azul marinho do logo */
-        --tinta-suave: #253862;         /* Navy um pouco mais claro */
-        --pedra: #f0e9db;              /* Creme quente de fundo */
+        --tinta: #1a2c50;
+        --tinta-suave: #253862;
+        --pedra: #f0e9db;
         --pedra-card: #ffffff;
-        --latao: #c9a875;              /* Dourado suave do leão */
-        --latao-escuro: #a88855;       /* Dourado mais escuro */
-        --bordo: #7a2331;              /* Borgonha para contraste */
+        --latao: #c9a875;
+        --latao-escuro: #a88855;
+        --bordo: #7a2331;
         --bordo-escuro: #591a24;
-        --navalha: #2f5d50;            /* Verde navalha mantido */
+        --navalha: #2f5d50;
         --texto: #1a1a24;
         --texto-suave: #6b6459;
-        --linha: #ddd4bf;              /* Linha mais quente */
+        --linha: #ddd4bf;
         --perigo: #a8332a;
         --info: #3f6a8f;
         --whatsapp: #25D366;
@@ -44,7 +44,6 @@
         --sombra: 0 8px 24px -12px rgba(26,44,80,0.25);
         --sombra-forte: 0 20px 48px -18px rgba(26,44,80,0.35);
 
-        /* Barber pole tradicional vermelho + azul */
         --faixa: repeating-linear-gradient(
             45deg,
             #c8102e 0px, #c8102e 14px,
@@ -290,6 +289,14 @@
     }
     .btn-atalho:hover, .btn-atalho.active { border-color: var(--latao); color: var(--latao-escuro); background: #faf6ec; }
 
+    /* DIAGNÓSTICO */
+    #diagnostico {
+        font-family: var(--fonte-dados);
+        font-size: .72rem;
+        color: var(--texto-suave);
+        margin: -12px 0 22px;
+    }
+
     /* KPIs */
     .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 30px; }
     .kpi-card { background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); padding: 20px; box-shadow: var(--sombra); }
@@ -447,17 +454,9 @@
         transition: all 0.3s ease;
     }
 
-    .hamburger-btn.active .hamburger-line:nth-child(1) {
-        transform: rotate(45deg) translate(8px, 8px);
-    }
-
-    .hamburger-btn.active .hamburger-line:nth-child(2) {
-        opacity: 0;
-    }
-
-    .hamburger-btn.active .hamburger-line:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -7px);
-    }
+    .hamburger-btn.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+    .hamburger-btn.active .hamburger-line:nth-child(2) { opacity: 0; }
+    .hamburger-btn.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
 
     .mobile-logo {
         flex: 1;
@@ -469,10 +468,7 @@
         color: var(--pedra);
         white-space: nowrap;
     }
-
-    .mobile-logo-text {
-        color: var(--latao);
-    }
+    .mobile-logo-text { color: var(--latao); }
 
     .sidebar-overlay {
         display: none;
@@ -482,10 +478,7 @@
         z-index: 99;
         backdrop-filter: blur(4px);
     }
-
-    .sidebar-overlay.active {
-        display: block;
-    }
+    .sidebar-overlay.active { display: block; }
 
     /* ================= MOBILE RESPONSIVE ================= */
     @media (max-width: 880px) {
@@ -512,75 +505,28 @@
         .sidebar-logo span:last-child { opacity: 1; }
         .nav-label { opacity: 1; }
 
-        #app {
-            margin-left: 0;
-            padding-top: 80px;
-        }
+        #app { margin-left: 0; padding-top: 80px; }
 
-        .kpi-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            font-size: 0.75rem;
-        }
-
-        .page-title {
-            font-size: 1.5rem;
-        }
-
-        .card {
-            padding: 16px;
-        }
-
-        table {
-            font-size: 0.75rem;
-        }
-
-        th, td {
-            padding: 8px 10px;
-        }
-
-        #toast-container {
-            bottom: 16px;
-            right: 16px;
-        }
-
-        .toast {
-            min-width: 250px;
-            font-size: 0.75rem;
-        }
+        .kpi-grid { grid-template-columns: 1fr 1fr; }
+        .btn { padding: 10px 20px; font-size: 0.75rem; }
+        .page-title { font-size: 1.5rem; }
+        .card { padding: 16px; }
+        table { font-size: 0.75rem; }
+        th, td { padding: 8px 10px; }
+        #toast-container { bottom: 16px; right: 16px; }
+        .toast { min-width: 250px; font-size: 0.75rem; }
     }
 
     @media (max-width: 520px) {
         .kpi-grid { grid-template-columns: 1fr; }
         .page-title { font-size: 1.2rem; }
-
-        #app {
-            padding: 80px 16px 40px;
-        }
-
+        #app { padding: 80px 16px 40px; }
         .card { padding: 12px; }
         table { font-size: 0.7rem; }
         th, td { padding: 6px 8px; }
-
-        .btn {
-            padding: 8px 16px;
-            font-size: 0.7rem;
-        }
-
-        .toast {
-            min-width: 200px;
-            font-size: 0.7rem;
-            padding: 10px 12px;
-        }
-
-        .page-header {
-            padding: 0 0 16px;
-            margin-bottom: 20px;
-        }
-
+        .btn { padding: 8px 16px; font-size: 0.7rem; }
+        .toast { min-width: 200px; font-size: 0.7rem; padding: 10px 12px; }
+        .page-header { padding: 0 0 16px; margin-bottom: 20px; }
         .kpi-value { font-size: 1.2rem; }
         .bloco-divisao .valor { font-size: 1.3rem; }
     }
@@ -689,6 +635,9 @@
       </div>
     </div>
 
+    <!-- DIAGNÓSTICO DA CARGA -->
+    <div id="diagnostico"></div>
+
     <!-- RESUMO GERAL -->
     <div class="kpi-grid">
       <div class="kpi-card">
@@ -750,7 +699,7 @@
     <div class="secao-titulo"><span class="numero">2</span> Divisão Final entre Sócios</div>
     <div class="fluxo-grid">
       <div class="bloco-divisao">
-        <div class="rotulo">Caixa − Liquido</div>
+        <div class="rotulo">Saldo Líquido (Caixa − Despesas)</div>
         <div class="valor" id="fluxo-saldo">R$ 0,00</div>
       </div>
       <div class="fluxo-seta">→</div>
@@ -791,67 +740,51 @@
     const STORAGE_KEY = 'auth_data_dashboard';
 
     function getAuthData() {
-        try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return null;
-            return JSON.parse(raw);
-        } catch { return null; }
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch { return null; }
     }
 
     function setAuthData() {
-        const hoje = new Date();
-        const dataStr = hoje.getFullYear() + '-' +
-                       String(hoje.getMonth()+1).padStart(2,'0') + '-' +
-                       String(hoje.getDate()).padStart(2,'0');
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: dataStr }));
+      const h = new Date();
+      const dataStr = `${h.getFullYear()}-${String(h.getMonth() + 1).padStart(2, '0')}-${String(h.getDate()).padStart(2, '0')}`;
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: dataStr })); } catch {}
     }
 
     function precisaAutenticar() {
-        const auth = getAuthData();
-        if (!auth) return true;
+      const auth = getAuthData();
+      if (!auth || !auth.data) return true;
 
-        const hoje = new Date();
-        const diaAtual = hoje.getDate();
-        const mesAtual = hoje.getMonth() + 1;
-        const anoAtual = hoje.getFullYear();
-
-        if (diaAtual === 8) {
-            if (!auth.data) return true;
-            const partes = auth.data.split('-');
-            if (partes.length !== 3) return true;
-            const anoSalvo = parseInt(partes[0], 10);
-            const mesSalvo = parseInt(partes[1], 10);
-            const diaSalvo = parseInt(partes[2], 10);
-            if (anoSalvo !== anoAtual || mesSalvo !== mesAtual || diaSalvo !== 8) {
-                return true;
-            }
-            return false;
-        } else {
-            if (!auth.data) return true;
-            return false;
-        }
+      const hoje = new Date();
+      if (hoje.getDate() === 8) {
+        const [a, m, d] = auth.data.split('-').map(n => parseInt(n, 10));
+        return !(a === hoje.getFullYear() && m === hoje.getMonth() + 1 && d === 8);
+      }
+      return false;
     }
 
     function autenticar(senha) {
-        if (senha === SENHA_CORRETA) {
-            setAuthData();
-            document.getElementById('login-overlay').classList.remove('active');
-            document.getElementById('app').style.display = 'block';
-            iniciarDashboard();
-            return true;
-        } else {
-            const erro = document.getElementById('login-erro');
-            erro.classList.add('visible');
-            setTimeout(() => erro.classList.remove('visible'), 3000);
-            return false;
-        }
+      if (senha === SENHA_CORRETA) {
+        setAuthData();
+        document.getElementById('login-overlay').classList.remove('active');
+        document.getElementById('app').style.display = 'block';
+        iniciarDashboard();
+        return true;
+      }
+      const erro = document.getElementById('login-erro');
+      erro.classList.add('visible');
+      setTimeout(() => erro.classList.remove('visible'), 3000);
+      return false;
     }
 
     /* =============================================
-       WEBHOOK CONFIG
+       CONFIG
     ============================================= */
     const API_CONFIG = {
-      OBTER_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter'
+      OBTER_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter',
+      TIMEOUT_MS: 20000,
+      LIMITE_N8N: 1000 // mesmo "limit" do nó Get row(s) no n8n
     };
 
     /* =============================================
@@ -861,206 +794,287 @@
       document.getElementById('loader').classList.add('visible');
       document.querySelector('.loader-text').textContent = msg;
     }
-
-    function hideLoader() {
-      document.getElementById('loader').classList.remove('visible');
-    }
+    function hideLoader() { document.getElementById('loader').classList.remove('visible'); }
 
     function toast(msg, type = 'info', duration = 4000) {
-      const container = document.getElementById('toast-container');
       const el = document.createElement('div');
       el.className = `toast ${type}`;
-      el.innerHTML = `<span class="toast-msg">${msg}</span>`;
-      container.appendChild(el);
+      const span = document.createElement('span');
+      span.className = 'toast-msg';
+      span.textContent = msg;
+      el.appendChild(span);
+      document.getElementById('toast-container').appendChild(el);
       setTimeout(() => el.remove(), duration);
     }
 
-    function formatMoeda(val) {
-      const sinal = val < 0 ? '-' : '';
-      return sinal + 'R$ ' + Math.abs(parseFloat(val || 0)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    function escapeHtml(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+      ));
     }
 
-    /* =============================================
-       PARSING DA RESPOSTA DA DATA TABLE (n8n)
-    ============================================= */
-    function normalizarLinha(row) {
-      const tipoBruto = String(row.Tipo ?? row.tipo ?? '').toLowerCase().trim();
-
-      const PALAVRAS_SAIDA = ['saida', 'saída', 'despesa', 'sangria', 'perda', 'retirada', 'pagamento'];
-      const PALAVRAS_ENTRADA = ['entrada', 'receita', 'venda', 'recebimento', 'ganho'];
-
-      let tipo = 'entrada';
-
-      if (PALAVRAS_SAIDA.some(p => tipoBruto.includes(p))) {
-        tipo = 'saida';
-      } else if (PALAVRAS_ENTRADA.some(p => tipoBruto.includes(p))) {
-        tipo = 'entrada';
-      } else {
-        tipo = 'entrada';
-      }
-
-      return {
-        tipo,
-        tipo_original: tipoBruto,
-        descricao: row.Descricao ?? row.descricao ?? '',
-        valor: parseFloat(row.Valor ?? row.valor ?? 0) || 0,
-        data_hora: row.Data ?? row.data_hora ?? null
-      };
+    const fmtBRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+    // recebe CENTAVOS (inteiro)
+    function formatMoeda(centavos) {
+      return fmtBRL.format((centavos || 0) / 100).replace(/\u00a0/g, ' ');
     }
 
     function pad(n) { return String(n).padStart(2, '0'); }
     function dataParaInput(d) { return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
 
     /* =============================================
-       CARREGAR DADOS DO CAIXA
+       PARSERS ROBUSTOS (principal causa de "valores estranhos")
+    ============================================= */
+
+    // Aceita 50, "50", "50.5", "50,50", "R$ 1.500,00", "1,500.00"
+    // Retorna CENTAVOS (inteiro) para evitar erro de ponto flutuante.
+    function parseValorCentavos(v) {
+      if (typeof v === 'number') return Number.isFinite(v) ? Math.round(v * 100) : 0;
+      let s = String(v ?? '').replace(/[^\d,.\-]/g, '');
+      if (!s || s === '-') return 0;
+
+      const temVirgula = s.includes(',');
+      const temPonto = s.includes('.');
+
+      if (temVirgula && temPonto) {
+        if (s.lastIndexOf(',') > s.lastIndexOf('.')) s = s.replace(/\./g, '').replace(',', '.');
+        else s = s.replace(/,/g, '');
+      } else if (temVirgula) {
+        s = s.replace(/\./g, '').replace(',', '.');
+      } else if (temPonto && /^-?\d{1,3}(\.\d{3})+$/.test(s)) {
+        s = s.replace(/\./g, ''); // "1.500" => 1500
+      }
+      const n = parseFloat(s);
+      return Number.isFinite(n) ? Math.round(n * 100) : 0;
+    }
+
+    // "yyyy-mm-dd" puro é tratado como data LOCAL (antes virava UTC e caía no dia anterior).
+    function parseData(v) {
+      if (v === null || v === undefined || v === '') return { date: null, somenteData: false };
+      if (v instanceof Date) return { date: isNaN(v) ? null : v, somenteData: false };
+      if (typeof v === 'number') { const d = new Date(v); return { date: isNaN(d) ? null : d, somenteData: false }; }
+
+      const s = String(v).trim();
+      let m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (m) return { date: new Date(+m[1], +m[2] - 1, +m[3], 12, 0, 0), somenteData: true };
+
+      m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})(?:[ ,T]+(\d{1,2}):(\d{2}))?/);
+      if (m) {
+        return {
+          date: new Date(+m[3], +m[2] - 1, +m[1], +(m[4] ?? 12), +(m[5] ?? 0)),
+          somenteData: m[4] === undefined
+        };
+      }
+
+      const iso = /^\d{4}-\d{2}-\d{2} \d/.test(s) ? s.replace(' ', 'T') : s;
+      const d = new Date(iso);
+      return { date: isNaN(d) ? null : d, somenteData: false };
+    }
+
+    function semAcento(s) {
+      return String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    }
+
+    const PALAVRAS_SAIDA = ['saida', 'despesa', 'sangria', 'perda', 'retirada', 'pagamento', 'gasto', 'custo'];
+    const PALAVRAS_ENTRADA = ['entrada', 'receita', 'venda', 'recebimento', 'ganho'];
+
+    function classificarTipo(tipoBruto) {
+      const t = semAcento(tipoBruto);
+      if (PALAVRAS_SAIDA.some(p => t.includes(p))) return 'saida';
+      if (PALAVRAS_ENTRADA.some(p => t.includes(p))) return 'entrada';
+      return 'desconhecido'; // ANTES: virava "entrada" em silêncio e inflava a renda
+    }
+
+    function pick(row, chaves) {
+      for (const k of chaves) if (row[k] !== undefined && row[k] !== null) return row[k];
+      return undefined;
+    }
+
+    function normalizarLinha(row) {
+      const tipoOriginal = pick(row, ['Tipo', 'tipo']) ?? '';
+      const { date, somenteData } = parseData(pick(row, ['Data', 'data_hora', 'data']));
+      let centavos = parseValorCentavos(pick(row, ['Valor', 'valor']));
+      const tipo = classificarTipo(tipoOriginal);
+      if (tipo === 'saida') centavos = Math.abs(centavos);
+
+      return {
+        id: pick(row, ['id', 'ID']) ?? null,
+        tipo,
+        tipo_original: String(tipoOriginal),
+        descricao: String(pick(row, ['Descricao', 'descricao']) ?? ''),
+        barbeiro: String(pick(row, ['Barbeiro', 'barbeiro']) ?? ''),
+        centavos,
+        data: date,
+        somenteData
+      };
+    }
+
+    // Extrai as linhas de qualquer formato que o n8n devolver
+    function extrairLinhas(data) {
+      let arr;
+      if (Array.isArray(data)) arr = data;
+      else if (Array.isArray(data?.data)) arr = data.data;
+      else if (data && typeof data === 'object') arr = [data];
+      else arr = [];
+
+      return arr
+        .map(item => item?.json ?? item)
+        .filter(r => r && typeof r === 'object' &&
+          ['Tipo', 'tipo', 'Valor', 'valor', 'Descricao', 'descricao'].some(k => r[k] !== undefined));
+    }
+
+    /* =============================================
+       CARREGAR DADOS
     ============================================= */
     let movimentacoes = [];
+    let resumoCarga = { recebidas: 0, duplicadas: 0, semData: 0, tipoDesconhecido: 0, tiposDesconhecidos: [] };
+    let reqId = 0;
 
     async function carregarDadosDivisao() {
+      const meuId = ++reqId;
       showLoader('CARREGANDO LANÇAMENTOS...');
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), API_CONFIG.TIMEOUT_MS);
+
       try {
-        const resp = await fetch(API_CONFIG.OBTER_CAIXA);
+        const resp = await fetch(`${API_CONFIG.OBTER_CAIXA}?t=${Date.now()}`, { cache: 'no-store', signal: ctrl.signal });
         if (!resp.ok) throw new Error('Resposta HTTP ' + resp.status);
-        const data = await resp.json();
 
-        const linhas = Array.isArray(data)
-          ? data
-          : Array.isArray(data?.data)
-            ? data.data
-            : (data ? [data] : []);
+        const texto = await resp.text();
+        const data = texto.trim() ? JSON.parse(texto) : [];
+        if (meuId !== reqId) return; // chegou uma resposta mais nova, ignora esta
 
-        movimentacoes = linhas.map(item => normalizarLinha(item.json ?? item));
+        const brutas = extrairLinhas(data);
 
-        console.log('📊 Movimentações recebidas:', movimentacoes.length, movimentacoes);
+        // remove duplicatas REAIS (mesmo id); lançamentos iguais com ids diferentes são mantidos
+        const vistos = new Set();
+        let duplicadas = 0;
+        const normalizadas = [];
+        for (const r of brutas) {
+          const n = normalizarLinha(r);
+          if (n.id !== null) {
+            if (vistos.has(String(n.id))) { duplicadas++; continue; }
+            vistos.add(String(n.id));
+          }
+          normalizadas.push(n);
+        }
+        movimentacoes = normalizadas;
+
+        const desconhecidos = movimentacoes.filter(m => m.tipo === 'desconhecido');
+        resumoCarga = {
+          recebidas: brutas.length,
+          duplicadas,
+          semData: movimentacoes.filter(m => !m.data).length,
+          tipoDesconhecido: desconhecidos.length,
+          tiposDesconhecidos: [...new Set(desconhecidos.map(m => m.tipo_original || '(vazio)'))]
+        };
+
+        console.log('📊 Linhas brutas do n8n (amostra):', brutas.slice(0, 5));
+        console.table(movimentacoes.slice(0, 15).map(m => ({
+          id: m.id, tipo: m.tipo, tipo_original: m.tipo_original, descricao: m.descricao,
+          valor: m.centavos / 100, data: m.data ? m.data.toLocaleString('pt-BR') : null
+        })));
+        console.log('🔎 Resumo da carga:', resumoCarga);
 
         aplicarFiltro();
 
-        if (movimentacoes.length > 0) {
+        if (brutas.length >= API_CONFIG.LIMITE_N8N) {
+          toast(`Atenção: o n8n devolveu ${brutas.length} linhas (limite). Pode haver lançamentos antigos faltando.`, 'error', 7000);
+        } else if (movimentacoes.length) {
           toast(`${movimentacoes.length} lançamentos carregados`, 'success');
         } else {
           toast('Nenhum lançamento encontrado no backend.', 'info');
         }
       } catch (err) {
+        if (meuId !== reqId) return;
         console.warn('Não foi possível carregar os lançamentos.', err);
         movimentacoes = [];
+        resumoCarga = { recebidas: 0, duplicadas: 0, semData: 0, tipoDesconhecido: 0, tiposDesconhecidos: [] };
         aplicarFiltro();
-        toast('Não foi possível carregar os dados do n8n. Verifique a conexão.', 'error');
+        toast(err.name === 'AbortError'
+          ? 'O servidor demorou demais para responder.'
+          : 'Não foi possível carregar os dados do n8n. Verifique a conexão.', 'error');
       } finally {
-        hideLoader();
+        clearTimeout(timer);
+        if (meuId === reqId) hideLoader();
       }
     }
 
+    /* =============================================
+       FILTRO DE PERÍODO
+    ============================================= */
     function definirAtalho(tipo) {
       const hoje = new Date();
-      let inicio, fim = new Date(hoje);
+      let inicio;
+      const fim = new Date(hoje);
 
-      if (tipo === 'hoje') {
-        inicio = new Date(hoje);
-      } else if (tipo === 'semana') {
-        inicio = new Date(hoje);
-        inicio.setDate(inicio.getDate() - 6);
-      } else if (tipo === 'mes') {
-        inicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-      } else {
-        inicio = new Date(2000, 0, 1);
-      }
+      if (tipo === 'hoje') inicio = new Date(hoje);
+      else if (tipo === 'semana') { inicio = new Date(hoje); inicio.setDate(inicio.getDate() - 6); }
+      else if (tipo === 'mes') inicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+      else inicio = new Date(2000, 0, 1);
 
       document.getElementById('filtro-inicio').value = dataParaInput(inicio);
       document.getElementById('filtro-fim').value = dataParaInput(fim);
-
       document.querySelectorAll('.btn-atalho').forEach(b => b.classList.toggle('active', b.dataset.atalho === tipo));
       aplicarFiltro();
     }
-
-    document.querySelectorAll('.btn-atalho').forEach(btn => {
-      btn.addEventListener('click', () => definirAtalho(btn.dataset.atalho));
-    });
-    document.getElementById('filtro-inicio').addEventListener('change', () => {
-      document.querySelectorAll('.btn-atalho').forEach(b => b.classList.remove('active'));
-      aplicarFiltro();
-    });
-    document.getElementById('filtro-fim').addEventListener('change', () => {
-      document.querySelectorAll('.btn-atalho').forEach(b => b.classList.remove('active'));
-      aplicarFiltro();
-    });
 
     function aplicarFiltro() {
       const inicioStr = document.getElementById('filtro-inicio').value;
       const fimStr = document.getElementById('filtro-fim').value;
 
-      let inicio, fim;
-      if (!inicioStr && !fimStr) {
-        inicio = new Date(0);
-        fim = new Date(8640000000000000);
-      } else {
-        inicio = inicioStr ? new Date(inicioStr + 'T00:00:00') : new Date(0);
-        fim = fimStr ? new Date(fimStr + 'T23:59:59.999') : new Date(8640000000000000);
-      }
+      const inicio = inicioStr ? new Date(inicioStr + 'T00:00:00') : new Date(0);
+      const fim = fimStr ? new Date(fimStr + 'T23:59:59.999') : new Date(8640000000000000);
 
-      const filtradas = movimentacoes.filter(m => {
-        if (!m.data_hora) return false;
-        const d = new Date(m.data_hora);
-        if (isNaN(d)) return false;
-        return d >= inicio && d <= fim;
-      });
-
-      console.log('📅 Filtro:', inicioStr || '—', 'até', fimStr || '—');
-      console.log('📌 Movimentações no período:', filtradas.length);
-
+      const filtradas = movimentacoes.filter(m => m.data && m.data >= inicio && m.data <= fim);
       calcularDivisao(filtradas);
     }
 
     /* =============================================
-       REGRA DE NEGÓCIO DA DIVISÃO FINANCEIRA
+       REGRA DE NEGÓCIO (tudo em centavos)
     ============================================= */
     function calcularDivisao(lista) {
-      let renda = 0;
-      let despesas = 0;
-      const entradas = [];
-      const saidas = [];
+      let renda = 0, despesas = 0;
+      const entradas = [], saidas = [];
 
-      lista.forEach(m => {
-        if (m.tipo === 'entrada') {
-          renda += m.valor;
-          entradas.push(m);
-        } else if (m.tipo === 'saida') {
-          despesas += m.valor;
-          saidas.push(m);
-        }
-      });
+      for (const m of lista) {
+        if (m.tipo === 'entrada') { renda += m.centavos; entradas.push(m); }
+        else if (m.tipo === 'saida') { despesas += m.centavos; saidas.push(m); }
+        // tipo 'desconhecido' NÃO entra no cálculo
+      }
 
-      entradas.sort((a, b) => new Date(b.data_hora) - new Date(a.data_hora));
-      saidas.sort((a, b) => new Date(b.data_hora) - new Date(a.data_hora));
+      const maisRecente = (a, b) => b.data - a.data;
+      entradas.sort(maisRecente);
+      saidas.sort(maisRecente);
 
-      const repasseBarbeiro = renda / 2;
-      const fundoDespesas = renda / 2;
+      const repasseBarbeiro = Math.round(renda / 2);
+      const fundoDespesas = renda - repasseBarbeiro;
       const saldoLiquido = fundoDespesas - despesas;
-      const parteKayo = saldoLiquido / 2;
-      const parteMuniz = saldoLiquido / 2;
+      const parteKayo = Math.round(saldoLiquido / 2);
+      const parteMuniz = saldoLiquido - parteKayo; // Kayo + Muniz = saldo exato
 
-      document.getElementById('kpi-renda').textContent = formatMoeda(renda);
-      document.getElementById('kpi-despesas').textContent = formatMoeda(despesas);
-      const kpiSaldo = document.getElementById('kpi-saldo-liquido');
-      kpiSaldo.textContent = formatMoeda(saldoLiquido);
-      kpiSaldo.className = 'kpi-value ' + (saldoLiquido < 0 ? 'red' : 'green');
+      const set = (id, txt) => { document.getElementById(id).textContent = txt; };
 
-      document.getElementById('fluxo-renda').textContent = formatMoeda(renda);
-      document.getElementById('fluxo-barbeiro').textContent = formatMoeda(repasseBarbeiro);
-      document.getElementById('fluxo-fundo').textContent = formatMoeda(fundoDespesas);
+      set('kpi-renda', formatMoeda(renda));
+      set('kpi-despesas', formatMoeda(despesas));
+      set('kpi-saldo-liquido', formatMoeda(saldoLiquido));
+      document.getElementById('kpi-saldo-liquido').className = 'kpi-value ' + (saldoLiquido < 0 ? 'red' : 'green');
 
-      const fluxoSaldoEl = document.getElementById('fluxo-saldo');
-      fluxoSaldoEl.textContent = formatMoeda(saldoLiquido);
-      fluxoSaldoEl.style.color = saldoLiquido < 0 ? 'var(--perigo)' : '';
-      document.getElementById('fluxo-kayo').textContent = formatMoeda(parteKayo);
-      document.getElementById('fluxo-muniz-socio').textContent = formatMoeda(parteMuniz);
+      set('fluxo-renda', formatMoeda(renda));
+      set('fluxo-barbeiro', formatMoeda(repasseBarbeiro));
+      set('fluxo-fundo', formatMoeda(fundoDespesas));
+      set('fluxo-saldo', formatMoeda(saldoLiquido));
+      document.getElementById('fluxo-saldo').style.color = saldoLiquido < 0 ? 'var(--perigo)' : '';
+      set('fluxo-kayo', formatMoeda(parteKayo));
+      set('fluxo-muniz-socio', formatMoeda(parteMuniz));
 
       document.getElementById('aviso-negativo').classList.toggle('visible', saldoLiquido < 0);
-
-      document.getElementById('total-despesas-inline').textContent = formatMoeda(despesas);
-      document.getElementById('total-entradas-inline').textContent = formatMoeda(renda);
+      set('total-despesas-inline', formatMoeda(despesas));
+      set('total-entradas-inline', formatMoeda(renda));
 
       renderTabela('tabela-despesas', saidas, 3);
       renderTabela('tabela-entradas', entradas, 3);
+      renderDiagnostico(lista.length, entradas.length, saidas.length);
     }
 
     function renderTabela(idTbody, lista, colspan) {
@@ -1070,90 +1084,80 @@
         return;
       }
       tbody.innerHTML = lista.map(m => {
-        const d = new Date(m.data_hora);
-        const dataFmt = isNaN(d) ? '—' : d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        const cor = m.tipo === 'entrada' ? 'var(--navalha)' : 'var(--bordo)';
-        const sinal = m.tipo === 'entrada' ? '+' : '-';
+        const dataFmt = m.somenteData
+          ? m.data.toLocaleDateString('pt-BR')
+          : m.data.toLocaleDateString('pt-BR') + ' ' + m.data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        const entrada = m.tipo === 'entrada';
         return `
           <tr>
-            <td>${m.descricao || '—'}</td>
+            <td>${escapeHtml(m.descricao) || '—'}</td>
             <td>${dataFmt}</td>
-            <td style="color:${cor}; font-weight:600;">${sinal} ${formatMoeda(m.valor)}</td>
-          </tr>
-        `;
+            <td style="color:${entrada ? 'var(--navalha)' : 'var(--bordo)'}; font-weight:600;">${entrada ? '+' : '-'} ${formatMoeda(Math.abs(m.centavos))}</td>
+          </tr>`;
       }).join('');
+    }
+
+    // Linha pequena sob o filtro: ajuda a enxergar de onde vêm números estranhos
+    function renderDiagnostico(totalPeriodo, nEntradas, nSaidas) {
+      const el = document.getElementById('diagnostico');
+      if (!el) return;
+      const r = resumoCarga;
+      const partes = [`${r.recebidas} linhas recebidas`, `${totalPeriodo} no período (${nEntradas} entradas, ${nSaidas} despesas)`];
+      if (r.duplicadas) partes.push(`${r.duplicadas} duplicadas removidas`);
+      if (r.semData) partes.push(`${r.semData} sem data válida (ignoradas)`);
+      if (r.tipoDesconhecido) partes.push(`${r.tipoDesconhecido} com tipo desconhecido (ignoradas): ${r.tiposDesconhecidos.join(', ')}`);
+      el.textContent = partes.join(' · ');
+      el.style.color = (r.semData || r.tipoDesconhecido) ? 'var(--perigo)' : 'var(--texto-suave)';
     }
 
     /* =============================================
        MENU HAMBÚRGUER
     ============================================= */
-    function toggleMenu() {
-      const hamburger = document.getElementById('hamburger-btn');
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebar-overlay');
-
-      hamburger.classList.toggle('active');
-      sidebar.classList.toggle('active');
-      overlay.classList.toggle('active');
-      document.body.style.overflow = hamburger.classList.contains('active') ? 'hidden' : '';
+    function setMenu(aberto) {
+      document.getElementById('hamburger-btn').classList.toggle('active', aberto);
+      document.getElementById('hamburger-btn').setAttribute('aria-expanded', String(aberto));
+      document.getElementById('sidebar').classList.toggle('active', aberto);
+      document.getElementById('sidebar-overlay').classList.toggle('active', aberto);
+      document.body.style.overflow = aberto ? 'hidden' : '';
     }
-
-    function closeMenu() {
-      const hamburger = document.getElementById('hamburger-btn');
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebar-overlay');
-
-      hamburger.classList.remove('active');
-      sidebar.classList.remove('active');
-      overlay.classList.remove('active');
-      document.body.style.overflow = '';
-    }
+    const toggleMenu = () => setMenu(!document.getElementById('sidebar').classList.contains('active'));
+    const closeMenu = () => setMenu(false);
 
     /* =============================================
        INICIALIZAÇÃO
     ============================================= */
+    let dashboardIniciado = false;
+
     function iniciarDashboard() {
+      if (dashboardIniciado) return; // evita listeners duplicados
+      dashboardIniciado = true;
+
+      document.querySelectorAll('.btn-atalho').forEach(btn => btn.addEventListener('click', () => definirAtalho(btn.dataset.atalho)));
+      ['filtro-inicio', 'filtro-fim'].forEach(id => {
+        document.getElementById(id).addEventListener('change', () => {
+          document.querySelectorAll('.btn-atalho').forEach(b => b.classList.remove('active'));
+          aplicarFiltro();
+        });
+      });
+
+      document.getElementById('hamburger-btn').addEventListener('click', toggleMenu);
+      document.getElementById('sidebar-overlay').addEventListener('click', closeMenu);
+      document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', closeMenu));
+      window.addEventListener('resize', () => { if (window.innerWidth > 880) closeMenu(); });
+
       definirAtalho('mes');
       carregarDadosDivisao();
-
-      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-      document.querySelector('a[href="dashboard.html"]')?.classList.add('active');
-
-      const hamburger = document.getElementById('hamburger-btn');
-      const overlay = document.getElementById('sidebar-overlay');
-      const navItems = document.querySelectorAll('.nav-item');
-
-      hamburger.addEventListener('click', toggleMenu);
-      overlay.addEventListener('click', closeMenu);
-
-      navItems.forEach(item => {
-        item.addEventListener('click', closeMenu);
-      });
-
-      window.addEventListener('resize', () => {
-        if (window.innerWidth > 880) {
-          closeMenu();
-        }
-      });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('btn-login').addEventListener('click', function() {
-        const input = document.getElementById('senha-input');
-        autenticar(input.value);
-        input.value = '';
-      });
-
-      document.getElementById('senha-input').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          document.getElementById('btn-login').click();
-        }
-      });
+      const input = document.getElementById('senha-input');
+      document.getElementById('btn-login').addEventListener('click', () => { autenticar(input.value); input.value = ''; });
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('btn-login').click(); });
 
       if (precisaAutenticar()) {
         document.getElementById('login-overlay').classList.add('active');
         document.getElementById('app').style.display = 'none';
-        document.getElementById('senha-input').focus();
+        input.focus();
       } else {
         document.getElementById('login-overlay').classList.remove('active');
         document.getElementById('app').style.display = 'block';
