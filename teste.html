@@ -1,1170 +1,339 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUNIZ STUDIO — Gestão</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="image.png" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="image.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="image.png" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Muniz" />
-  <meta name="theme-color" content="#1a2c50" />
-  <meta name="mobile-web-app-capable" content="yes" />
-
- <style>
-    :root {
-        /* ====== PALETA MUNIZ STUDIO (navy + gold) ====== */
-        --tinta: #1a2c50;
-        --tinta-suave: #253862;
-        --pedra: #f0e9db;
-        --pedra-card: #ffffff;
-        --latao: #c9a875;
-        --latao-escuro: #a88855;
-        --bordo: #7a2331;
-        --bordo-escuro: #591a24;
-        --navalha: #2f5d50;
-        --texto: #1a1a24;
-        --texto-suave: #6b6459;
-        --linha: #ddd4bf;
-        --perigo: #a8332a;
-        --info: #3f6a8f;
-        --whatsapp: #25D366;
-
-        --fonte-cartaz: 'Oswald', sans-serif;
-        --fonte-corpo: 'Inter', sans-serif;
-        --fonte-dados: 'IBM Plex Mono', monospace;
-
-        --radius: 10px;
-        --radius-peq: 6px;
-        --sombra: 0 8px 24px -12px rgba(26,44,80,0.25);
-        --sombra-forte: 0 20px 48px -18px rgba(26,44,80,0.35);
-
-        --faixa: repeating-linear-gradient(
-            45deg,
-            #c8102e 0px, #c8102e 14px,
-            var(--pedra-card) 14px, var(--pedra-card) 28px,
-            #1e40af 28px, #1e40af 42px,
-            var(--pedra-card) 42px, var(--pedra-card) 56px
-        );
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-        background: var(--pedra);
-        color: var(--texto);
-        font-family: var(--fonte-corpo);
-        min-height: 100vh;
-        -webkit-font-smoothing: antialiased;
-    }
-    a { color: inherit; text-decoration: none; }
-    button { cursor: pointer; font-family: inherit; }
-
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--pedra); }
-    ::-webkit-scrollbar-thumb { background: var(--latao); border-radius: 3px; }
-
-    .faixa-topo { height: 5px; width: 100%; background: var(--faixa); background-size: 70px 70px; animation: girarFaixa 3.2s linear infinite; }
-    @keyframes girarFaixa { from { background-position: 0 0; } to { background-position: 70px 0; } }
-
-    /* ================= LOGIN OVERLAY ================= */
-    #login-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(26, 44, 80, 0.95);
-        backdrop-filter: blur(8px);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 99999;
-        padding: 20px;
-    }
-    #login-overlay.active { display: flex; }
-    .login-box {
-        background: var(--pedra-card);
-        border-radius: var(--radius);
-        padding: 40px 36px;
-        max-width: 420px;
-        width: 100%;
-        box-shadow: var(--sombra-forte);
-        text-align: center;
-        animation: modalEntrar 0.4s ease;
-        border-top: 5px solid var(--latao);
-    }
-    @keyframes modalEntrar {
-        from { opacity: 0; transform: translateY(-20px) scale(0.96); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    .login-box h1 {
-        font-family: var(--fonte-cartaz);
-        font-size: 1.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        color: var(--tinta);
-        margin-bottom: 6px;
-    }
-    .login-box .sub {
-        color: var(--texto-suave);
-        font-size: 0.9rem;
-        margin-bottom: 24px;
-        border-bottom: 1px solid var(--linha);
-        padding-bottom: 16px;
-    }
-    .login-box .login-icon {
-        font-size: 2.8rem;
-        margin-bottom: 10px;
-        color: var(--latao);
-    }
-    .login-box input {
-        width: 100%;
-        padding: 14px 16px;
-        border: 2px solid var(--linha);
-        border-radius: var(--radius-peq);
-        font-size: 1rem;
-        font-family: var(--fonte-corpo);
-        background: var(--pedra);
-        color: var(--texto);
-        transition: border-color 0.2s;
-        margin-bottom: 16px;
-        text-align: center;
-        letter-spacing: 2px;
-    }
-    .login-box input:focus {
-        outline: none;
-        border-color: var(--latao);
-    }
-    .login-box .btn-entrar {
-        width: 100%;
-        padding: 14px;
-        background: var(--tinta);
-        color: #fff;
-        border: none;
-        border-radius: var(--radius-peq);
-        font-family: var(--fonte-cartaz);
-        font-size: 1rem;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        font-weight: 600;
-        transition: background 0.15s;
-    }
-    .login-box .btn-entrar:hover {
-        background: var(--latao-escuro);
-    }
-    .login-box .erro {
-        color: var(--perigo);
-        font-size: 0.85rem;
-        margin-top: 12px;
-        display: none;
-    }
-    .login-box .erro.visible {
-        display: block;
-    }
-
-    /* ================= SIDEBAR ================= */
-    #sidebar {
-        position: fixed; left: 0; top: 5px; bottom: 0;
-        width: 72px; background: var(--tinta); border-right: 1px solid rgba(201,168,117,0.25);
-        display: flex; flex-direction: column; align-items: center; padding: 22px 0;
-        z-index: 100; transition: width .3s ease; overflow: hidden;
-    }
-    #sidebar:hover { width: 220px; }
-    .sidebar-logo {
-        font-family: var(--fonte-cartaz); font-size: 1.05rem; font-weight: 600; letter-spacing: 0.1em;
-        text-transform: uppercase; color: var(--pedra); white-space: nowrap; overflow: hidden;
-        width: 100%; text-align: center; padding: 0 16px; margin-bottom: 18px;
-    }
-    .sidebar-logo span:last-child { color: var(--latao); opacity: 0; transition: opacity .2s; }
-    #sidebar:hover .sidebar-logo span:last-child { opacity: 1; }
-    .sidebar-logo-icon { min-width: 40px; display: inline-block; }
-
-    .nav-item {
-        width: 100%; display: flex; align-items: center; gap: 14px; padding: 13px 16px;
-        transition: background .15s, border-color .15s; border-left: 3px solid transparent; white-space: nowrap;
-    }
-    .nav-item:hover { background: rgba(201,168,117,0.1); border-left-color: var(--latao-escuro); }
-    .nav-item.active { background: rgba(201,168,117,0.16); border-left-color: var(--latao); }
-    .nav-item.active .nav-icon, .nav-item.active .nav-label { color: var(--latao); }
-    .nav-icon { min-width: 40px; text-align: center; color: #8896b0; font-size: 1.05rem; }
-    .nav-label { font-size: 0.82rem; font-weight: 500; color: #8896b0; opacity: 0; transition: opacity .2s; }
-    #sidebar:hover .nav-label { opacity: 1; }
-
-    /* ================= APP ================= */
-    #app { margin-left: 72px; min-height: 100vh; padding: 36px 40px 60px; max-width: 1180px; }
-
-    .page-header {
-        padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px; position: relative; overflow: hidden;
-    }
-    .page-header::after {
-        content: '⌗'; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
-        font-size: 64px; color: rgba(201,168,117,0.15); pointer-events: none;
-    }
-    .page-title { font-family: var(--fonte-cartaz); font-size: 1.9rem; text-transform: uppercase; letter-spacing: 0.02em; color: var(--tinta); margin-bottom: 4px; }
-    .page-subtitle { color: var(--texto-suave); font-size: 0.88rem; }
-
-    .card {
-        background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius);
-        padding: 24px; box-shadow: var(--sombra); position: relative; overflow: hidden; transition: border-color .15s, box-shadow .15s;
-        margin-bottom: 24px;
-    }
-    .card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--faixa); background-size: 48px 48px; }
-    .card:hover { border-color: var(--latao); }
-    .card-title {
-        font-family: var(--fonte-cartaz); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
-        color: var(--tinta); text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
-    }
-    .card-title::after { content: ""; flex: 1; height: 1px; background: var(--linha); }
-    .card-title .total-inline { margin-left: auto; color: var(--texto); font-family: var(--fonte-dados); font-size: 0.9rem; text-transform: none; letter-spacing: 0; }
-
-    /* BOTÕES */
-    .btn {
-        display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 26px;
-        border-radius: var(--radius-peq); font-family: var(--fonte-cartaz); font-size: 0.8rem; font-weight: 600;
-        letter-spacing: 0.04em; text-transform: uppercase; transition: background .15s, transform .12s, box-shadow .15s; border: none;
-    }
-    .btn:active { transform: scale(0.98); }
-    .btn-outline { background: transparent; color: var(--tinta); border: 2px solid var(--linha); }
-    .btn-outline:hover { border-color: var(--latao); background: #f7f2e6; }
-
-    /* TABELA */
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    thead tr { border-bottom: 2px solid var(--linha); }
-    th { text-align: left; padding: 11px 14px; font-family: var(--fonte-cartaz); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--tinta); }
-    td { padding: 13px 14px; border-bottom: 1px solid var(--linha); color: var(--texto); }
-    tbody tr { transition: background .15s; }
-    tbody tr:hover { background: #f7f2e6; }
-
-    /* FILTRO DE PERÍODO */
-    .filtro-periodo {
-        display: flex;
-        align-items: flex-end;
-        gap: 12px;
-        flex-wrap: wrap;
-        background: var(--pedra-card);
-        border: 1px solid var(--linha);
-        border-radius: var(--radius);
-        padding: 16px 18px;
-        box-shadow: var(--sombra);
-        margin-bottom: 24px;
-    }
-    .filtro-periodo .form-group { margin-bottom: 0; min-width: 150px; flex: 1; }
-    .filtro-periodo label {
-        display: block; font-family: var(--fonte-cartaz); font-size: 0.7rem; font-weight: 600;
-        letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta); margin-bottom: 7px;
-    }
-    .filtro-periodo input[type="date"] {
-        font-family: var(--fonte-corpo);
-        background: var(--pedra);
-        border: 2px solid var(--linha);
-        border-radius: var(--radius-peq);
-        color: var(--texto);
-        padding: 10px 12px;
-        width: 100%;
-        font-size: 0.88rem;
-        transition: border-color .15s;
-    }
-    .filtro-periodo input[type="date"]:focus { outline: none; border-color: var(--latao); }
-    .filtro-atalhos { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn-atalho {
-        padding: 9px 14px;
-        border-radius: var(--radius-peq);
-        border: 2px solid var(--linha);
-        background: var(--pedra);
-        font-family: var(--fonte-cartaz);
-        font-size: 0.7rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        color: var(--texto-suave);
-        transition: all .15s;
-        white-space: nowrap;
-    }
-    .btn-atalho:hover, .btn-atalho.active { border-color: var(--latao); color: var(--latao-escuro); background: #faf6ec; }
-
-    /* DIAGNÓSTICO */
-    #diagnostico {
-        font-family: var(--fonte-dados);
-        font-size: .72rem;
-        color: var(--texto-suave);
-        margin: -12px 0 22px;
-    }
-
-    /* KPIs */
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 30px; }
-    .kpi-card { background: var(--pedra-card); border: 1px solid var(--linha); border-radius: var(--radius); padding: 20px; box-shadow: var(--sombra); }
-    .kpi-title { font-family: var(--fonte-cartaz); font-size: 0.7rem; text-transform: uppercase; color: var(--texto-suave); letter-spacing: 0.06em; }
-    .kpi-value { font-family: var(--fonte-dados); font-size: 1.5rem; font-weight: 600; margin-top: 8px; color: var(--texto); }
-    .kpi-value.green { color: var(--navalha); }
-    .kpi-value.red { color: var(--bordo); }
-    .kpi-value.gold { color: var(--latao-escuro); }
-
-    /* SEÇÕES */
-    .secao-titulo {
-        font-family: var(--fonte-cartaz);
-        font-size: 1rem;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: var(--tinta);
-        margin: 38px 0 16px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-    .secao-titulo .numero {
-        width: 26px; height: 26px;
-        background: var(--tinta);
-        color: var(--latao);
-        border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 0.8rem;
-        font-weight: 700;
-    }
-    .secao-titulo::after { content: ""; flex: 1; height: 1px; background: var(--linha); }
-
-    /* FLUXO DE DIVISÃO */
-    .fluxo-grid {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
-        gap: 16px;
-        align-items: center;
-        margin-bottom: 12px;
-    }
-    @media (max-width: 700px) {
-        .fluxo-grid { grid-template-columns: 1fr; }
-        .fluxo-seta { transform: rotate(90deg); margin: 4px auto; }
-    }
-    .fluxo-seta { font-size: 1.6rem; color: var(--latao); text-align: center; }
-    .bloco-divisao {
-        background: var(--pedra-card);
-        border: 1px solid var(--linha);
-        border-radius: var(--radius);
-        padding: 20px;
-        box-shadow: var(--sombra);
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
-    .bloco-divisao::before {
-        content: "";
-        position: absolute; top: 0; left: 0; right: 0; height: 5px;
-        background: var(--faixa); background-size: 40px 40px;
-    }
-    .bloco-divisao .rotulo {
-        font-family: var(--fonte-cartaz);
-        font-size: 0.72rem;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        color: var(--texto-suave);
-        margin-bottom: 6px;
-    }
-    .bloco-divisao .percentual {
-        display: inline-block;
-        font-family: var(--fonte-cartaz);
-        font-size: 0.65rem;
-        background: rgba(201,168,117,0.2);
-        color: var(--latao-escuro);
-        padding: 2px 10px;
-        border-radius: 20px;
-        margin-bottom: 10px;
-    }
-    .bloco-divisao .valor {
-        font-family: var(--fonte-dados);
-        font-size: 1.7rem;
-        font-weight: 600;
-        color: var(--texto);
-    }
-    .bloco-divisao.origem .valor { color: var(--latao-escuro); }
-    .bloco-divisao.destino .valor { color: var(--navalha); }
-
-    .aviso-saldo-negativo {
-        background: #fdecea;
-        border: 1px solid var(--perigo);
-        color: var(--bordo-escuro);
-        border-radius: var(--radius-peq);
-        padding: 12px 16px;
-        font-size: 0.82rem;
-        margin-bottom: 16px;
-        display: none;
-    }
-    .aviso-saldo-negativo.visible { display: block; }
-
-    /* LOADER / TOAST */
-    .loader-overlay {
-        position: fixed; inset: 0; background: rgba(240,233,219,0.92); backdrop-filter: blur(6px);
-        display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 9000;
-    }
-    .loader-overlay.visible { display: flex; }
-    .loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--linha); border-top-color: var(--tinta); animation: spin .8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loader-text { margin-top: 18px; font-family: var(--fonte-cartaz); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta); }
-
-    #toast-container { position: fixed; bottom: 28px; right: 28px; z-index: 9998; display: flex; flex-direction: column; gap: 10px; }
-    .toast {
-        display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--pedra-card); border: 1px solid var(--linha);
-        border-radius: var(--radius); min-width: 300px; box-shadow: var(--sombra-forte); animation: slideIn .35s ease; font-size: 0.85rem; color: var(--texto);
-    }
-    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    .toast.success { border-color: var(--navalha); }
-    .toast.error { border-color: var(--perigo); }
-    .toast.info { border-color: var(--latao); }
-
-    /* ================= HEADER MOBILE ================= */
-    .mobile-header {
-        display: none;
-        position: fixed;
-        top: 5px;
-        left: 0;
-        right: 0;
-        height: 60px;
-        background: var(--tinta);
-        border-bottom: 1px solid rgba(201,168,117,0.25);
-        z-index: 101;
-        align-items: center;
-        padding: 0 16px;
-        gap: 16px;
-    }
-
-    .hamburger-btn {
-        display: none;
-        width: 40px;
-        height: 40px;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
-        padding: 0;
-    }
-
-    .hamburger-line {
-        width: 24px;
-        height: 2px;
-        background: var(--latao);
-        transition: all 0.3s ease;
-    }
-
-    .hamburger-btn.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
-    .hamburger-btn.active .hamburger-line:nth-child(2) { opacity: 0; }
-    .hamburger-btn.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
-
-    .mobile-logo {
-        flex: 1;
-        font-family: var(--fonte-cartaz);
-        font-size: 0.95rem;
-        font-weight: 600;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--pedra);
-        white-space: nowrap;
-    }
-    .mobile-logo-text { color: var(--latao); }
-
-    .sidebar-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(26, 44, 80, 0.5);
-        z-index: 99;
-        backdrop-filter: blur(4px);
-    }
-    .sidebar-overlay.active { display: block; }
-
-    /* ================= MOBILE RESPONSIVE ================= */
-    @media (max-width: 880px) {
-        .mobile-header { display: flex; }
-        .hamburger-btn { display: flex; }
-
-        #sidebar {
-            position: fixed;
-            left: 0;
-            top: 65px;
-            bottom: 0;
-            width: 280px;
-            height: auto;
-            max-height: calc(100vh - 65px);
-            overflow-y: auto;
-            flex-direction: column;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            z-index: 102;
-        }
-
-        #sidebar.active { transform: translateX(0); }
-        #sidebar:hover { width: 280px; }
-        .sidebar-logo span:last-child { opacity: 1; }
-        .nav-label { opacity: 1; }
-
-        #app { margin-left: 0; padding-top: 80px; }
-
-        .kpi-grid { grid-template-columns: 1fr 1fr; }
-        .btn { padding: 10px 20px; font-size: 0.75rem; }
-        .page-title { font-size: 1.5rem; }
-        .card { padding: 16px; }
-        table { font-size: 0.75rem; }
-        th, td { padding: 8px 10px; }
-        #toast-container { bottom: 16px; right: 16px; }
-        .toast { min-width: 250px; font-size: 0.75rem; }
-    }
-
-    @media (max-width: 520px) {
-        .kpi-grid { grid-template-columns: 1fr; }
-        .page-title { font-size: 1.2rem; }
-        #app { padding: 80px 16px 40px; }
-        .card { padding: 12px; }
-        table { font-size: 0.7rem; }
-        th, td { padding: 6px 8px; }
-        .btn { padding: 8px 16px; font-size: 0.7rem; }
-        .toast { min-width: 200px; font-size: 0.7rem; padding: 10px 12px; }
-        .page-header { padding: 0 0 16px; margin-bottom: 20px; }
-        .kpi-value { font-size: 1.2rem; }
-        .bloco-divisao .valor { font-size: 1.3rem; }
-    }
-
-    @media (max-width: 380px) {
-        .mobile-logo { font-size: 0.8rem; }
-        #app { padding: 80px 12px 40px; }
-        .page-title { font-size: 1rem; }
-        table { font-size: 0.65rem; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quem vai ganhar? ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --jade:#2fb68a; --jade-d:#0f6b52; --mint:#d9f7ea; --pink:#ff8fb7; --pink-d:#d6336c;
+  --blue:#7fb8f5; --blue-d:#2b6fd1; --ink:#2b3a36;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:"Fredoka","Nunito",ui-rounded,"Segoe UI",system-ui,sans-serif;
+  color:var(--ink);
+  background:linear-gradient(160deg,#e3fbf0 0%,#fff0f6 55%,#e6f2ff 100%);
+  overflow-x:hidden;
+  padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);
+}
+/* bolhas de fundo */
+.bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.bg span{position:absolute;bottom:-60px;opacity:.5;animation:rise linear infinite;will-change:transform}
+@keyframes rise{
+  0%{transform:translateY(0) rotate(0) translateX(0)}
+  50%{transform:translateY(-60vh) rotate(20deg) translateX(18px)}
+  100%{transform:translateY(-115vh) rotate(-15deg) translateX(-12px)}
+}
+main{
+  position:relative;z-index:1;min-height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px 16px 32px;text-align:center;gap:14px;
+}
+.baby{font-size:44px;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-10px) rotate(6deg)}}
+h1{font-size:clamp(30px,8vw,48px);font-weight:700;color:var(--jade-d);line-height:1.1}
+.sub{min-height:28px;font-size:clamp(16px,4.2vw,20px);font-weight:500;color:#5a6f69;transition:opacity .3s}
+.turns{display:flex;gap:14px}
+.chip{
+  width:56px;height:56px;border-radius:50%;display:grid;place-items:center;
+  font-size:32px;font-weight:700;background:#fff;opacity:.45;
+  transition:transform .35s cubic-bezier(.3,1.6,.5,1),opacity .3s,box-shadow .3s;
+}
+.chip.f{color:var(--pink-d)} .chip.m{color:var(--blue-d)}
+.chip.on{opacity:1;transform:scale(1.18) translateY(-3px);box-shadow:0 8px 20px rgba(47,182,138,.35)}
+.wrap{position:relative;width:min(92vw,400px)}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,2.4vw,14px)}
+.card{
+  aspect-ratio:1;border:0;background:none;padding:0;cursor:pointer;
+  perspective:700px;border-radius:24px;font:inherit;
+}
+.inner{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d;transition:transform .75s cubic-bezier(.3,1.3,.5,1)}
+.card.open .inner{transform:rotateY(180deg)}
+.face{
+  position:absolute;inset:0;border-radius:24px;display:grid;place-items:center;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  box-shadow:0 6px 0 rgba(15,107,82,.18),0 12px 22px rgba(15,107,82,.14);
+}
+.back{background:linear-gradient(145deg,#a6efd2,#35b98c)}
+.back::after{
+  content:"";position:absolute;inset:0;border-radius:24px;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);
+  background-size:250% 100%;animation:sheen 3.6s ease-in-out infinite;
+}
+@keyframes sheen{0%{background-position:150% 0}60%,100%{background-position:-60% 0}}
+.back svg{width:58%;height:58%;filter:drop-shadow(0 3px 3px rgba(15,107,82,.35))}
+.front{transform:rotateY(180deg)}
+.f .front{background:linear-gradient(145deg,#ffe0eb,#ff9cbd)}
+.m .front{background:linear-gradient(145deg,#d8ebff,#8fc3fb)}
+.sym{font-size:clamp(46px,16vw,78px);font-weight:700;line-height:1;text-shadow:0 3px 0 rgba(255,255,255,.7)}
+.f .sym{color:var(--pink-d)} .m .sym{color:var(--blue-d)}
+.open .sym{animation:pop .6s .35s both cubic-bezier(.3,1.8,.5,1)}
+@keyframes pop{0%{transform:scale(.2) rotate(-30deg)}100%{transform:scale(1) rotate(0)}}
+.card.next{animation:glow 1.3s ease-in-out infinite}
+.card.next .back{outline:4px solid #fff;outline-offset:-4px}
+@keyframes glow{
+  0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 rgba(255,143,183,0))}
+  50%{transform:scale(1.07) rotate(-1.5deg);filter:drop-shadow(0 0 14px rgba(255,143,183,.95))}
+}
+.card.nope{animation:nope .45s}
+@keyframes nope{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.card.winner .inner{animation:winpulse .8s ease-in-out infinite alternate}
+@keyframes winpulse{from{transform:rotateY(180deg) scale(1)}to{transform:rotateY(180deg) scale(1.1)}}
+.card:disabled{cursor:default}
+.card.dim{opacity:.55}
+.line{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.line line{stroke:#ffd34e;stroke-width:12;stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(255,211,78,.9))}
+.hint{font-size:15px;color:#7a8d87}
+#snd{
+  position:fixed;top:calc(12px + env(safe-area-inset-top,0));right:12px;z-index:5;
+  width:44px;height:44px;border-radius:50%;border:0;background:#fff;font-size:20px;cursor:pointer;
+  box-shadow:0 4px 12px rgba(15,107,82,.18)
+}
+/* final */
+.win{
+  position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;padding:20px;text-align:center;overflow:auto;
+  background:radial-gradient(circle at 50% 32%,#f2fff9 0%,#bdf1da 45%,#ffd3e4 100%);
+  opacity:0;visibility:hidden;transition:opacity .8s,visibility .8s;
+}
+.win.show{opacity:1;visibility:visible}
+.gemwrap{--r:min(34vw,150px);position:relative;width:min(46vw,210px);aspect-ratio:1;margin:6px auto 4px;transform:scale(0) rotate(-200deg)}
+.win.show .gemwrap{animation:gemin 1.4s .2s cubic-bezier(.2,1.4,.4,1) forwards,floaty 3.2s 1.6s ease-in-out infinite}
+@keyframes gemin{to{transform:scale(1) rotate(0)}}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+.gemwrap>svg{width:100%;height:100%;filter:drop-shadow(0 12px 18px rgba(15,107,82,.45))}
+.halo{position:absolute;inset:-35%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,255,255,0) 65%);animation:halo 2.4s ease-in-out infinite}
+@keyframes halo{0%,100%{transform:scale(.85);opacity:.7}50%{transform:scale(1.1);opacity:1}}
+.shine{animation:shine 2.6s 1.4s ease-in-out infinite}
+@keyframes shine{0%{transform:translateX(-140px)}60%,100%{transform:translateX(260px)}}
+.orbit{position:absolute;inset:0;animation:spin 14s linear infinite}
+.orbit span{
+  position:absolute;left:50%;top:50%;font-size:26px;
+  transform:translate(-50%,-50%) rotate(var(--a)) translateY(calc(-1*var(--r))) rotate(calc(-1*var(--a)));
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.win p,.win h2,.win .name,.win button{opacity:0;transform:translateY(24px)}
+.win.show p,.win.show h2,.win.show .name,.win.show button{animation:up .8s cubic-bezier(.2,1.3,.4,1) forwards}
+.win.show .c1{animation-delay:1.1s}.win.show h2{animation-delay:1.5s}
+.win.show .name{animation-delay:1.9s}.win.show .note{animation-delay:2.6s}.win.show button{animation-delay:3.2s}
+@keyframes up{to{opacity:1;transform:translateY(0)}}
+.c1{font-size:clamp(26px,7vw,40px);font-weight:600;color:var(--jade-d)}
+.win h2{font-size:clamp(34px,9.5vw,62px);font-weight:700;color:var(--pink-d);line-height:1.05;text-shadow:0 3px 0 #fff}
+.name{display:flex;justify-content:center;line-height:1;margin:2px 0}
+.name i{
+  font-style:normal;font-weight:700;font-size:clamp(72px,24vw,140px);display:inline-block;
+  background:linear-gradient(100deg,#0c7a5a,#5fe0b0,#e9fff6,#5fe0b0,#0c7a5a);background-size:300% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 4px 0 rgba(255,255,255,.8));
+  animation:letter 1.6s ease-in-out infinite,shimmer 3s linear infinite;animation-delay:calc(var(--n)*.12s)
+}
+@keyframes letter{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px) rotate(-3deg)}}
+@keyframes shimmer{to{background-position:-300% 0}}
+.note{font-size:clamp(16px,4.4vw,22px);font-weight:500;color:#4c6a61;max-width:420px}
+.win button{
+  margin-top:10px;font:inherit;font-size:17px;font-weight:600;color:#fff;border:0;border-radius:999px;
+  padding:12px 26px;background:linear-gradient(135deg,var(--jade),#1c8f6b);cursor:pointer;
+  box-shadow:0 6px 0 #146b50,0 10px 20px rgba(15,107,82,.3)
+}
+.win button:active{transform:translateY(4px);box-shadow:0 2px 0 #146b50}
+#fx{position:fixed;inset:0;z-index:20;pointer-events:none}
+:focus-visible{outline:3px solid var(--pink-d);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;animation-delay:0s!important}
+}
+</style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="gem" viewBox="0 0 200 200">
+    <polygon points="70,35 130,35 115,70 85,70" fill="#c9fbe6"/>
+    <polygon points="70,35 85,70 40,70" fill="#7be3b8"/>
+    <polygon points="130,35 160,70 115,70" fill="#4fd0a0"/>
+    <polygon points="40,70 85,70 100,170" fill="#2fb68a"/>
+    <polygon points="85,70 115,70 100,170" fill="#5fe0b0"/>
+    <polygon points="115,70 160,70 100,170" fill="#13946c"/>
+  </symbol>
+</svg>
+<div class="bg" id="bg" aria-hidden="true"></div>
+<button id="snd" aria-label="Ligar ou desligar o som">🔔</button>
 
-<div class="faixa-topo" aria-hidden="true"></div>
-
-<!-- LOGIN OVERLAY -->
-<div id="login-overlay" class="active">
-    <div class="login-box">
-        <div class="login-icon">🔐</div>
-        <h1>Muniz Studio</h1>
-        <div class="sub">Painel Administrativo</div>
-        <input type="password" id="senha-input" placeholder="Digite a senha" autocomplete="off">
-        <button class="btn-entrar" id="btn-login">Entrar</button>
-        <div class="erro" id="login-erro">Senha incorreta. Tente novamente.</div>
-    </div>
-</div>
-
-  <!-- MOBILE HEADER -->
-  <div class="mobile-header">
-    <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-    </button>
-    <div class="mobile-logo">Mun<span class="mobile-logo-text">iz</span></div>
+<main>
+  <div class="baby" aria-hidden="true">🍼</div>
+  <h1>Quem vai ganhar?</h1>
+  <p class="sub" id="status">Toque na carta que está brilhando!</p>
+  <div class="turns" aria-hidden="true">
+    <div class="chip f" id="tf">♀︎</div><div class="chip m" id="tm">♂︎</div>
   </div>
-
-  <!-- SIDEBAR OVERLAY -->
-  <div class="sidebar-overlay" id="sidebar-overlay"></div>
-
-  <!-- LOADER -->
-  <div class="loader-overlay" id="loader">
-    <div class="loader-ring"></div>
-    <div class="loader-text">PROCESSANDO...</div>
+  <div class="wrap" id="wrap">
+    <div class="board" id="board"></div>
+    <svg class="line" id="line"></svg>
   </div>
+  <p class="hint">Jogo da velha da grande revelação</p>
+</main>
 
-  <!-- TOAST CONTAINER -->
-  <div id="toast-container"></div>
-
-  <!-- SIDEBAR -->
-  <nav id="sidebar">
-    <div class="sidebar-logo"><span class="sidebar-logo-icon">Mun</span><span>iz</span></div>
-
-    <a href="index.html" class="nav-item active">
-      <span class="nav-icon">◈</span>
-      <span class="nav-label">Dashboard</span>
-    </a>
-    <a href="financeiro.html" class="nav-item">
-      <span class="nav-icon">◎</span>
-      <span class="nav-label">Financeiro</span>
-    </a>
-    <a href="barbeiros.html" class="nav-item">
-      <span class="nav-icon">◉</span>
-      <span class="nav-label">Barbeiros</span>
-    </a>
-    <a href="agenda.html" class="nav-item">
-      <span class="nav-icon">▦</span>
-      <span class="nav-label">Agenda</span>
-    </a>
-    <a href="clientes.html" class="nav-item">
-      <span class="nav-icon">◈</span>
-      <span class="nav-label">Clientes</span>
-    </a>
-  </nav>
-
-  <!-- MAIN CONTENT (DASHBOARD — apenas Divisão de Lucros) -->
-  <main id="app" style="display:none;">
-
-    <div class="page-header">
-      <div class="page-title">Divisão de Lucros</div>
-      <p class="page-subtitle">Renda total, despesas e repasse entre barbeiro e sócios no período selecionado</p>
+<section class="win" id="win" aria-live="polite">
+  <div class="gemwrap">
+    <div class="halo"></div>
+    <div class="orbit">
+      <span style="--a:0deg">💖</span><span style="--a:60deg">♀︎</span><span style="--a:120deg">✨</span>
+      <span style="--a:180deg">💚</span><span style="--a:240deg">♀︎</span><span style="--a:300deg">🎀</span>
     </div>
-
-    <div style="margin-bottom: 26px;">
-      <button class="btn btn-outline" onclick="carregarDadosDivisao()">
-        ⟳ &nbsp;Atualizar Dados
-      </button>
-    </div>
-
-    <!-- FILTRO DE PERÍODO -->
-    <div class="filtro-periodo">
-      <div class="form-group">
-        <label>Data Inicial</label>
-        <input type="date" id="filtro-inicio" />
-      </div>
-      <div class="form-group">
-        <label>Data Final</label>
-        <input type="date" id="filtro-fim" />
-      </div>
-      <div class="filtro-atalhos">
-        <button class="btn-atalho" data-atalho="hoje">Hoje</button>
-        <button class="btn-atalho" data-atalho="semana">7 Dias</button>
-        <button class="btn-atalho active" data-atalho="mes">Este Mês</button>
-        <button class="btn-atalho" data-atalho="tudo">Tudo</button>
-      </div>
-    </div>
-
-    <!-- DIAGNÓSTICO DA CARGA -->
-    <div id="diagnostico"></div>
-
-    <!-- RESUMO GERAL -->
-    <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-title">Renda Total do Período</div>
-        <div class="kpi-value gold" id="kpi-renda">R$ 0,00</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Despesas Totais do Período</div>
-        <div class="kpi-value red" id="kpi-despesas">R$ 0,00</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Saldo Líquido p/ Sócios</div>
-        <div class="kpi-value green" id="kpi-saldo-liquido">R$ 0,00</div>
-      </div>
-    </div>
-
-    <div class="aviso-saldo-negativo" id="aviso-negativo">
-      ⚠ As despesas do período superaram o fundo operacional. O saldo dos sócios ficará negativo até esse déficit ser coberto.
-    </div>
-
-    <!-- ETAPA 1: DIVISÃO INICIAL -->
-    <div class="secao-titulo"><span class="numero">1</span> Divisão Inicial da Renda</div>
-    <div class="fluxo-grid">
-      <div class="bloco-divisao origem">
-        <div class="rotulo">Renda Total Recebida</div>
-        <div class="valor" id="fluxo-renda">R$ 0,00</div>
-      </div>
-      <div class="fluxo-seta">→</div>
-      <div class="fluxo-grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
-        <div class="bloco-divisao">
-          <div class="percentual">50%</div>
-          <div class="rotulo">Repasse Barbeiro Muniz</div>
-          <div class="valor" id="fluxo-barbeiro">R$ 0,00</div>
-        </div>
-        <div class="bloco-divisao">
-          <div class="percentual">50%</div>
-          <div class="rotulo">Vai pro Caixa</div>
-          <div class="valor" id="fluxo-fundo">R$ 0,00</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DESPESAS -->
-    <div class="card" style="margin-top: 22px;">
-      <div class="card-title">Despesas do Período <span class="total-inline" id="total-despesas-inline">R$ 0,00</span></div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Descrição</th><th>Data</th><th>Valor</th></tr>
-          </thead>
-          <tbody id="tabela-despesas">
-            <tr><td colspan="3" style="text-align:center; color:var(--texto-suave); padding:24px;">Carregando...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ETAPA 2: DIVISÃO FINAL -->
-    <div class="secao-titulo"><span class="numero">2</span> Divisão Final entre Sócios</div>
-    <div class="fluxo-grid">
-      <div class="bloco-divisao">
-        <div class="rotulo">Saldo Líquido (Caixa − Despesas)</div>
-        <div class="valor" id="fluxo-saldo">R$ 0,00</div>
-      </div>
-      <div class="fluxo-seta">→</div>
-      <div class="fluxo-grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
-        <div class="bloco-divisao destino">
-          <div class="percentual">50%</div>
-          <div class="rotulo">Sócio Kayo Melo</div>
-          <div class="valor" id="fluxo-kayo">R$ 0,00</div>
-        </div>
-        <div class="bloco-divisao destino">
-          <div class="percentual">50%</div>
-          <div class="rotulo">Sócio Muniz</div>
-          <div class="valor" id="fluxo-muniz-socio">R$ 0,00</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ENTRADAS (TRANSPARÊNCIA DA RENDA) -->
-    <div class="card" style="margin-top: 30px;">
-      <div class="card-title">Lançamentos de Entrada (compõem a Renda Total) <span class="total-inline" id="total-entradas-inline">R$ 0,00</span></div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Descrição</th><th>Data</th><th>Valor</th></tr>
-          </thead>
-          <tbody id="tabela-entradas">
-            <tr><td colspan="3" style="text-align:center; color:var(--texto-suave); padding:24px;">Carregando...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </main>
-
-  <script>
-    // ================= SISTEMA DE SENHA =================
-    const SENHA_CORRETA = 'km12873';
-    const STORAGE_KEY = 'auth_data_dashboard';
-
-    function getAuthData() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? JSON.parse(raw) : null;
-      } catch { return null; }
-    }
-
-    function setAuthData() {
-      const h = new Date();
-      const dataStr = `${h.getFullYear()}-${String(h.getMonth() + 1).padStart(2, '0')}-${String(h.getDate()).padStart(2, '0')}`;
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: dataStr })); } catch {}
-    }
-
-    function precisaAutenticar() {
-      const auth = getAuthData();
-      if (!auth || !auth.data) return true;
-
-      const hoje = new Date();
-      if (hoje.getDate() === 8) {
-        const [a, m, d] = auth.data.split('-').map(n => parseInt(n, 10));
-        return !(a === hoje.getFullYear() && m === hoje.getMonth() + 1 && d === 8);
-      }
-      return false;
-    }
-
-    function autenticar(senha) {
-      if (senha === SENHA_CORRETA) {
-        setAuthData();
-        document.getElementById('login-overlay').classList.remove('active');
-        document.getElementById('app').style.display = 'block';
-        iniciarDashboard();
-        return true;
-      }
-      const erro = document.getElementById('login-erro');
-      erro.classList.add('visible');
-      setTimeout(() => erro.classList.remove('visible'), 3000);
-      return false;
-    }
-
-    /* =============================================
-       CONFIG
-    ============================================= */
-    const API_CONFIG = {
-      OBTER_CAIXA: 'https://n8n-n8n.njqmsx.easypanel.host/webhook/caixa-obter',
-      TIMEOUT_MS: 20000,
-      LIMITE_N8N: 1000 // mesmo "limit" do nó Get row(s) no n8n
-    };
-
-    /* =============================================
-       UTILITÁRIOS
-    ============================================= */
-    function showLoader(msg = 'PROCESSANDO...') {
-      document.getElementById('loader').classList.add('visible');
-      document.querySelector('.loader-text').textContent = msg;
-    }
-    function hideLoader() { document.getElementById('loader').classList.remove('visible'); }
-
-    function toast(msg, type = 'info', duration = 4000) {
-      const el = document.createElement('div');
-      el.className = `toast ${type}`;
-      const span = document.createElement('span');
-      span.className = 'toast-msg';
-      span.textContent = msg;
-      el.appendChild(span);
-      document.getElementById('toast-container').appendChild(el);
-      setTimeout(() => el.remove(), duration);
-    }
-
-    function escapeHtml(s) {
-      return String(s ?? '').replace(/[&<>"']/g, c => (
-        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-      ));
-    }
-
-    const fmtBRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-    // recebe CENTAVOS (inteiro)
-    function formatMoeda(centavos) {
-      return fmtBRL.format((centavos || 0) / 100).replace(/\u00a0/g, ' ');
-    }
-
-    function pad(n) { return String(n).padStart(2, '0'); }
-    function dataParaInput(d) { return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
-
-    /* =============================================
-       PARSERS ROBUSTOS (principal causa de "valores estranhos")
-    ============================================= */
-
-    // Aceita 50, "50", "50.5", "50,50", "R$ 1.500,00", "1,500.00"
-    // Retorna CENTAVOS (inteiro) para evitar erro de ponto flutuante.
-    function parseValorCentavos(v) {
-      if (typeof v === 'number') return Number.isFinite(v) ? Math.round(v * 100) : 0;
-      let s = String(v ?? '').replace(/[^\d,.\-]/g, '');
-      if (!s || s === '-') return 0;
-
-      const temVirgula = s.includes(',');
-      const temPonto = s.includes('.');
-
-      if (temVirgula && temPonto) {
-        if (s.lastIndexOf(',') > s.lastIndexOf('.')) s = s.replace(/\./g, '').replace(',', '.');
-        else s = s.replace(/,/g, '');
-      } else if (temVirgula) {
-        s = s.replace(/\./g, '').replace(',', '.');
-      } else if (temPonto && /^-?\d{1,3}(\.\d{3})+$/.test(s)) {
-        s = s.replace(/\./g, ''); // "1.500" => 1500
-      }
-      const n = parseFloat(s);
-      return Number.isFinite(n) ? Math.round(n * 100) : 0;
-    }
-
-    // "yyyy-mm-dd" puro é tratado como data LOCAL (antes virava UTC e caía no dia anterior).
-    function parseData(v) {
-      if (v === null || v === undefined || v === '') return { date: null, somenteData: false };
-      if (v instanceof Date) return { date: isNaN(v) ? null : v, somenteData: false };
-      if (typeof v === 'number') { const d = new Date(v); return { date: isNaN(d) ? null : d, somenteData: false }; }
-
-      const s = String(v).trim();
-      let m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-      if (m) return { date: new Date(+m[1], +m[2] - 1, +m[3], 12, 0, 0), somenteData: true };
-
-      m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})(?:[ ,T]+(\d{1,2}):(\d{2}))?/);
-      if (m) {
-        return {
-          date: new Date(+m[3], +m[2] - 1, +m[1], +(m[4] ?? 12), +(m[5] ?? 0)),
-          somenteData: m[4] === undefined
-        };
-      }
-
-      const iso = /^\d{4}-\d{2}-\d{2} \d/.test(s) ? s.replace(' ', 'T') : s;
-      const d = new Date(iso);
-      return { date: isNaN(d) ? null : d, somenteData: false };
-    }
-
-    function semAcento(s) {
-      return String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-    }
-
-    const PALAVRAS_SAIDA = ['saida', 'despesa', 'sangria', 'perda', 'retirada', 'pagamento', 'gasto', 'custo'];
-    const PALAVRAS_ENTRADA = ['entrada', 'receita', 'venda', 'recebimento', 'ganho'];
-
-    function classificarTipo(tipoBruto) {
-      const t = semAcento(tipoBruto);
-      if (PALAVRAS_SAIDA.some(p => t.includes(p))) return 'saida';
-      if (PALAVRAS_ENTRADA.some(p => t.includes(p))) return 'entrada';
-      return 'desconhecido'; // ANTES: virava "entrada" em silêncio e inflava a renda
-    }
-
-    function pick(row, chaves) {
-      for (const k of chaves) if (row[k] !== undefined && row[k] !== null) return row[k];
-      return undefined;
-    }
-
-    function normalizarLinha(row) {
-      const tipoOriginal = pick(row, ['Tipo', 'tipo']) ?? '';
-      const { date, somenteData } = parseData(pick(row, ['Data', 'data_hora', 'data']));
-      let centavos = parseValorCentavos(pick(row, ['Valor', 'valor']));
-      const tipo = classificarTipo(tipoOriginal);
-      if (tipo === 'saida') centavos = Math.abs(centavos);
-
-      return {
-        id: pick(row, ['id', 'ID']) ?? null,
-        tipo,
-        tipo_original: String(tipoOriginal),
-        descricao: String(pick(row, ['Descricao', 'descricao']) ?? ''),
-        barbeiro: String(pick(row, ['Barbeiro', 'barbeiro']) ?? ''),
-        centavos,
-        data: date,
-        somenteData
-      };
-    }
-
-    // Extrai as linhas de qualquer formato que o n8n devolver
-    function extrairLinhas(data) {
-      let arr;
-      if (Array.isArray(data)) arr = data;
-      else if (Array.isArray(data?.data)) arr = data.data;
-      else if (data && typeof data === 'object') arr = [data];
-      else arr = [];
-
-      return arr
-        .map(item => item?.json ?? item)
-        .filter(r => r && typeof r === 'object' &&
-          ['Tipo', 'tipo', 'Valor', 'valor', 'Descricao', 'descricao'].some(k => r[k] !== undefined));
-    }
-
-    /* =============================================
-       CARREGAR DADOS
-    ============================================= */
-    let movimentacoes = [];
-    let resumoCarga = { recebidas: 0, duplicadas: 0, semData: 0, tipoDesconhecido: 0, tiposDesconhecidos: [] };
-    let reqId = 0;
-
-    async function carregarDadosDivisao() {
-      const meuId = ++reqId;
-      showLoader('CARREGANDO LANÇAMENTOS...');
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), API_CONFIG.TIMEOUT_MS);
-
-      try {
-        const resp = await fetch(`${API_CONFIG.OBTER_CAIXA}?t=${Date.now()}`, { cache: 'no-store', signal: ctrl.signal });
-        if (!resp.ok) throw new Error('Resposta HTTP ' + resp.status);
-
-        const texto = await resp.text();
-        const data = texto.trim() ? JSON.parse(texto) : [];
-        if (meuId !== reqId) return; // chegou uma resposta mais nova, ignora esta
-
-        const brutas = extrairLinhas(data);
-
-        // remove duplicatas REAIS (mesmo id); lançamentos iguais com ids diferentes são mantidos
-        const vistos = new Set();
-        let duplicadas = 0;
-        const normalizadas = [];
-        for (const r of brutas) {
-          const n = normalizarLinha(r);
-          if (n.id !== null) {
-            if (vistos.has(String(n.id))) { duplicadas++; continue; }
-            vistos.add(String(n.id));
-          }
-          normalizadas.push(n);
-        }
-        movimentacoes = normalizadas;
-
-        const desconhecidos = movimentacoes.filter(m => m.tipo === 'desconhecido');
-        resumoCarga = {
-          recebidas: brutas.length,
-          duplicadas,
-          semData: movimentacoes.filter(m => !m.data).length,
-          tipoDesconhecido: desconhecidos.length,
-          tiposDesconhecidos: [...new Set(desconhecidos.map(m => m.tipo_original || '(vazio)'))]
-        };
-
-        console.log('📊 Linhas brutas do n8n (amostra):', brutas.slice(0, 5));
-        console.table(movimentacoes.slice(0, 15).map(m => ({
-          id: m.id, tipo: m.tipo, tipo_original: m.tipo_original, descricao: m.descricao,
-          valor: m.centavos / 100, data: m.data ? m.data.toLocaleString('pt-BR') : null
-        })));
-        console.log('🔎 Resumo da carga:', resumoCarga);
-
-        aplicarFiltro();
-
-        if (brutas.length >= API_CONFIG.LIMITE_N8N) {
-          toast(`Atenção: o n8n devolveu ${brutas.length} linhas (limite). Pode haver lançamentos antigos faltando.`, 'error', 7000);
-        } else if (movimentacoes.length) {
-          toast(`${movimentacoes.length} lançamentos carregados`, 'success');
-        } else {
-          toast('Nenhum lançamento encontrado no backend.', 'info');
-        }
-      } catch (err) {
-        if (meuId !== reqId) return;
-        console.warn('Não foi possível carregar os lançamentos.', err);
-        movimentacoes = [];
-        resumoCarga = { recebidas: 0, duplicadas: 0, semData: 0, tipoDesconhecido: 0, tiposDesconhecidos: [] };
-        aplicarFiltro();
-        toast(err.name === 'AbortError'
-          ? 'O servidor demorou demais para responder.'
-          : 'Não foi possível carregar os dados do n8n. Verifique a conexão.', 'error');
-      } finally {
-        clearTimeout(timer);
-        if (meuId === reqId) hideLoader();
-      }
-    }
-
-    /* =============================================
-       FILTRO DE PERÍODO
-    ============================================= */
-    function definirAtalho(tipo) {
-      const hoje = new Date();
-      let inicio;
-      const fim = new Date(hoje);
-
-      if (tipo === 'hoje') inicio = new Date(hoje);
-      else if (tipo === 'semana') { inicio = new Date(hoje); inicio.setDate(inicio.getDate() - 6); }
-      else if (tipo === 'mes') inicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-      else inicio = new Date(2000, 0, 1);
-
-      document.getElementById('filtro-inicio').value = dataParaInput(inicio);
-      document.getElementById('filtro-fim').value = dataParaInput(fim);
-      document.querySelectorAll('.btn-atalho').forEach(b => b.classList.toggle('active', b.dataset.atalho === tipo));
-      aplicarFiltro();
-    }
-
-    function aplicarFiltro() {
-      const inicioStr = document.getElementById('filtro-inicio').value;
-      const fimStr = document.getElementById('filtro-fim').value;
-
-      const inicio = inicioStr ? new Date(inicioStr + 'T00:00:00') : new Date(0);
-      const fim = fimStr ? new Date(fimStr + 'T23:59:59.999') : new Date(8640000000000000);
-
-      const filtradas = movimentacoes.filter(m => m.data && m.data >= inicio && m.data <= fim);
-      calcularDivisao(filtradas);
-    }
-
-    /* =============================================
-       REGRA DE NEGÓCIO (tudo em centavos)
-    ============================================= */
-    function calcularDivisao(lista) {
-      let renda = 0, despesas = 0;
-      const entradas = [], saidas = [];
-
-      for (const m of lista) {
-        if (m.tipo === 'entrada') { renda += m.centavos; entradas.push(m); }
-        else if (m.tipo === 'saida') { despesas += m.centavos; saidas.push(m); }
-        // tipo 'desconhecido' NÃO entra no cálculo
-      }
-
-      const maisRecente = (a, b) => b.data - a.data;
-      entradas.sort(maisRecente);
-      saidas.sort(maisRecente);
-
-      const repasseBarbeiro = Math.round(renda / 2);
-      const fundoDespesas = renda - repasseBarbeiro;
-      const saldoLiquido = fundoDespesas - despesas;
-      const parteKayo = Math.round(saldoLiquido / 2);
-      const parteMuniz = saldoLiquido - parteKayo; // Kayo + Muniz = saldo exato
-
-      const set = (id, txt) => { document.getElementById(id).textContent = txt; };
-
-      set('kpi-renda', formatMoeda(renda));
-      set('kpi-despesas', formatMoeda(despesas));
-      set('kpi-saldo-liquido', formatMoeda(saldoLiquido));
-      document.getElementById('kpi-saldo-liquido').className = 'kpi-value ' + (saldoLiquido < 0 ? 'red' : 'green');
-
-      set('fluxo-renda', formatMoeda(renda));
-      set('fluxo-barbeiro', formatMoeda(repasseBarbeiro));
-      set('fluxo-fundo', formatMoeda(fundoDespesas));
-      set('fluxo-saldo', formatMoeda(saldoLiquido));
-      document.getElementById('fluxo-saldo').style.color = saldoLiquido < 0 ? 'var(--perigo)' : '';
-      set('fluxo-kayo', formatMoeda(parteKayo));
-      set('fluxo-muniz-socio', formatMoeda(parteMuniz));
-
-      document.getElementById('aviso-negativo').classList.toggle('visible', saldoLiquido < 0);
-      set('total-despesas-inline', formatMoeda(despesas));
-      set('total-entradas-inline', formatMoeda(renda));
-
-      renderTabela('tabela-despesas', saidas, 3);
-      renderTabela('tabela-entradas', entradas, 3);
-      renderDiagnostico(lista.length, entradas.length, saidas.length);
-    }
-
-    function renderTabela(idTbody, lista, colspan) {
-      const tbody = document.getElementById(idTbody);
-      if (!lista.length) {
-        tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center; color:var(--texto-suave); padding:24px;">Nenhum lançamento no período selecionado.</td></tr>`;
-        return;
-      }
-      tbody.innerHTML = lista.map(m => {
-        const dataFmt = m.somenteData
-          ? m.data.toLocaleDateString('pt-BR')
-          : m.data.toLocaleDateString('pt-BR') + ' ' + m.data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        const entrada = m.tipo === 'entrada';
-        return `
-          <tr>
-            <td>${escapeHtml(m.descricao) || '—'}</td>
-            <td>${dataFmt}</td>
-            <td style="color:${entrada ? 'var(--navalha)' : 'var(--bordo)'}; font-weight:600;">${entrada ? '+' : '-'} ${formatMoeda(Math.abs(m.centavos))}</td>
-          </tr>`;
-      }).join('');
-    }
-
-    // Linha pequena sob o filtro: ajuda a enxergar de onde vêm números estranhos
-    function renderDiagnostico(totalPeriodo, nEntradas, nSaidas) {
-      const el = document.getElementById('diagnostico');
-      if (!el) return;
-      const r = resumoCarga;
-      const partes = [`${r.recebidas} linhas recebidas`, `${totalPeriodo} no período (${nEntradas} entradas, ${nSaidas} despesas)`];
-      if (r.duplicadas) partes.push(`${r.duplicadas} duplicadas removidas`);
-      if (r.semData) partes.push(`${r.semData} sem data válida (ignoradas)`);
-      if (r.tipoDesconhecido) partes.push(`${r.tipoDesconhecido} com tipo desconhecido (ignoradas): ${r.tiposDesconhecidos.join(', ')}`);
-      el.textContent = partes.join(' · ');
-      el.style.color = (r.semData || r.tipoDesconhecido) ? 'var(--perigo)' : 'var(--texto-suave)';
-    }
-
-    /* =============================================
-       MENU HAMBÚRGUER
-    ============================================= */
-    function setMenu(aberto) {
-      document.getElementById('hamburger-btn').classList.toggle('active', aberto);
-      document.getElementById('hamburger-btn').setAttribute('aria-expanded', String(aberto));
-      document.getElementById('sidebar').classList.toggle('active', aberto);
-      document.getElementById('sidebar-overlay').classList.toggle('active', aberto);
-      document.body.style.overflow = aberto ? 'hidden' : '';
-    }
-    const toggleMenu = () => setMenu(!document.getElementById('sidebar').classList.contains('active'));
-    const closeMenu = () => setMenu(false);
-
-    /* =============================================
-       INICIALIZAÇÃO
-    ============================================= */
-    let dashboardIniciado = false;
-
-    function iniciarDashboard() {
-      if (dashboardIniciado) return; // evita listeners duplicados
-      dashboardIniciado = true;
-
-      document.querySelectorAll('.btn-atalho').forEach(btn => btn.addEventListener('click', () => definirAtalho(btn.dataset.atalho)));
-      ['filtro-inicio', 'filtro-fim'].forEach(id => {
-        document.getElementById(id).addEventListener('change', () => {
-          document.querySelectorAll('.btn-atalho').forEach(b => b.classList.remove('active'));
-          aplicarFiltro();
-        });
-      });
-
-      document.getElementById('hamburger-btn').addEventListener('click', toggleMenu);
-      document.getElementById('sidebar-overlay').addEventListener('click', closeMenu);
-      document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', closeMenu));
-      window.addEventListener('resize', () => { if (window.innerWidth > 880) closeMenu(); });
-
-      definirAtalho('mes');
-      carregarDadosDivisao();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const input = document.getElementById('senha-input');
-      document.getElementById('btn-login').addEventListener('click', () => { autenticar(input.value); input.value = ''; });
-      input.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('btn-login').click(); });
-
-      if (precisaAutenticar()) {
-        document.getElementById('login-overlay').classList.add('active');
-        document.getElementById('app').style.display = 'none';
-        input.focus();
-      } else {
-        document.getElementById('login-overlay').classList.remove('active');
-        document.getElementById('app').style.display = 'block';
-        iniciarDashboard();
-      }
-    });
-  </script>
-
+    <svg viewBox="0 0 200 200">
+      <defs><clipPath id="gc"><polygon points="40,70 70,35 130,35 160,70 100,170"/></clipPath></defs>
+      <use href="#gem"/>
+      <g clip-path="url(#gc)"><polygon class="shine" points="0,0 28,0 -6,200 -34,200" fill="#fff" opacity=".6"/></g>
+    </svg>
+  </div>
+  <p class="c1">Parabéns! 🎉</p>
+  <h2>É uma menina!</h2>
+  <div class="name" id="name" aria-label="Jade"></div>
+  <p class="note">Preciosa e brilhante como uma pedra de jade. Seja muito bem-vinda, pequena! 💚</p>
+  <button id="again">Jogar de novo</button>
+</section>
+<canvas id="fx"></canvas>
+
+<script>
+
+const F='\u2640\uFE0E', M='\u2642\uFE0E';
+// Jogo roteirizado: o ♀ sempre vence (diagonal 2-4-6), com suspense no meio
+const seq=[[4,'f'],[1,'m'],[0,'f'],[8,'m'],[6,'f'],[3,'m'],[2,'f']];
+const WIN=[2,4,6];
+const msgs=[
+  'O ♀ começou no meio!','O ♂ entrou no jogo!','Hmm, o ♀ está armando algo…',
+  'O ♂ bloqueou! Será?','Dois caminhos abertos para o ♀! 👀','O ♂ só consegue bloquear um…'
+];
+const $=id=>document.getElementById(id);
+const board=$('board'), status=$('status'), reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let step=0, busy=false;
+
+/* cartas */
+function build(){
+  board.innerHTML='';
+  for(let i=0;i<9;i++){
+    const b=document.createElement('button');
+    b.className='card'; b.dataset.i=i; b.setAttribute('aria-label','Carta '+(i+1));
+    b.innerHTML='<span class="inner"><span class="face back"><svg viewBox="0 0 200 200"><use href="#gem"/></svg></span><span class="face front"><span class="sym"></span></span></span>';
+    board.appendChild(b);
+  }
+}
+const cell=i=>board.children[i];
+function mark(){
+  [...board.children].forEach(c=>c.classList.remove('next'));
+  $('tf').classList.remove('on'); $('tm').classList.remove('on');
+  if(step<seq.length){
+    const [i,w]=seq[step];
+    cell(i).classList.add('next');
+    $(w==='f'?'tf':'tm').classList.add('on');
+  }
+}
+board.addEventListener('click',e=>{
+  const c=e.target.closest('.card'); if(!c||busy||step>=seq.length||c.disabled) return;
+  const [i,who]=seq[step];
+  if(+c.dataset.i!==i){c.classList.remove('nope');void c.offsetWidth;c.classList.add('nope');return}
+  busy=true; c.disabled=true;
+  c.classList.add('open',who); c.classList.remove('next');
+  c.querySelector('.sym').textContent=who==='f'?F:M;
+  pop(); step++;
+  if(step===seq.length){ finish(); return }
+  status.textContent=msgs[step-1]; mark();
+  setTimeout(()=>busy=false,650);
+});
+
+/* final */
+function finish(){
+  $('tf').classList.remove('on'); $('tm').classList.remove('on');
+  status.textContent='Três ♀ em linha!!! 🎉';
+  setTimeout(()=>{
+    drawLine();
+    WIN.forEach(i=>cell(i).classList.add('winner'));
+    [...board.children].forEach(c=>{if(!c.classList.contains('open'))c.classList.add('dim')});
+    burst(innerWidth/2,innerHeight*.45,40);
+  },900);
+  setTimeout(showWin,2800);
+}
+function drawLine(){
+  const w=$('wrap').getBoundingClientRect(), svg=$('line');
+  svg.setAttribute('viewBox',`0 0 ${w.width} ${w.height}`);
+  const pt=i=>{const r=cell(i).getBoundingClientRect();return [r.left-w.left+r.width/2,r.top-w.top+r.height/2]};
+  let [x1,y1]=pt(WIN[0]),[x2,y2]=pt(WIN[2]);
+  const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),ex=dx/len*26,ey=dy/len*26;
+  x1-=ex;y1-=ey;x2+=ex;y2+=ey;
+  const L=Math.hypot(x2-x1,y2-y1);
+  svg.innerHTML=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-dasharray="${L}" stroke-dashoffset="${L}"><animate attributeName="stroke-dashoffset" from="${L}" to="0" dur=".8s" fill="freeze"/></line>`;
+}
+function showWin(){
+  $('win').classList.add('show');
+  chime(); rain=!reduce; burst(innerWidth/2,innerHeight*.4,reduce?30:140);
+  setTimeout(()=>burst(0,innerHeight*.7,50,-1),900);
+  setTimeout(()=>burst(innerWidth,innerHeight*.7,50,1),900);
+}
+$('name').innerHTML=[...'Jade'].map((l,n)=>`<i style="--n:${n}">${l}</i>`).join('');
+$('again').onclick=()=>{
+  $('win').classList.remove('show'); rain=false; P=[];
+  $('line').innerHTML=''; step=0; busy=false; build();
+  status.textContent='Toque na carta que está brilhando!'; mark();
+};
+
+/* confete */
+const cv=$('fx'),ctx=cv.getContext('2d');let P=[],rain=false,running=false,W,H;
+function fit(){const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0)}
+fit();addEventListener('resize',fit);
+const cols=['#2fb68a','#7fe0bf','#0f8a67','#ff8fb7','#ffc2d6','#ffd34e','#ffffff'];
+const rnd=(a,b)=>a+Math.random()*(b-a);
+function add(x,y,vx,vy){
+  P.push({x,y,vx,vy,r:rnd(0,6),vr:rnd(-.2,.2),s:rnd(9,18),c:cols[Math.random()*cols.length|0],k:'rcfhd'[Math.random()*5|0],h:Math.random()<.5?'💚':'💖'});
+}
+function burst(x,y,n,side=0){
+  for(let i=0;i<n;i++){
+    const a=side?(-Math.PI/2+side*rnd(-.2,-1)):rnd(-Math.PI,0),sp=rnd(7,17);
+    add(x,y,Math.cos(a)*sp,Math.sin(a)*sp);
+  }
+  if(!running){running=true;requestAnimationFrame(tick)}
+}
+function tick(){
+  ctx.clearRect(0,0,W,H);
+  if(rain&&Math.random()<.5)add(rnd(0,W),-20,rnd(-1,1),rnd(2,4));
+  P=P.filter(p=>p.y<H+40);
+  for(const p of P){
+    p.vy+=.22;p.vx*=.992;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;
+    if(p.k==='r')ctx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);
+    else if(p.k==='c'){ctx.beginPath();ctx.arc(0,0,p.s/3,0,7);ctx.fill()}
+    else if(p.k==='d'){ctx.beginPath();ctx.moveTo(0,-p.s/2);ctx.lineTo(p.s/2.4,0);ctx.lineTo(0,p.s/2);ctx.lineTo(-p.s/2.4,0);ctx.closePath();ctx.fill()}
+    else{ctx.font=`${p.s+6}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+      if(p.k==='f'){ctx.fillStyle='#ff6fa3';ctx.fillText(F,0,0)}else ctx.fillText(p.h,0,0)}
+    ctx.restore();
+  }
+  if(P.length||rain)requestAnimationFrame(tick);else{running=false;ctx.clearRect(0,0,W,H)}
+}
+
+/* som */
+let ac,on=true;
+function tone(f,t,d,type='sine',v=.07){
+  if(!on)return;
+  try{
+    ac=ac||new(window.AudioContext||window.webkitAudioContext)();
+    const o=ac.createOscillator(),g=ac.createGain(),s=ac.currentTime+t;
+    o.type=type;o.frequency.value=f;
+    g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(v,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+d);
+    o.connect(g);g.connect(ac.destination);o.start(s);o.stop(s+d+.05);
+  }catch(e){}
+}
+const pop=()=>{tone(520,0,.14,'triangle');tone(780,.06,.14,'triangle')};
+const chime=()=>[784,988,1175,1568,1976,2349].forEach((f,i)=>tone(f,i*.11,.7,'sine',.06));
+$('snd').onclick=e=>{on=!on;e.currentTarget.textContent=on?'🔔':'🔕'};
+
+
+/* bolhas de fundo */
+const sy=['♀︎','♂︎','💚','✨','🫧','🎀','♀︎','💖'];
+$('bg').innerHTML=Array.from({length:16},(_,i)=>
+  `<span style="left:${rnd(2,96)}%;font-size:${rnd(18,40)}px;animation-duration:${rnd(14,26)}s;animation-delay:${-rnd(0,26)}s;color:${i%3===1?'#8fc3fb':'#ff8fb7'}">${sy[i%sy.length]}</span>`).join('');
+
+build();mark();
+</script>
 </body>
 </html>
