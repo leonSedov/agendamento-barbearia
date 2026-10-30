@@ -70,7 +70,7 @@
     #sidebar:hover .nav-label { opacity: 1; }
 
     #app { margin-left: 72px; min-height: 100vh; padding: 36px 40px 60px; max-width: 1100px; }
-    .page-header { padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px; position: relative; }
+    .page-header { padding: 0 0 24px; border-bottom: 2px solid var(--linha); margin-bottom: 28px; position: relative; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
     .page-title { font-family: var(--fonte-cartaz); font-size: 1.9rem; text-transform: uppercase; letter-spacing: 0.02em; color: var(--tinta); margin-bottom: 4px; }
     .page-subtitle { color: var(--texto-suave); font-size: 0.88rem; }
     .page-subtitle strong { color: var(--tinta); }
@@ -240,7 +240,7 @@
     .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(26, 44, 80, 0.5); z-index: 99; backdrop-filter: blur(4px); }
     .sidebar-overlay.active { display: block; }
 
-    /* Sino (mesmo do painel) */
+    /* Sino */
     .notif-icon-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; }
     .notif-bell-svg { width: 18px; height: 18px; display: block; stroke: currentColor; }
     .notif-badge {
@@ -336,8 +336,6 @@
         <span class="sidebar-perfil__nome">Igor Muniz</span>
     </div>
 
-
-
     <a href="#" class="nav-item active notif-nav" id="notif-nav" onclick="event.preventDefault(); recarregarTarefas();">
         <span class="nav-icon">
             <span class="notif-icon-wrap">
@@ -357,10 +355,13 @@
 
 <main id="app" style="display:none;">
     <div class="page-header">
-        <div class="page-title">Tarefas Atrasadas</div>
-        <div class="page-subtitle">
-            Agendamentos de <strong id="sub-mes">—</strong> que já passaram e que ainda <strong>não constam como pago</strong>
+        <div>
+            <div class="page-title">Tarefas Atrasadas</div>
+            <div class="page-subtitle">
+                Agendamentos de <strong id="sub-mes">—</strong> que já passaram e que ainda <strong>não constam como pago</strong>
+            </div>
         </div>
+        <button type="button" class="btn-acao btn-acao--ghost" id="btnRecarregar">🔄 Recarregar</button>
     </div>
 
     <div class="grid-2" style="margin-bottom: 22px;">
@@ -373,7 +374,6 @@
             <div class="metric-label">Valor total pendente no mês</div>
         </div>
     </div>
-
 
     <div class="card">
         <div class="card-title">Pendências por dia — <span id="titulo-mes" style="color: var(--tinta); text-transform: none;">—</span></div>
@@ -420,6 +420,13 @@
 </div>
 
 <script>
+    // ================= HELPERS SEGUROS =================
+    function on(id, evt, fn) {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener(evt, fn);
+        return el;
+    }
+
     // ================= CONFIGURAÇÕES =================
     const BARBEIRO_ID = 'igor';
     const CONSULTA_URL = 'https://n8n-n8n.njqmsx.easypanel.host/webhook/consultar-disponibilidade';
@@ -487,12 +494,12 @@
             return false;
         }
     }
-    document.getElementById('btn-login').addEventListener('click', function() {
+    on('btn-login', 'click', function() {
         const input = document.getElementById('senha-input');
         autenticar(input.value);
         input.value = '';
     });
-    document.getElementById('senha-input').addEventListener('keydown', function(e) {
+    on('senha-input', 'keydown', function(e) {
         if (e.key === 'Enter') document.getElementById('btn-login').click();
     });
     document.addEventListener('DOMContentLoaded', function() {
@@ -509,12 +516,19 @@
 
     // ================= HELPERS =================
     function showLoader(msg = 'CARREGANDO TAREFAS...') {
-        document.getElementById('loader').classList.add('visible');
-        document.querySelector('.loader-text').textContent = msg;
+        const loader = document.getElementById('loader');
+        if (!loader) return;
+        loader.classList.add('visible');
+        const txt = loader.querySelector('.loader-text');
+        if (txt) txt.textContent = msg;
     }
-    function hideLoader() { document.getElementById('loader').classList.remove('visible'); }
+    function hideLoader() {
+        const loader = document.getElementById('loader');
+        if (loader) loader.classList.remove('visible');
+    }
     function toast(msg, type = 'info', duration = 3000) {
         const container = document.getElementById('toast-container');
+        if (!container) return;
         const el = document.createElement('div');
         el.className = `toast ${type}`;
         el.innerHTML = `<span class="toast-msg">${msg}</span>`;
@@ -672,7 +686,6 @@
             const pagamentosMap = await carregarPagamentosTodos();
             const agora = new Date();
 
-            // 🔧 Começa no dia 1º do mês atual
             const inicio = new Date(agora.getFullYear(), agora.getMonth(), 1);
 
             const diasConsultar = [];
@@ -703,7 +716,7 @@
                         const [hh, mm] = String(hora).split(':').map(Number);
                         if (isNaN(hh) || isNaN(mm)) return;
                         const dtAg = new Date(`${dataStr}T${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}:00`);
-                        if (dtAg >= agora) return; // futuro → não é atrasado
+                        if (dtAg >= agora) return;
 
                         const nome = extrairNomeCliente(ag);
                         const servico = extrairServicoLimpo(ag);
@@ -747,8 +760,10 @@
     function atualizarMetricas() {
         const qtd = STATE.tarefas.length;
         const valor = STATE.tarefas.reduce((s, t) => s + (t.valor || 0), 0);
-        document.getElementById('metric-qtd').textContent = qtd;
-        document.getElementById('metric-valor').textContent = 'R$ ' + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+        const elQtd = document.getElementById('metric-qtd');
+        const elValor = document.getElementById('metric-valor');
+        if (elQtd) elQtd.textContent = qtd;
+        if (elValor) elValor.textContent = 'R$ ' + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
     }
 
     function atualizarBadgeSidebar() {
@@ -767,6 +782,7 @@
 
     function renderizarTarefas(algumErro = false) {
         const container = document.getElementById('tarefasLista');
+        if (!container) return;
         const mesNome = getMesAtualNome();
 
         if (STATE.tarefas.length === 0) {
@@ -847,15 +863,20 @@
             toast(`${STATE.tarefas.length} tarefa(s) pendente(s) em ${getMesAtualNome()}.`, STATE.tarefas.length > 0 ? 'info' : 'success');
         });
     }
-    document.getElementById('btnRecarregar').addEventListener('click', function() {
-        this.disabled = true;
-        this.textContent = '⏳ Carregando...';
-        recarregarTarefas();
-        setTimeout(() => {
-            this.disabled = false;
-            this.textContent = '🔄 Recarregar';
-        }, 600);
-    });
+
+    // Botão Recarregar do header (com proteção null-safe)
+    const btnRecarregar = document.getElementById('btnRecarregar');
+    if (btnRecarregar) {
+        btnRecarregar.addEventListener('click', function() {
+            this.disabled = true;
+            this.textContent = '⏳ Carregando...';
+            recarregarTarefas();
+            setTimeout(() => {
+                this.disabled = false;
+                this.textContent = '🔄 Recarregar';
+            }, 600);
+        });
+    }
 
     // ================= MODAL DE PAGAMENTO =================
     function abrirPagamento(tarefa) {
@@ -894,6 +915,7 @@
         STATE.formaPagamentoSelecionada = null;
     }
 
+    // Listener de seleção de forma de pagamento (delegação no document)
     document.addEventListener('click', (e) => {
         const opcao = e.target.closest('#formaPagamentoGrid .forma-pagamento-opcao');
         if (!opcao) return;
@@ -961,8 +983,25 @@
             });
 
             if (!response.ok) {
-                const texto = await response.text();
-                toast(`Erro ${response.status}: ${texto}`, 'error');
+                let texto = '';
+                try { texto = await response.text(); } catch {}
+                toast(`Erro ${response.status}: ${texto || 'resposta inválida'}`, 'error', 5000);
+                return;
+            }
+
+            // Se o backend devolver JSON de erro dentro de 200, detecta
+            let resultado = null;
+            try {
+                const ct = response.headers.get('content-type') || '';
+                if (ct.includes('application/json')) {
+                    resultado = await response.json();
+                } else {
+                    await response.text();
+                }
+            } catch (e) { /* ignora se não for JSON */ }
+
+            if (resultado && resultado.success === false) {
+                toast(`Backend recusou: ${resultado.message || 'erro desconhecido'}`, 'error', 5000);
                 return;
             }
 
@@ -988,17 +1027,19 @@
         }
     }
 
-    document.getElementById('btnFecharPagamento').addEventListener('click', fecharModalPagamento);
-    document.getElementById('modalPagamento').addEventListener('click', (e) => {
+    // Listeners dos botões do modal (null-safe via on())
+    on('btnFecharPagamento', 'click', fecharModalPagamento);
+    on('modalPagamento', 'click', (e) => {
         if (e.target === e.currentTarget) fecharModalPagamento();
     });
-    document.getElementById('btnConfirmarPagamento').addEventListener('click', confirmarPagamento);
+    on('btnConfirmarPagamento', 'click', confirmarPagamento);
 
     // ================= MENU MOBILE =================
     function toggleMenu() {
         const hamburger = document.getElementById('hamburger-btn');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebar-overlay');
+        if (!hamburger || !sidebar || !overlay) return;
         hamburger.classList.toggle('active');
         sidebar.classList.toggle('active');
         overlay.classList.toggle('active');
@@ -1008,6 +1049,7 @@
         const hamburger = document.getElementById('hamburger-btn');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebar-overlay');
+        if (!hamburger || !sidebar || !overlay) return;
         hamburger.classList.remove('active');
         sidebar.classList.remove('active');
         overlay.classList.remove('active');
@@ -1016,19 +1058,20 @@
 
     // ================= INICIAR =================
     function iniciarAplicacao() {
-        // Preenche o nome do mês nos textos dinâmicos
         const mesLabel = getMesAtualLabel();
         const mesNome = getMesAtualNome();
-        document.getElementById('sub-mes').textContent = mesLabel;
-        document.getElementById('titulo-mes').textContent = mesNome;
+        const subMes = document.getElementById('sub-mes');
+        const tituloMes = document.getElementById('titulo-mes');
+        if (subMes) subMes.textContent = mesLabel;
+        if (tituloMes) tituloMes.textContent = mesNome;
 
         carregarTarefas();
 
         const hamburger = document.getElementById('hamburger-btn');
         const overlay = document.getElementById('sidebar-overlay');
         const navItems = document.querySelectorAll('.nav-item');
-        hamburger.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', closeMenu);
+        if (hamburger) hamburger.addEventListener('click', toggleMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
         navItems.forEach(item => item.addEventListener('click', () => {
             if (!item.classList.contains('notif-nav')) closeMenu();
         }));
